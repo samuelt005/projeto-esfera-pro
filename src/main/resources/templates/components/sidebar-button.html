@@ -1,0 +1,24 @@
+<div th:fragment="button(page)">
+    <div class="sidebar-button inactive" th:page="${page}">
+        <div th:if="${page == 'dashboard'}">
+            <div th:replace="~{icons/dashboard :: dashboard}"></div>
+            <p>Dashboard</p>
+        </div>
+        <div th:if="${page == 'calendario'}">
+            <div th:replace="~{icons/calendario :: calendario}"></div>
+            <p>Calendário</p>
+        </div>
+        <div th:if="${page == 'clientes'}">
+            <div th:replace="~{icons/clientes :: clientes}"></div>
+            <p>Clientes</p>
+        </div>
+        <div th:if="${page == 'propostas'}">
+            <div th:replace="~{icons/propostas :: propostas}"></div>
+            <p>Propostas</p>
+        </div>
+        <div th:if="${page == 'interacoes'}">
+            <div th:replace="~{icons/interacoes :: interacoes}"></div>
+            <p>Interações</p>
+        </div>
+    </div>
+</div>
