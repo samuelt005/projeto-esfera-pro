@@ -1,0 +1,76 @@
+.main header {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    padding-right: 20px;
+    box-sizing: border-box;
+}
+
+.notifications-button,
+.settings-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 32px;
+    width: 32px;
+    cursor: pointer;
+    border-radius: 50%;
+    background-color: transparent;
+    transition: background-color 0.5s;
+}
+
+.notifications-button:hover,
+.settings-button:hover {
+    background-color: rgba(16, 24, 40, 0.2);
+    transition: background-color 0.5s;
+}
+
+.user-profile {
+    display: flex;
+    gap: 10px;
+    padding-left: 20px;
+    box-sizing: border-box;
+    cursor: pointer;
+    border-radius: 20px;
+}
+
+.user-profile .user-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    max-width: 300px;
+}
+
+.user-name {
+    color: var(--text-primary);
+    font-weight: bold;
+    font-size: 20px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+.user-team {
+    color: var(--text-secondary);
+    font-style: italic;
+    font-size: 13px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+.user-button svg {
+    border-radius: 50%;
+    background-color: transparent;
+    transition: background-color 0.5s;
+}
+
+.user-profile:hover .user-button svg {
+    background-color: rgba(16, 24, 40, 0.2);
+    transition: background-color 0.5s;
+}

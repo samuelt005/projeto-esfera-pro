@@ -7,6 +7,7 @@
     <link rel="stylesheet" th:href="@{/styles/colors.css}"/>
     <link rel="stylesheet" th:href="@{/styles/frame.css}"/>
     <link rel="stylesheet" th:href="@{/styles/sidebar.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/header.css}"/>
     <link rel="stylesheet" th:href="@{/styles/loading.css}"/>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,7 +17,7 @@
 <section class="sidebar">
     <div class="top-content">
         <div class="expand-menu">
-            <div th:replace="~{icons/expand :: expand}"></div>
+            <div th:replace="~{icons/sidebar/expand :: expand}"></div>
         </div>
         <div class="buttons">
             <div th:replace="~{components/sidebar-button :: button('dashboard')}"></div>
@@ -29,7 +30,7 @@
 
     <div class="bottom-content">
         <div class="need-help">
-            <div th:replace="~{icons/help :: help}"></div>
+            <div th:replace="~{icons/sidebar/help :: help}"></div>
             <p>Ajuda</p>
         </div>
     </div>
@@ -37,6 +38,15 @@
 
 <section class="main">
     <header>
+        <div th:replace="~{icons/header/notifications :: notifications}"></div>
+        <div th:replace="~{icons/header/settings :: settings}"></div>
+        <div class="user-profile">
+            <div class="user-text">
+                <p class="user-name">Fulano de Tal</p>
+                <p class="user-team">User Team</p>
+            </div>
+            <div th:replace="~{icons/header/user :: user}"></div>
+        </div>
     </header>
 
     <div class="frame" id="mainFrame">
