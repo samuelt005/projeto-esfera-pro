@@ -1,0 +1,144 @@
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    width: 80px;
+    padding: 5px;
+    box-sizing: border-box;
+    transition: width 0.5s;
+}
+
+.sidebar .top-content {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.sidebar.expanded {
+    width: 300px;
+    transition: width 0.5s;
+}
+
+.expand-menu {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 70px;
+    height: 70px;
+    border-radius: 20px;
+    cursor: pointer;
+    background-color: transparent;
+    transition: background-color 0.5s;
+}
+
+.expand-menu:hover {
+    background-color: rgba(61, 0, 83, 0.2);
+    transition: background-color 0.5s;
+}
+
+.buttons {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 5px;
+}
+
+.sidebar-button {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding-left: 20px;
+    box-sizing: border-box;
+    width: 100%;
+    height: 70px;
+    border-radius: 20px;
+    cursor: pointer;
+    background-color: transparent;
+    transition: background-color 0.5s;
+}
+
+.sidebar-button div {
+    display: flex;
+    gap: 10px;
+}
+
+.sidebar-button .icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 32px;
+    width: 32px;
+}
+
+.sidebar-button p {
+    font-size: 20px;
+    line-height: 32px;
+    color: var(--main-purple);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s, visibility 0.2s;
+    user-select: none;
+}
+
+.sidebar-button.inactive {
+    background-color: transparent;
+    transition: background-color 0.5s;
+}
+
+.sidebar-button.inactive:hover {
+    background-color: rgba(61, 0, 83, 0.2);
+    transition: background-color 0.5s;
+}
+
+.sidebar-button.active {
+    background-color: var(--main-purple);
+}
+
+.sidebar-button.active svg path {
+    fill: var(--main-orange);
+}
+
+.sidebar.expanded .sidebar-button p {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.7s, visibility 0.7s;
+}
+
+.sidebar.expanded .sidebar-button.active p {
+    color: var(--white);
+}
+
+.bottom-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 64px;
+}
+
+.need-help {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    text-align: center;
+}
+
+.need-help p {
+    color: var(--gray);
+    user-select: none;
+    width: 0;
+    margin-left: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s, visibility 0.2s, width 0.2s, margin-left 0.2s;
+}
+
+.sidebar.expanded .need-help p {
+    opacity: 1;
+    width: auto;
+    margin-left: 10px;
+    visibility: visible;
+    transition: opacity 0.7s, visibility 0.7s, width 0.7s, margin-left 0.7s;
+}

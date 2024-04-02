@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Esfera</title>
+    <link rel="stylesheet" th:href="@{/styles/reset.css}">
+    <link rel="stylesheet" th:href="@{/styles/colors.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/frame.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/sidebar.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/header.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/loading.css}"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+</head>
+<body>
+<section class="sidebar">
+    <div class="top-content">
+        <div class="expand-menu">
+            <div th:replace="~{icons/sidebar/expand :: expand}"></div>
+        </div>
+        <div class="buttons">
+            <div th:replace="~{components/sidebar-button :: button('dashboard')}"></div>
+            <div th:replace="~{components/sidebar-button :: button('calendario')}"></div>
+            <div th:replace="~{components/sidebar-button :: button('clientes')}"></div>
+            <div th:replace="~{components/sidebar-button :: button('propostas')}"></div>
+            <div th:replace="~{components/sidebar-button :: button('interacoes')}"></div>
+        </div>
+    </div>
+
+    <div class="bottom-content">
+        <div class="need-help">
+            <div th:replace="~{icons/sidebar/help :: help}"></div>
+            <p>Ajuda</p>
+        </div>
+    </div>
+</section>
+
+<section class="main">
+    <header>
+        <div th:replace="~{icons/header/notifications :: notifications}"></div>
+        <div th:replace="~{icons/header/settings :: settings}"></div>
+        <div class="user-profile">
+            <div class="user-text">
+                <p class="user-name">Fulano de Tal</p>
+                <p class="user-team">User Team</p>
+            </div>
+            <div th:replace="~{icons/header/user :: user}"></div>
+        </div>
+    </header>
+
+    <div class="frame" id="mainFrame">
+        <div class="main-content hidden">
+        </div>
+        <div class="loading hidden">
+            <span class="loader-dot loader-dot-one"></span>
+            <span class="loader-dot loader-dot-two"></span>
+            <span class="loader-dot loader-dot-three"></span>
+        </div>
+    </div>
+</section>
+
+<div id="allStyles">
+</div>
+
+<div id="allScripts">
+    <script type="text/javascript" th:src="@{/scripts/frame.js}"></script>
+    <script type="text/javascript" th:src="@{/scripts/pages/calendario.js}"></script>
+    <script type="text/javascript" th:src="@{/scripts/pages/clientes.js}"></script>
+    <script type="text/javascript" th:src="@{/scripts/pages/dashboard.js}"></script>
+    <script type="text/javascript" th:src="@{/scripts/pages/interacoes.js}"></script>
+    <script type="text/javascript" th:src="@{/scripts/pages/propostas.js}"></script>
+</div>
+</body>
+</html>
