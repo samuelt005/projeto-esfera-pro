@@ -1,7 +1,6 @@
 // FUNCTIONS
-const URL = "http://localhost:8080";
 const mainContent = document.querySelector(".main-content");
-const allStyles = document.getElementById("allStyles");
+const allStyles = document.getElementById("styles");
 const sidebar = document.querySelector(".sidebar");
 const expandButton = document.querySelector(".expand-menu");
 const menuButtons = document.querySelectorAll(".sidebar-button");
