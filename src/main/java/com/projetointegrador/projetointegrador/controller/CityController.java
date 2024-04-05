@@ -41,25 +41,34 @@ public class CityController {
 
     @PutMapping("/{id}")
     public ResponseEntity<City> atualizarCidade(@PathVariable Long id, @RequestBody City newCity){
-        return cityRepository.findById(id)
-                .map(city -> {
-                    city.setName(newCity.getName());
-                    city.setState(stateRepository.findById(city.getStateId()).map(state -> {
-                        return state;
-                    }).orElse(null));
-                    cityRepository.save(city);
-                    return ResponseEntity.ok(city);
-                })
-                .orElse(ResponseEntity.notFound().build());
+        try {
+            return cityRepository.findById(id)
+                    .map(city -> {
+                        city.setName(newCity.getName());
+                        city.setStateId(newCity.getStateId());
+                        if (city.getStateId() != null) {
+                            State newState = stateRepository.findById(city.getStateId()).orElse(null);
+                            if (newState != null) {
+                                city.setState(newState);
+                            }
+                        }
+                        cityRepository.save(city);
+                        return ResponseEntity.ok(city);
+                    })
+                    .orElse(ResponseEntity.notFound().build());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deletarCidade(@PathVariable Long id) {
         try {
             cityRepository.deleteById(id);
-            return ResponseEntity.ok("Estado deletado com sucesso");
+            return ResponseEntity.ok("Cidade deletada com sucesso");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Falha ao deletar estado");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Falha ao deletar cidade");
         }
     }
 }

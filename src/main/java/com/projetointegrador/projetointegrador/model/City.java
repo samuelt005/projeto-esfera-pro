@@ -14,9 +14,8 @@ public class City {
     private String name;
     @Transient
     private Long stateId;
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "State_id_state", nullable = false)
-    @JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "state_id", nullable = false)
     private State state;
 
     public Long getId() {

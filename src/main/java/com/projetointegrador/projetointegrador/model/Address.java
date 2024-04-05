@@ -1,6 +1,5 @@
 package com.projetointegrador.projetointegrador.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.Objects;
@@ -20,13 +19,11 @@ public class Address {
     private Long cityId;
     @Transient
     private Long clientId;
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "City_id_city", nullable = false)
-    @JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "city_id", nullable = false)
     private City city;
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "Client_id_client", nullable = false)
-    @JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "client_id", nullable = false)
     private Client client;
 
     public Long getId() {

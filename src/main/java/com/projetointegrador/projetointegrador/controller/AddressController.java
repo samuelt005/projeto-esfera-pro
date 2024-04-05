@@ -1,7 +1,11 @@
 package com.projetointegrador.projetointegrador.controller;
 
 import com.projetointegrador.projetointegrador.model.Address;
+import com.projetointegrador.projetointegrador.model.City;
+import com.projetointegrador.projetointegrador.model.Client;
 import com.projetointegrador.projetointegrador.repository.AddressRepository;
+import com.projetointegrador.projetointegrador.repository.CityRepository;
+import com.projetointegrador.projetointegrador.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +18,10 @@ import java.util.List;
 public class AddressController {
     @Autowired
     AddressRepository addressRepository;
+    @Autowired
+    ClientRepository clientRepository;
+    @Autowired
+    CityRepository cityRepository;
 
     @GetMapping
     public List<Address> listarEndereco(){
@@ -23,6 +31,10 @@ public class AddressController {
     @PostMapping
     public ResponseEntity<Address> criarEndereco(@RequestBody Address address){
         try{
+            City city = cityRepository.findById(address.getCityId()).orElse(null);
+            Client client = clientRepository.findById(address.getClientId()).orElse(null);
+            address.setCity(city);
+            address.setClient(client);
             addressRepository.save(address);
             return ResponseEntity.ok(address);
         }catch (Exception e) {
@@ -34,13 +46,15 @@ public class AddressController {
     public ResponseEntity<Address> atualizarEndereco(@PathVariable Long id, @RequestBody Address newAddress){
         return addressRepository.findById(id)
                 .map(address -> {
-                    address.setCity(newAddress.getCity());
-                    address.setStreet(newAddress.getStreet());
+                    City city = cityRepository.findById(newAddress.getCityId()).orElse(null);
+                    Client client = clientRepository.findById(newAddress.getClientId()).orElse(null);
+                    address.setCity(city);
+                    address.setClient(client);
                     address.setNumber(newAddress.getNumber());
-                    address.setZip_code(newAddress.getZip_code());
-                    address.setClient(newAddress.getClient());
-                    addressRepository.save(address);
-                    return ResponseEntity.ok(address);
+                    address.setStreet(newAddress.getStreet());
+                    address.setCityId(newAddress.getCityId());
+                    address.setClientId(newAddress.getClientId());
+                    return ResponseEntity.ok(addressRepository.save(address));
                 })
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -49,9 +63,9 @@ public class AddressController {
     public ResponseEntity<String> deletarEndereco(@PathVariable Long id) {
         try {
             addressRepository.deleteById(id);
-            return ResponseEntity.ok("Estado deletado com sucesso");
+            return ResponseEntity.ok("Endereco deletado com sucesso");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Falha ao deletar estado");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Falha ao deletar endereco");
         }
     }
 }
