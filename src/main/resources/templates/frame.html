@@ -60,10 +60,17 @@
     </div>
 </section>
 
-<div id="allStyles">
+<div id="styles">
 </div>
 
-<div id="allScripts">
+<div id="scripts">
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        const IP = /*[[${IP}]]*/ '';
+        const PORT = /*[[${PORT}]]*/ '';
+        const URL = 'http://' + IP + ':' + PORT;
+        /*]]>*/
+    </script>
     <script type="text/javascript" th:src="@{/scripts/frame.js}"></script>
     <script type="text/javascript" th:src="@{/scripts/pages/calendario.js}"></script>
     <script type="text/javascript" th:src="@{/scripts/pages/clientes.js}"></script>

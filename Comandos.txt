@@ -1,0 +1,8 @@
+
+docker build -t samuelt005/projetointegrador .
+
+// maven -> clean -> install
+
+docker run --name mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=root -d mysql
+
+docker run -d --name projetointegrador -p 8080:8080 --restart unless-stopped samuelt005/projetointegrador
