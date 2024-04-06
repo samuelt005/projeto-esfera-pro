@@ -103,3 +103,4 @@ function frameSetup() {
 }
 
 frameSetup();
+menuButtons[2].click();
