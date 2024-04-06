@@ -92,12 +92,6 @@
     width: 100px;
 }
 
-.table tr th:first-of-type,
-.table tr td:first-of-type {
-    text-align: center;
-    width: 40px;
-}
-
 .table tr th:last-of-type,
 .table tr td:last-of-type {
     flex-grow: 2;
