@@ -9,19 +9,10 @@
     <div class="content-container">
         <div class="table-header">
             <h2>Clientes</h2>
-            <div class="search-wrapper">
-                <input placeholder="Pesquisar" type="text">
-                 <div th:replace="~{icons/search/magnifying-glass :: magnifying-glass}"></div>
-            </div>
+            <div th:replace="~{components/search :: search('pesquisar', 'Pesquisar', ~{icons/search/magnifying-glass :: magnifying-glass})}"></div>
             <div class="buttons">
-                <div class="button">
-                    <div th:replace="~{icons/search/filters :: filters}"></div>
-                    Limpar Filtros
-                </div>
-                <div class="button">
-                    <div th:replace="~{icons/search/export :: export}"></div>
-                    Exportar
-                </div>
+                <div th:replace="~{components/button1 :: button('filtrar', 'Filtrar', ~{icons/buttons/filters :: filters})}"></div>
+                <div th:replace="~{components/button1 :: button('exportar', 'Exportar', ~{icons/buttons/export :: export})}"></div>
             </div>
         </div>
     </div>
@@ -29,6 +20,9 @@
 
 <styles>
     <link rel="stylesheet" th:href="@{/styles/pages/clientes.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/components/search.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/components/button1.css}"/>
+
 </styles>
 </body>
 </html>

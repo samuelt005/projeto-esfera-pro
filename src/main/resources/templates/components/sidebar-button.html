@@ -1,8 +1,6 @@
-<div th:fragment="button(page, title, icon)">
-    <div class="sidebar-button inactive" th:page="${page}">
-        <div>
-            <div th:replace="${icon}"></div>
-            <p th:text="${title}"></p>
-        </div>
+<div th:fragment="button(page, title, icon)" class="sidebar-button inactive" th:page="${page}">
+    <div>
+        <div th:replace="${icon}"></div>
+        <p th:text="${title}"></p>
     </div>
 </div>

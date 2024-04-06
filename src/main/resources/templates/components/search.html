@@ -1,0 +1,4 @@
+<div th:fragment="search(id, placeholder, icon)" class="search-wrapper" th:id="${id}">
+    <input th:placeholder="${placeholder}" type="text">
+    <div th:replace="${icon}"></div>
+</div>
