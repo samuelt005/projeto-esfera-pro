@@ -1,4 +1,4 @@
-package com.projetointegrador.projetointegrador.model;
+package com.projetointegrador.projetointegrador.models;
 
 import jakarta.persistence.*;
 

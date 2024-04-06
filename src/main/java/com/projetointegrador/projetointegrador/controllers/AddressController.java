@@ -1,11 +1,11 @@
-package com.projetointegrador.projetointegrador.controller;
+package com.projetointegrador.projetointegrador.controllers;
 
-import com.projetointegrador.projetointegrador.model.Address;
-import com.projetointegrador.projetointegrador.model.City;
-import com.projetointegrador.projetointegrador.model.Client;
-import com.projetointegrador.projetointegrador.repository.AddressRepository;
-import com.projetointegrador.projetointegrador.repository.CityRepository;
-import com.projetointegrador.projetointegrador.repository.ClientRepository;
+import com.projetointegrador.projetointegrador.models.Address;
+import com.projetointegrador.projetointegrador.models.City;
+import com.projetointegrador.projetointegrador.models.Client;
+import com.projetointegrador.projetointegrador.repositories.AddressRepository;
+import com.projetointegrador.projetointegrador.repositories.CityRepository;
+import com.projetointegrador.projetointegrador.repositories.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

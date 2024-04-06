@@ -1,6 +1,5 @@
-package com.projetointegrador.projetointegrador.model;
+package com.projetointegrador.projetointegrador.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.Objects;
