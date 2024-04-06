@@ -4,6 +4,7 @@
     justify-content: space-between;
     height: 100%;
     width: 80px;
+    min-width: 80px;
     padding: 5px;
     box-sizing: border-box;
     transition: width 0.5s;

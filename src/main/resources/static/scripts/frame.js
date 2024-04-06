@@ -42,7 +42,6 @@ function getMainFrameContent(page) {
             return response.text();
         })
         .then(data => {
-            console.log(data)
             const tempElement = document.createElement("div");
             tempElement.innerHTML = data;
 
