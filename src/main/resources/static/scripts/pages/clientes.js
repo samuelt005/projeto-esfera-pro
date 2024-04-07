@@ -48,8 +48,16 @@ function clientesStartup() {
     addRows(20);
     const checkboxes = document.querySelectorAll('.row-checkbox');
     const selectAllCheckbox = document.querySelector('.select-all-checkbox');
+    const buttonAddNew = document.querySelector('.button-add-new');
+    const buttonCloseModal = document.querySelector('.close-modal-button');
+    const cancelCloseModal = document.querySelector('.cancel-modal-button');
+    const saveCloseModal = document.querySelector('.save-modal-button');
     addCheckboxEvents(checkboxes);
     addSelectAllEvent(selectAllCheckbox, checkboxes);
+    addSwitchOverlayEvent(buttonAddNew);
+    addSwitchOverlayEvent(buttonCloseModal);
+    addSwitchOverlayEvent(cancelCloseModal);
+    addSwitchOverlayEvent(buttonCloseModal);
 }
 
 

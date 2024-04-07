@@ -39,14 +39,89 @@
                 <tbody class="table-content">
                 </tbody>
             </table>
+            <div th:replace="~{components/button-add-new :: button}"></div>
         </div>
     </div>
 </content>
 
+<modal>
+    <div class="modal-container">
+        <header>
+            <h2>
+                Cadastrar cliente
+            </h2>
+            <div class="close-modal-button">
+                <div th:replace="~{icons/buttons/close :: close}"></div>
+            </div>
+        </header>
+        <main>
+            <section>
+                <h3>Dados básicos</h3>
+                <div class="inputs-row">
+                    <div class="input-wrapper">
+                        <h4>Nome</h4>
+                        <div th:replace="~{components/input1 :: input('name', 'Digite o nome do cliente')}"></div>
+                    </div>
+                    <div class="input-wrapper">
+                        <h4>CPF</h4>
+                        <div th:replace="~{components/input1 :: input('cpf', '999.999.999-99')}"></div>
+                    </div>
+                </div>
+                <div class="inputs-row">
+                    <div class="input-wrapper">
+                        <h4>Empresa</h4>
+                        <div th:replace="~{components/input1 :: input('company', 'Digite o nome da empresa')}"></div>
+                    </div>
+                    <div class="input-wrapper">
+                        <h4>CNPJ</h4>
+                        <div th:replace="~{components/input1 :: input('cnpj', '99.999.999/9999-99')}"></div>
+                    </div>
+                </div>
+            </section>
+            <section>
+                <h3>Endereço</h3>
+                <div class="inputs-row">
+                    <div class="input-wrapper">
+                        <h4>Rua</h4>
+                        <div th:replace="~{components/input1 :: input('street', 'Insira a rua')}"></div>
+                    </div>
+                    <div class="input-wrapper small">
+                        <h4>Número</h4>
+                        <div th:replace="~{components/input1 :: input('number', '99999')}"></div>
+                    </div>
+                    <div class="input-wrapper small">
+                        <h4>CEP</h4>
+                        <div th:replace="~{components/input1 :: input('zip_code', '99999-999')}"></div>
+                    </div>
+                </div>
+                <div class="inputs-row">
+                    <div class="input-wrapper">
+                        <h4>Cidade</h4>
+                        <div th:replace="~{components/input1 :: input('street', 'Insira a rua')}"></div>
+                    </div>
+                    <div class="input-wrapper">
+                        <h4>Estado</h4>
+                        <div th:replace="~{components/input1 :: input('number', '99999')}"></div>
+                    </div>
+                </div>
+            </section>
+        </main>
+        <footer>
+            <div th:replace="~{components/button2 :: button('cancel-modal-button', 'Cancelar', false)}"></div>
+            <div th:replace="~{components/button2 :: button('save-modal-button', 'Salvar', true)}"></div>
+        </footer>
+    </div>
+</modal>
+
 <styles>
     <link rel="stylesheet" th:href="@{/styles/pages/clientes.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/modals/modal.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/modals/clientes.css}"/>
     <link rel="stylesheet" th:href="@{/styles/components/search.css}"/>
     <link rel="stylesheet" th:href="@{/styles/components/button1.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/components/button2.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/components/button3.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/components/input1.css}"/>
     <link rel="stylesheet" th:href="@{/styles/components/button-table.css}"/>
     <link rel="stylesheet" th:href="@{/styles/components/checkbox-table.css}"/>
 </styles>

@@ -1,5 +1,6 @@
 // FUNCTIONS
 const mainContent = document.querySelector(".main-content");
+const overlay = document.querySelector(".overlay");
 const allStyles = document.getElementById("styles");
 const sidebar = document.querySelector(".sidebar");
 const expandButton = document.querySelector(".expand-menu");
@@ -46,16 +47,23 @@ function getMainFrameContent(page) {
             tempElement.innerHTML = data;
 
             const contentDiv = tempElement.querySelector('content');
+            const modalDiv = tempElement.querySelector('modal');
             const stylesDiv = tempElement.querySelector('styles');
 
-            if (contentDiv) {
-                mainContent.innerHTML = contentDiv.innerHTML;
-                loadSelectedPageScript(page);
+
+            if (modalDiv) {
+                overlay.innerHTML = modalDiv.innerHTML;
             }
 
             if (stylesDiv) {
                 allStyles.innerHTML = stylesDiv.innerHTML;
             }
+
+            if (contentDiv) {
+                mainContent.innerHTML = contentDiv.innerHTML;
+            }
+
+            loadSelectedPageScript(page);
         })
         .catch(error => {
             console.error(error);

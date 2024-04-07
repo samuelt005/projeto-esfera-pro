@@ -44,6 +44,21 @@ function addSelectAllEvent(selectAllCheckbox, otherCheckboxes) {
 
         selectAllCheckbox.classList.toggle("selected");
     });
+}
 
+function switchOverlay() {
+    if (overlay.classList.contains("hidden")) {
+        overlay.classList.remove("fade-out");
+        overlay.classList.remove("hidden");
+    } else {
+        overlay.classList.add("fade-out");
+        overlay.addEventListener("animationend", function () {
+            overlay.classList.add("hidden");
+            overlay.classList.remove("fade-out");
+        }, {once: true});
+    }
+}
 
+function addSwitchOverlayEvent(button) {
+    button.addEventListener('click', switchOverlay);
 }

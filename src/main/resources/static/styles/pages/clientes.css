@@ -34,7 +34,7 @@
 
 .table-header h2 {
     font-size: 20px;
-    font-weight: 500;
+    font-weight: 600;
     color: var(--text-primary);
 }
 
@@ -87,9 +87,13 @@
 .table tr th,
 .table tr td {
     flex-grow: 1;
-    font-weight: 600;
     text-align: left;
     width: 100px;
+    font-size: 20px;
+}
+
+.table tr th {
+    font-weight: 600;
 }
 
 .table tr th:last-of-type,
