@@ -1,5 +1,7 @@
 package com.projetointegrador.projetointegrador.controllers;
 
+import com.projetointegrador.projetointegrador.models.City;
+import com.projetointegrador.projetointegrador.projections.CityProjection;
 import com.projetointegrador.projetointegrador.repositories.CityRepository;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +17,7 @@ public class CityController {
     }
 
     @GetMapping("byState/{stateId}")
-    public List<Object[]> listarCidadePorEstado(@PathVariable("stateId") Long stateId) {
+    public List<CityProjection> listCitiesPerState(@PathVariable("stateId") Long stateId) {
         return cityRepository.findCitiesByStateId(stateId);
     }
 }

@@ -1,0 +1,38 @@
+.input-select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    height: 36px;
+    width: 100%;
+    border-radius: 5px;
+    padding: 4px 10px;
+    border: 2px solid transparent;
+    background-color: var(--field);
+    color: var(--text-primary);
+    font-size: 16px;
+}
+
+.input-select.invalid {
+    border: 2px solid var(--red);
+}
+
+.input-select:focus {
+    background-color: var(--field-focus);
+    outline: none;
+}
+
+select::-ms-expand {
+    display: none;
+}
+
+.input-select.unselected {
+    color: var(--field-placeholder);
+}
+
+.input-select.unselected option {
+    color: var(--text-primary);
+}
+
+.input-select option:first-of-type {
+    color: var(--field-focus);
+}

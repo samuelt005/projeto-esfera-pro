@@ -8,6 +8,11 @@
     padding: 10px;
     box-sizing: border-box;
     background-color: var(--field);
+    border: 2px solid transparent;
+}
+
+.input1-wrapper.invalid {
+    border: 2px solid var(--red);
 }
 
 .input1-wrapper input {
@@ -23,4 +28,13 @@
 .input1-wrapper input::placeholder {
     color: var(--field-placeholder);
     font-size: 16px;
+}
+
+.input1-wrapper input:focus {
+    background-color: var(--field-focus);
+    outline: none;
+}
+
+.input1-wrapper:focus-within {
+    background-color: var(--field-focus);
 }

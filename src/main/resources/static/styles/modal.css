@@ -87,6 +87,10 @@
     max-width: 120px;
 }
 
+.input-wrapper.medium {
+    max-width: 200px;
+}
+
 .input-wrapper h4 {
     font-size: 20px;
     color: var(--text-primary);

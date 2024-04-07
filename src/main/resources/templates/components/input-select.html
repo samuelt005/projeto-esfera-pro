@@ -1,0 +1,4 @@
+<select th:fragment="input(name, firstOption, disabled)" th:disabled="${disabled}" th:name="${name}"
+        class="input-select unselected">
+    <option value="0" disabled selected th:text="${firstOption}"></option>
+</select>

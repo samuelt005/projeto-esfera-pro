@@ -5,8 +5,10 @@
 
     --white: #fff;
     --gray: #d9d9d9;
+    --red: #FD4B47;
 
     --field: #F0F0F7;
+    --field-focus: #dcdce3;
     --field-placeholder: #9393C2;
     --overlay-background: rgba(0, 0, 0, 0.5);
 

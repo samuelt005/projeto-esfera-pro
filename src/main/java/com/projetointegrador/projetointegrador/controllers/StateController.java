@@ -16,7 +16,7 @@ public class StateController {
     }
 
     @GetMapping
-    public List<State> listarEstados() {
+    public List<State> listStates() {
         return stateRepository.findAll();
     }
 }
