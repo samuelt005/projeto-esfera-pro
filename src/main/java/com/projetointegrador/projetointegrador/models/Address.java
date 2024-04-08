@@ -1,10 +1,13 @@
 package com.projetointegrador.projetointegrador.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.util.Objects;
 
 @Entity
+@JsonIgnoreProperties({"client", "cityId", "clientId"})
 public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,7 +25,7 @@ public class Address {
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "city_id", nullable = false)
     private City city;
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @OneToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "client_id", nullable = false)
     private Client client;
 

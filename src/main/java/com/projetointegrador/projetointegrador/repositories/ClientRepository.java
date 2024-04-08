@@ -49,4 +49,7 @@ public interface ClientRepository extends JpaRepository<Client, Long> {
             "WHERE " +
             "c.inactive = false AND c.id = :id")
     ClientProjection findClientById(@Param("id") Long id);
+
+    @Query("SELECT DISTINCT c FROM Client c LEFT JOIN FETCH c.address")
+    List<Client> findAllClientsWithAddress();
 }

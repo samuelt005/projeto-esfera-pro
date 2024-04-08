@@ -36,6 +36,11 @@ public class ClientController {
         return clientRepository.findClientById(id);
     }
 
+    @GetMapping("/test")
+    public List<Client> newlistClients() {
+        return clientRepository.findAllClientsWithAddress();
+    }
+
     @PostMapping
     public ClientProjection createClient(@RequestBody ClientDTO clientDTO) {
 

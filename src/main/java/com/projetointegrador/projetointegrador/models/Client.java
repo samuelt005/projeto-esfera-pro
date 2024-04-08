@@ -1,7 +1,10 @@
 package com.projetointegrador.projetointegrador.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -19,6 +22,8 @@ public class Client {
     private String company;
     @Column(nullable = false)
     private Boolean inactive;
+    @OneToOne(mappedBy = "client", cascade = CascadeType.ALL)
+    private Address address;
 
     public Long getId() {
         return id;
@@ -64,16 +69,24 @@ public class Client {
         this.inactive = inactive;
     }
 
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Client client = (Client) o;
-        return Objects.equals(id, client.id) && Objects.equals(name, client.name) && Objects.equals(cpf, client.cpf) && Objects.equals(cnpj, client.cnpj) && Objects.equals(company, client.company);
+        return Objects.equals(id, client.id) && Objects.equals(name, client.name) && Objects.equals(cpf, client.cpf) && Objects.equals(cnpj, client.cnpj) && Objects.equals(company, client.company) && Objects.equals(inactive, client.inactive) && Objects.equals(address, client.address);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, cpf, cnpj, company);
+        return Objects.hash(id, name, cpf, cnpj, company, inactive, address);
     }
 }

@@ -1,10 +1,12 @@
 package com.projetointegrador.projetointegrador.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.util.Objects;
 
 @Entity
+@JsonIgnoreProperties({"stateId"})
 public class City {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
