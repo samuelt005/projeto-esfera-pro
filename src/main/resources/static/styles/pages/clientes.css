@@ -89,7 +89,7 @@
     flex-grow: 1;
     text-align: left;
     width: 100px;
-    font-size: 20px;
+    font-size: 16px;
 }
 
 .table tr th {
@@ -98,8 +98,6 @@
 
 .table tr th:last-of-type,
 .table tr td:last-of-type {
-    flex-grow: 2;
-    width: 200px;
 }
 
 .table-buttons {
@@ -108,4 +106,5 @@
     justify-content: flex-start;
     flex-direction: row;
     gap: 20px;
+    padding-right: 20px;
 }

@@ -26,7 +26,7 @@ public class State {
         this.uf = uf;
     }
 
-    public String getName() {
+    public String getState_name() {
         return name;
     }
 

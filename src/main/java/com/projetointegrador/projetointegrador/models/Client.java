@@ -11,11 +11,11 @@ public class Client {
     private Long id;
     @Column(length = 50, nullable = false)
     private String name;
-    @Column(length = 11, nullable = true)
+    @Column(length = 11)
     private String cpf;
-    @Column(length = 14, nullable = true)
+    @Column(length = 14)
     private String cnpj;
-    @Column(length = 50, nullable = true)
+    @Column(length = 50)
     private String company;
     @Column(nullable = false)
     private Boolean inactive;
