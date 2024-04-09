@@ -18,6 +18,10 @@ public class State {
         return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getUf() {
         return uf;
     }

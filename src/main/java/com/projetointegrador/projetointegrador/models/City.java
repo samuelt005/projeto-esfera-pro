@@ -13,8 +13,6 @@ public class City {
     private Long id;
     @Column(length = 100, nullable = false)
     private String name;
-    @Transient
-    private Long stateId;
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "state_id", nullable = false)
     private State state;
@@ -29,14 +27,6 @@ public class City {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Long getStateId() {
-        return stateId;
-    }
-
-    public void setStateId(Long stateId) {
-        this.stateId = stateId;
     }
 
     public State getState() {

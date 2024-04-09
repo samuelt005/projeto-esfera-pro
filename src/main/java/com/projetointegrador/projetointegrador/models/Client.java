@@ -22,7 +22,8 @@ public class Client {
     private String company;
     @Column(nullable = false)
     private Boolean inactive;
-    @OneToOne(mappedBy = "client", cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "address_id")
     private Address address;
 
     public Long getId() {
