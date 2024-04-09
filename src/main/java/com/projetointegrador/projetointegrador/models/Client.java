@@ -1,10 +1,7 @@
 package com.projetointegrador.projetointegrador.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -26,54 +23,67 @@ public class Client {
     @JoinColumn(name = "address_id")
     private Address address;
 
+    @SuppressWarnings("unused")
     public Long getId() {
         return id;
     }
 
+    @SuppressWarnings("unused")
     public String getName() {
         return name;
     }
 
+    @SuppressWarnings("unused")
     public void setName(String name) {
         this.name = name;
     }
 
+    @SuppressWarnings("unused")
     public String getCpf() {
         return cpf;
     }
 
+    @SuppressWarnings("unused")
     public void setCpf(String cpf) {
         this.cpf = cpf;
     }
 
+    @SuppressWarnings("unused")
     public String getCnpj() {
         return cnpj;
     }
 
+    @SuppressWarnings("unused")
     public void setCnpj(String cnpj) {
         this.cnpj = cnpj;
     }
 
+    @SuppressWarnings("unused")
     public String getCompany() {
         return company;
     }
 
+    @SuppressWarnings("unused")
     public void setCompany(String company) {
         this.company = company;
     }
 
+    @SuppressWarnings("unused")
     public Boolean getInactive() {
         return inactive;
     }
 
+    @SuppressWarnings("unused")
     public void setInactive(Boolean inactive) {
         this.inactive = inactive;
     }
 
+    @SuppressWarnings("unused")
     public Address getAddress() {
         return address;
     }
 
+    @SuppressWarnings("unused")
     public void setAddress(Address address) {
         this.address = address;
     }

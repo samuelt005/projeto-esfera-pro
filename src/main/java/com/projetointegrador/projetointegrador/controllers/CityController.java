@@ -2,7 +2,6 @@ package com.projetointegrador.projetointegrador.controllers;
 
 import com.projetointegrador.projetointegrador.models.City;
 import com.projetointegrador.projetointegrador.models.State;
-import com.projetointegrador.projetointegrador.projections.CityProjection;
 import com.projetointegrador.projetointegrador.repositories.CityRepository;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;

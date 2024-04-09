@@ -1,8 +1,6 @@
 package com.projetointegrador.projetointegrador.controllers;
 
 import com.projetointegrador.projetointegrador.models.Client;
-import com.projetointegrador.projetointegrador.repositories.AddressRepository;
-import com.projetointegrador.projetointegrador.repositories.CityRepository;
 import com.projetointegrador.projetointegrador.repositories.ClientRepository;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
@@ -17,7 +15,7 @@ import java.util.Optional;
 public class ClientController {
     private final ClientRepository clientRepository;
 
-    public ClientController(ClientRepository clientRepository, AddressRepository addressRepository, CityRepository cityRepository) {
+    public ClientController(ClientRepository clientRepository) {
         this.clientRepository = clientRepository;
     }
 

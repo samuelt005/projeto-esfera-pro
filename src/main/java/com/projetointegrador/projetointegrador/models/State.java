@@ -14,22 +14,27 @@ public class State {
     @Column(length = 100, nullable = false)
     private String name;
 
+    @SuppressWarnings("unused")
     public Long getId() {
         return id;
     }
 
+    @SuppressWarnings("unused")
     public void setId(Long id) {
         this.id = id;
     }
 
+    @SuppressWarnings("unused")
     public String getUf() {
         return uf;
     }
 
+    @SuppressWarnings("unused")
     public void setUf(String uf) {
         this.uf = uf;
     }
 
+    @SuppressWarnings("unused")
     public String getState_name() {
         return name;
     }

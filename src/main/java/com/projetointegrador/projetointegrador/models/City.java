@@ -17,22 +17,22 @@ public class City {
     @JoinColumn(name = "state_id", nullable = false)
     private State state;
 
+    @SuppressWarnings("unused")
     public Long getId() {
         return id;
     }
 
+    @SuppressWarnings("unused")
     public String getCity_name() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
+    @SuppressWarnings("unused")
     public State getState() {
         return state;
     }
 
+    @SuppressWarnings("unused")
     public void setState(State state) {
         this.state = state;
     }
