@@ -1,55 +1,41 @@
 package com.projetointegrador.projetointegrador.controllers;
 
 import com.projetointegrador.projetointegrador.models.Client;
-import com.projetointegrador.projetointegrador.repositories.ClientRepository;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
+import com.projetointegrador.projetointegrador.services.ClientService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/client")
 public class ClientController {
-    private final ClientRepository clientRepository;
+    private final ClientService clientService;
 
-    public ClientController(ClientRepository clientRepository) {
-        this.clientRepository = clientRepository;
+    public ClientController(ClientService clientService) {
+        this.clientService = clientService;
     }
 
     @GetMapping("byId/{id}")
-    public Optional<Client> findClient(@PathVariable("id") Long id) {
-        return clientRepository.findById(id);
+    public ResponseEntity<?> findClient(@PathVariable("id") Long id) {
+        return clientService.findOneClient(id);
     }
 
     @GetMapping
-    public List<Client> listActiveClients() {
-        Client exampleClient = new Client();
-        exampleClient.setInactive(false);
-
-        ExampleMatcher matcher = ExampleMatcher.matching()
-                .withIgnorePaths("id");
-
-        Example<Client> example = Example.of(exampleClient, matcher);
-
-        return clientRepository.findAll(example);
+    public ResponseEntity<?> listClients() {
+        return clientService.listActiveClients();
     }
 
     @PostMapping
-    public ResponseEntity<Client> createClient(@RequestBody Client client) {
-        client.setInactive(false);
-        Client createdClient = clientRepository.save(client);
-        return ResponseEntity.ok().body(createdClient);
+    public ResponseEntity<?> createClient(@RequestBody Client client) {
+        return clientService.createClient(client);
+    }
+
+    @PutMapping
+    public ResponseEntity<?> updateClient(@RequestBody Client client) {
+        return clientService.updateClient(client);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Client> deleteClient(@PathVariable Long id) {
-        return clientRepository.findById(id).map(client -> {
-            client.setInactive(true);
-            Client updatedClient = clientRepository.save(client);
-            return ResponseEntity.ok().body(updatedClient);
-        }).orElseThrow();
+    public ResponseEntity<?> deleteClient(@PathVariable Long id) {
+        return clientService.deleteClient(id);
     }
 }

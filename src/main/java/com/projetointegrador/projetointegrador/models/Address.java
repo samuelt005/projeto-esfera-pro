@@ -21,27 +21,26 @@ public class Address {
     @JoinColumn(name = "city_id", nullable = false)
     private City city;
 
-    @SuppressWarnings("unused")
     public Long getId() {
         return id;
     }
 
-    @SuppressWarnings("unused")
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getStreet() {
         return street;
     }
 
-    @SuppressWarnings("unused")
     public String getZip_code() {
         return zip_code;
     }
 
-    @SuppressWarnings("unused")
     public Integer getNumber() {
         return number;
     }
 
-    @SuppressWarnings("unused")
     public City getCity() {
         return city;
     }
