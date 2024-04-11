@@ -46,41 +46,33 @@ public class ClientService {
     }
 
     public ResponseEntity<?> createClient(Client client) {
+        if (validateClient(client)) {
+            return ResponseEntity.badRequest().body(new Response(HttpStatus.BAD_REQUEST, "Dados do cliente inválidos."));
+        }
+
+        if (isAlreadyRegistered(client.getCpf(), client.getCnpj())) {
+            return ResponseEntity.badRequest().body(new Response(HttpStatus.BAD_REQUEST, "CPF ou CNPJ já está cadastrado."));
+        }
+
         client.setInactive(false);
         client.setId(null);
         client.getAddress().setId(null);
-
-        if (client.getCpf() != null) {
-            if (!this.isCpfValid(client.getCpf())) {
-                Response response = new Response(HttpStatus.BAD_REQUEST, "CPF inválido.");
-                return ResponseEntity.badRequest().body(response);
-            }
-        }
-
-        if (client.getCnpj() != null) {
-            if (!this.isCpnjValid(client.getCnpj())) {
-                Response response = new Response(HttpStatus.BAD_REQUEST, "CNPJ inválido.");
-                return ResponseEntity.badRequest().body(response);
-            }
-        }
 
         Client createdClient = clientRepository.save(client);
         return ResponseEntity.ok().body(createdClient);
     }
 
-
     public ResponseEntity<?> updateClient(Client client) {
-        client.setId(null);
-        client.getAddress().setId(null);
-
-        if (client.getId() == null) {
-            Response response = new Response(HttpStatus.BAD_REQUEST, "Id de cliente não está presente.");
-            return ResponseEntity.badRequest().body(response);
+        if (client.getId() == null || client.getAddress().getId() == null) {
+            return ResponseEntity.badRequest().body(new Response(HttpStatus.BAD_REQUEST, "IDs de cliente ou endereço não estão presentes."));
         }
 
-        if (client.getAddress().getId() == null) {
-            Response response = new Response(HttpStatus.BAD_REQUEST, "Id de endereço não está presente.");
-            return ResponseEntity.badRequest().body(response);
+        if (validateClient(client)) {
+            return ResponseEntity.badRequest().body(new Response(HttpStatus.BAD_REQUEST, "Dados do cliente inválidos."));
+        }
+
+        if (isAlreadyRegistered(client.getCpf(), client.getCnpj())) {
+            return ResponseEntity.badRequest().body(new Response(HttpStatus.BAD_REQUEST, "CPF ou CNPJ já está cadastrado."));
         }
 
         Client updatedClient = clientRepository.save(client);
@@ -102,13 +94,39 @@ public class ClientService {
         }
     }
 
-    public Boolean isCpfValid(String cpf) {
+    private boolean validateClient(Client client) {
+        if (client.getCpf() != null && !isCpfValid(client.getCpf())) {
+            return true;
+        }
+
+        return client.getCnpj() != null && !isCnpjValid(client.getCnpj());
+    }
+
+    private boolean isAlreadyRegistered(String cpf, String cnpj) {
+        if (cpf != null && isCpfAlreadyRegistered(cpf)) {
+            return true;
+        }
+
+        return cnpj != null && isCnpjAlreadyRegistered(cnpj);
+    }
+
+    private Boolean isCpfValid(String cpf) {
         CpfValidator validator = new CpfValidator();
         return validator.isValid(cpf);
     }
 
-    public Boolean isCpnjValid(String cnpj) {
+    private Boolean isCnpjValid(String cnpj) {
         CnpjValidator validator = new CnpjValidator();
         return validator.isValid(cnpj);
+    }
+
+    private boolean isCpfAlreadyRegistered(String cpf) {
+        Optional<Client> existentCpf = clientRepository.findByCpf(cpf);
+        return existentCpf.isPresent();
+    }
+
+    private boolean isCnpjAlreadyRegistered(String cnpj) {
+        Optional<Client> existentCnpj = clientRepository.findByCnpj(cnpj);
+        return existentCnpj.isPresent();
     }
 }

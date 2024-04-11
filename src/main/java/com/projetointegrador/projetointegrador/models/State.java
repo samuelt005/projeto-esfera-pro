@@ -30,7 +30,7 @@ public class State {
         this.uf = uf;
     }
 
-    public String getState_name() {
+    public String getName() {
         return name;
     }
 

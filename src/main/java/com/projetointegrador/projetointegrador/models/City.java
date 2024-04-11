@@ -21,7 +21,7 @@ public class City {
         return id;
     }
 
-    public String getCity_name() {
+    public String getName() {
         return name;
     }
 
