@@ -1,45 +1,37 @@
 let clientForm = {
-    name: null,
-    cpf: null,
-    cnpj: null,
-    company: null,
-    street: null,
-    number: null,
-    zip_code: null,
-    city_id: null,
-    city_name: null,
-    state_id: null,
-    state_name: null
+    id: null, name: "", cpf: "", cnpj: "", company: "", inactive: false, address: {
+        id: null, street: "", zip_code: "", number: null, city: {
+            id: null
+        }
+    }
 }
+let isEditing = false;
 
 function resetForm() {
     clientForm = {
-        name: null,
-        cpf: null,
-        cnpj: null,
-        company: null,
-        street: null,
-        number: null,
-        zip_code: null,
-        city_id: null,
-        city_name: null,
-        state_id: null,
-        state_name: null
+        id: null, name: "", cpf: "", cnpj: "", company: "", inactive: false, address: {
+            id: null, street: "", zip_code: "", number: null, city: {
+                id: null
+            }
+        }
     }
 }
 
 function fillFields(client) {
+    resetForm();
+    clientForm.id = client.id;
+    clientForm.address.id = client.address.id;
     nameInput.value = client.name;
     cpfInput.value = client.cpf;
     companyInput.value = client.company;
     cnpjInput.value = client.cnpj;
-    streetInput.value = client.street;
-    numberInput.value = client.number;
-    zipCodeInput.value = client.zip_code;
-    stateSelect.value = client.state_id;
+    streetInput.value = client.address.street;
+    numberInput.value = client.address.number;
+    zipCodeInput.value = client.address.zip_code;
+    stateSelect.value = client.address.city.state.id;
     stateSelect.classList.remove('unselected')
-    getCitiesByState(client.state_id).then(() => {
-        citySelect.value = client.city_id;
+    getCitiesByState(client.address.city.state.id).then(() => {
+        citySelect.value = client.address.city.id;
         citySelect.disabled = false;
         citySelect.classList.remove('unselected')
     });
@@ -48,6 +40,18 @@ function fillFields(client) {
     cnpjInput.dispatchEvent(new Event('input'));
     numberInput.dispatchEvent(new Event('input'));
     zipCodeInput.dispatchEvent(new Event('input'));
+}
+
+function cleanInvalidClasses() {
+    nameInput.parentElement.classList.remove('invalid');
+    cpfInput.parentElement.classList.remove('invalid');
+    companyInput.parentElement.classList.remove('invalid');
+    cnpjInput.parentElement.classList.remove('invalid');
+    streetInput.parentElement.classList.remove('invalid');
+    numberInput.parentElement.classList.remove('invalid');
+    zipCodeInput.parentElement.classList.remove('invalid');
+    stateSelect.classList.remove('invalid');
+    citySelect.classList.remove('invalid');
 }
 
 function resetFields() {
@@ -63,87 +67,6 @@ function resetFields() {
     citySelect.value = 0;
     citySelect.disabled = true;
     citySelect.classList.add('unselected')
-}
-
-function checkClientForm() {
-    resetForm();
-    let isFormValid = true;
-
-    nameInput.parentElement.classList.remove('invalid');
-    if (nameInput.value.trim() !== "") {
-        clientForm.name = nameInput.value;
-    } else {
-        clientForm.name = null;
-        nameInput.parentElement.classList.add('invalid');
-        isFormValid = false;
-    }
-
-    cpfInput.parentElement.classList.remove('invalid');
-    const unmaskedCpf = cpfInput.value.replace(/\D+/g, '');
-    if (validadeCpf(unmaskedCpf)) {
-        clientForm.cpf = unmaskedCpf;
-    } else {
-        cpfInput.parentElement.classList.add('invalid');
-        isFormValid = false;
-    }
-
-    companyInput.parentElement.classList.remove('invalid');
-    if (companyInput.value.trim() !== "") {
-        clientForm.company = companyInput.value;
-    } else {
-        companyInput.parentElement.classList.add('invalid');
-        isFormValid = false;
-    }
-
-    cnpjInput.parentElement.classList.remove('invalid');
-    const unmaskedCnpj = cnpjInput.value.replace(/\D+/g, '');
-    if (validadeCnpj(unmaskedCnpj)) {
-        clientForm.cnpj = unmaskedCnpj;
-    } else {
-        cnpjInput.parentElement.classList.add('invalid');
-        isFormValid = false;
-    }
-
-    streetInput.parentElement.classList.remove('invalid');
-    if (streetInput.value.trim() !== "") {
-        clientForm.street = streetInput.value;
-    }
-
-    numberInput.parentElement.classList.remove('invalid');
-    const numberValue = parseInt(numberInput.value.trim());
-    if (!isNaN(numberValue)) {
-        clientForm.number = numberValue;
-    }
-
-    zipCodeInput.parentElement.classList.remove('invalid');
-    const unmaskedZipCode = zipCodeInput.value.replace(/\D+/g, '');
-    if (unmaskedZipCode.length === 8) {
-        clientForm.zip_code = unmaskedZipCode;
-    } else if (unmaskedZipCode.length === 0) {
-        clientForm.zip_code = null;
-    } else {
-        zipCodeInput.parentElement.classList.add('invalid');
-    }
-
-    stateSelect.classList.remove('invalid');
-    const stateIdValue = parseInt(stateSelect.value.trim());
-    if (!isNaN(stateIdValue) && stateIdValue !== 0) {
-        clientForm.state_id = stateIdValue;
-    } else {
-        stateSelect.classList.add('invalid');
-        isFormValid = false;
-    }
-
-    citySelect.classList.remove('invalid');
-    const cityIdValue = parseInt(citySelect.value.trim());
-    if (!isNaN(cityIdValue) && cityIdValue !== 0) {
-        clientForm.city_id = cityIdValue;
-    } else {
-        citySelect.classList.add('invalid');
-        isFormValid = false;
-    }
-
-    return isFormValid;
 }
 
 function setInputMasks() {
@@ -163,4 +86,100 @@ function setInputMasks() {
     IMask(cnpjInput, cnpjMask);
     IMask(numberInput, numberMask);
     IMask(zipCodeInput, zipCodeMask);
+}
+
+function checkClientForm() {
+    cleanInvalidClasses();
+    let isFormValid = true;
+
+    if (nameInput.value.trim() !== "") {
+        clientForm.name = nameInput.value;
+    } else {
+        clientForm.name = null;
+        nameInput.parentElement.classList.add('invalid');
+        isFormValid = false;
+    }
+
+    const unmaskedCpf = cpfInput.value.replace(/\D+/g, '');
+    if (validadeCpf(unmaskedCpf)) {
+        clientForm.cpf = unmaskedCpf;
+    } else {
+        cpfInput.parentElement.classList.add('invalid');
+        isFormValid = false;
+    }
+
+    if (companyInput.value.trim() !== "") {
+        clientForm.company = companyInput.value;
+    } else {
+        companyInput.parentElement.classList.add('invalid');
+        isFormValid = false;
+    }
+
+    const unmaskedCnpj = cnpjInput.value.replace(/\D+/g, '');
+    if (validadeCnpj(unmaskedCnpj)) {
+        clientForm.cnpj = unmaskedCnpj;
+    } else {
+        cnpjInput.parentElement.classList.add('invalid');
+        isFormValid = false;
+    }
+
+    if (streetInput.value.trim() !== "") {
+        clientForm.address.street = streetInput.value;
+    }
+
+    const numberValue = parseInt(numberInput.value.trim());
+    if (!isNaN(numberValue)) {
+        clientForm.address.number = numberValue;
+    }
+
+    const unmaskedZipCode = zipCodeInput.value.replace(/\D+/g, '');
+    if (unmaskedZipCode.length === 8) {
+        clientForm.address.zip_code = unmaskedZipCode;
+    } else if (unmaskedZipCode.length === 0) {
+        clientForm.address.zip_code = null;
+    } else {
+        zipCodeInput.parentElement.classList.add('invalid');
+    }
+
+    const stateIdValue = parseInt(stateSelect.value.trim());
+    if (stateIdValue === null || stateIdValue === 0) {
+        stateSelect.classList.add('invalid');
+        isFormValid = false;
+    }
+
+    const cityIdValue = parseInt(citySelect.value.trim());
+    if (cityIdValue === null || cityIdValue === 0) {
+        citySelect.classList.add('invalid');
+        isFormValid = false;
+    } else {
+        clientForm.address.city.id = cityIdValue;
+    }
+
+    return isFormValid;
+}
+
+async function saveClient() {
+    if (!checkClientForm()) return;
+
+    console.log(clientForm)
+
+    try {
+        const response = await fetch(`${URL}/client`, {
+            method: isEditing ? 'PUT' : 'POST', headers: {
+                'Content-Type': 'application/json',
+            }, body: JSON.stringify(clientForm),
+        });
+
+        const responseData = await response.json();
+
+        if (!response.ok) {
+            console.error('Erro: ' + responseData.message);
+            return;
+        }
+
+        // TODO resetar o botão de select-all quando adicionada uma nova linha
+        switchOverlay();
+    } catch (error) {
+        console.error(isEditing ? 'Erro ao editar cliente:' : 'Erro ao criar cliente:', error);
+    }
 }

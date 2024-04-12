@@ -53,7 +53,7 @@ async function getStates(stateSelect) {
             data.forEach((data) => {
                 const newOption = document.createElement('option');
                 newOption.value = data.id;
-                newOption.textContent = data.state_name;
+                newOption.textContent = data.name;
                 newOption.classList.add('state-option');
 
                 stateSelect.appendChild(newOption);
@@ -116,13 +116,13 @@ function addRows(clients) {
 
         const newRowData = `
             <td>${client.name}</td>
-            <td>${client.cpf}</td>
+            <td>${client.cnpj ? client.cnpj : client.cpf}</td>
             <td>${client.company}</td>
-            <td>${client.zip_code}</td>
-            <td>${client.street}</td>
-            <td>${client.number}</td>
-            <td>${client.city_name}</td>
-            <td>${client.state_name}</td>
+            <td>${client.address.zip_code}</td>
+            <td>${client.address.street}</td>
+            <td>${client.address.number}</td>
+            <td>${client.address.city.name}</td>
+            <td>${client.address.city.state.name}</td>
         `
 
         newTableRow += newRowData;
@@ -157,8 +157,6 @@ function addRowButtonEvents() {
                 .then(response => {
                     if (!response.ok) {
                         throw new Error(`Erro ao deletar cliente`);
-                    } else {
-                        console.log('Cliente deletado com sucesso: ' + cliente.id);
                     }
                 })
                 .catch(error => {
@@ -169,6 +167,9 @@ function addRowButtonEvents() {
         editButton.addEventListener('click', () => {
             const rowId = button.closest('tr').id.split('-')[1];
             const client = clientList.find(client => client.id === parseInt(rowId));
+            isEditing = true;
+            resetFields();
+            cleanInvalidClasses();
             fillFields(client);
             switchOverlay();
         });
@@ -187,7 +188,9 @@ function addSelectedStateEvent(select) {
 
 function addNewItemEvent(button) {
     button.addEventListener('click', () => {
+        isEditing = false;
         resetFields();
+        cleanInvalidClasses();
         switchOverlay();
     });
 }
@@ -210,36 +213,8 @@ function switchSelectClass(event) {
     }
 }
 
-// TODO add editClient async function
-
-async function saveClient() {
-    if (checkClientForm()) {
-        await fetch(`${URL}/client`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(clientForm),
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`Erro ao criar cliente`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                addRows([data]);
-                // TODO resetar o botão de select-all quando adicionado uma nova linha
-                console.log('Cliente criado com sucesso:', [data]);
-                switchOverlay();
-            })
-            .catch(error => {
-                console.error('Erro ao criar cliente:', error);
-            });
-    }
-}
-
-// TODO add function to reset table when edit, delete or create an item
+// TODO Add function to reset table when edit, delete or create an item
+// TODO Maybe use an observer?
 
 function getDocumentElements() {
     checkboxes = document.querySelectorAll('.row-checkbox');

@@ -2,9 +2,9 @@ package com.projetointegrador.projetointegrador.services;
 
 import com.projetointegrador.projetointegrador.models.Client;
 import com.projetointegrador.projetointegrador.repositories.ClientRepository;
-import com.projetointegrador.projetointegrador.response.Response;
-import com.projetointegrador.projetointegrador.validatos.CnpjValidator;
-import com.projetointegrador.projetointegrador.validatos.CpfValidator;
+import com.projetointegrador.projetointegrador.responses.Response;
+import com.projetointegrador.projetointegrador.validators.CnpjValidator;
+import com.projetointegrador.projetointegrador.validators.CpfValidator;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.HttpStatus;
@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -50,7 +51,7 @@ public class ClientService {
             return ResponseEntity.badRequest().body(new Response(HttpStatus.BAD_REQUEST, "Dados do cliente inválidos."));
         }
 
-        if (isAlreadyRegistered(client.getCpf(), client.getCnpj())) {
+        if (isAlreadyRegistered(client.getCpf(), client.getCnpj(), null)) {
             return ResponseEntity.badRequest().body(new Response(HttpStatus.BAD_REQUEST, "CPF ou CNPJ já está cadastrado."));
         }
 
@@ -71,7 +72,7 @@ public class ClientService {
             return ResponseEntity.badRequest().body(new Response(HttpStatus.BAD_REQUEST, "Dados do cliente inválidos."));
         }
 
-        if (isAlreadyRegistered(client.getCpf(), client.getCnpj())) {
+        if (isAlreadyRegistered(client.getCpf(), client.getCnpj(), client.getId())) {
             return ResponseEntity.badRequest().body(new Response(HttpStatus.BAD_REQUEST, "CPF ou CNPJ já está cadastrado."));
         }
 
@@ -102,12 +103,12 @@ public class ClientService {
         return client.getCnpj() != null && !isCnpjValid(client.getCnpj());
     }
 
-    private boolean isAlreadyRegistered(String cpf, String cnpj) {
-        if (cpf != null && isCpfAlreadyRegistered(cpf)) {
+    private boolean isAlreadyRegistered(String cpf, String cnpj, Long id) {
+        if (cpf != null && isCpfAlreadyRegistered(cpf, id)) {
             return true;
         }
 
-        return cnpj != null && isCnpjAlreadyRegistered(cnpj);
+        return cnpj != null && isCnpjAlreadyRegistered(cnpj, id);
     }
 
     private Boolean isCpfValid(String cpf) {
@@ -120,13 +121,13 @@ public class ClientService {
         return validator.isValid(cnpj);
     }
 
-    private boolean isCpfAlreadyRegistered(String cpf) {
+    private boolean isCpfAlreadyRegistered(String cpf, Long id) {
         Optional<Client> existentCpf = clientRepository.findByCpf(cpf);
-        return existentCpf.isPresent();
+        return existentCpf.isPresent() && !Objects.equals(existentCpf.get().getId(), id);
     }
 
-    private boolean isCnpjAlreadyRegistered(String cnpj) {
+    private boolean isCnpjAlreadyRegistered(String cnpj, Long id) {
         Optional<Client> existentCnpj = clientRepository.findByCnpj(cnpj);
-        return existentCnpj.isPresent();
+        return existentCnpj.isPresent() && !Objects.equals(existentCnpj.get().getId(), id);
     }
 }

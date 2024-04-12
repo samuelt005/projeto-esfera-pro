@@ -1,4 +1,4 @@
-package com.projetointegrador.projetointegrador.validatos;
+package com.projetointegrador.projetointegrador.validators;
 
 public class CnpjValidator {
     private static final int[] pesoCNPJ = {6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2};

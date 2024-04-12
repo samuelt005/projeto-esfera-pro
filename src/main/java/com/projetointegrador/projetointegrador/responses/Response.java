@@ -1,4 +1,4 @@
-package com.projetointegrador.projetointegrador.response;
+package com.projetointegrador.projetointegrador.responses;
 
 import org.springframework.http.HttpStatus;
 
