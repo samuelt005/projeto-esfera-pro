@@ -1,22 +1,19 @@
 let selectedIds = [];
 
-function extractId(stringId) {
-    const parts = stringId.split('-');
-    return parseInt(parts[1]);
-}
-
 function checkboxClicked(event) {
     const checkbox = event.currentTarget;
-    const stringId = checkbox.getAttribute("id");
-    const id = extractId(stringId);
+    const id = parseInt(checkbox.dataset.checkboxId);
 
     const index = selectedIds.indexOf(id);
 
     if (index !== -1) {
+        selectAllCheckbox.classList.remove("selected");
         selectedIds.splice(index, 1);
     } else {
         selectedIds.push(id);
     }
+
+    console.log(selectedIds)
 
     checkbox.classList.toggle("selected");
 }
@@ -30,8 +27,8 @@ function selectAllHandler() {
     } else {
         selectedIds = [];
         checkboxes.forEach((checkbox) => {
-            const id = checkbox.id.split('-')[1];
-            selectedIds.push(parseInt(id));
+            const id = parseInt(checkbox.dataset.checkboxId);
+            selectedIds.push(id);
             checkbox.classList.add("selected");
         });
     }
