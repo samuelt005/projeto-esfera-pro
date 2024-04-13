@@ -21,29 +21,36 @@ function checkboxClicked(event) {
     checkbox.classList.toggle("selected");
 }
 
-function addCheckboxEvents(checkboxes) {
-    checkboxes.forEach((checkbox) => {
-        checkbox.addEventListener('click', checkboxClicked);
-    });
+function selectAllHandler() {
+    if (selectAllCheckbox.classList.contains("selected")) {
+        selectedIds = [];
+        checkboxes.forEach((checkbox) => {
+            checkbox.classList.remove("selected");
+        });
+    } else {
+        selectedIds = [];
+        checkboxes.forEach((checkbox) => {
+            const id = checkbox.id.split('-')[1];
+            selectedIds.push(parseInt(id));
+            checkbox.classList.add("selected");
+        });
+    }
+
+    selectAllCheckbox.classList.toggle("selected");
 }
 
-function addSelectAllEvent(selectAllCheckbox, otherCheckboxes) {
-    selectAllCheckbox.addEventListener('click', () => {
-        if (selectAllCheckbox.classList.contains("selected")) {
-            selectedIds = [];
-            otherCheckboxes.forEach((checkbox) => {
-                checkbox.classList.remove("selected");
-            });
-        } else {
-            selectedIds = [];
-            selectedIds.push(...allIds);
-            otherCheckboxes.forEach((checkbox) => {
-                checkbox.classList.add("selected");
-            });
-        }
 
-        selectAllCheckbox.classList.toggle("selected");
+function addCheckboxesEvents() {
+    checkboxes = document.querySelectorAll('.row-checkbox');
+    selectAllCheckbox = document.querySelector('.select-all-checkbox');
+
+    checkboxes.forEach((checkbox) => {
+        checkbox.removeEventListener('click', checkboxClicked);
+        checkbox.addEventListener('click', checkboxClicked);
     });
+
+    selectAllCheckbox.removeEventListener('click', selectAllHandler);
+    selectAllCheckbox.addEventListener('click', selectAllHandler);
 }
 
 function switchOverlay() {

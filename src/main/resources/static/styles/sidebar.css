@@ -84,6 +84,7 @@
     transition: opacity 0.2s, visibility 0.2s;
     user-select: none;
     text-transform: capitalize;
+    width: 0;
 }
 
 .sidebar-button.inactive {

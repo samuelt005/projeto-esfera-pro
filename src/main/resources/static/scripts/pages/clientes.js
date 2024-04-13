@@ -17,7 +17,6 @@ let citySelect;
 
 // Page Global Variables
 let clientList = [];
-let allIds = [];
 
 // Page Functions
 async function getClients() {
@@ -58,6 +57,8 @@ async function getOneClient(id, isEditing) {
                 if (index !== -1) {
                     clientList[index] = data;
                 }
+
+                addCheckboxesEvents();
             } else {
                 clientList.push(data);
                 addRows([data]);
@@ -137,6 +138,8 @@ function addRows(clients) {
         const newRow = createTableRow(client);
         tableContent.appendChild(newRow);
     });
+
+    addCheckboxesEvents();
 }
 
 function createTableRow(client) {
@@ -213,6 +216,12 @@ async function deleteClient() {
             console.error('Erro: ' + responseData.message);
         } else {
             this.closest('tr').remove();
+            addCheckboxesEvents();
+
+            const index = selectedIds.findIndex(index => index === parseInt(id));
+            if (index !== -1) {
+                selectedIds.splice(index, 1);
+            }
         }
 
     } catch (error) {
@@ -257,12 +266,7 @@ function switchSelectClass(event) {
     }
 }
 
-// TODO Add function to reset table when edit, delete or create an item
-// TODO Maybe use an observer?
-
 function getDocumentElements() {
-    checkboxes = document.querySelectorAll('.row-checkbox');
-    selectAllCheckbox = document.querySelector('.select-all-checkbox');
     buttonAddNew = document.querySelector('.button-add-new');
     buttonCloseModal = document.querySelector('.close-modal-button');
     cancelCloseModal = document.querySelector('.cancel-modal-button');
@@ -281,8 +285,6 @@ function getDocumentElements() {
 function clientesStartup() {
     getClients().then(() => {
             getDocumentElements();
-            addCheckboxEvents(checkboxes);
-            addSelectAllEvent(selectAllCheckbox, checkboxes);
             addNewItemEvent(buttonAddNew);
             addSwitchOverlayEvent(buttonCloseModal);
             addSwitchOverlayEvent(cancelCloseModal);
