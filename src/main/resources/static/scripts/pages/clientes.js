@@ -31,7 +31,37 @@ async function getClients() {
         .then(data => {
             clientList.push(...data);
             addRows(data);
-            addRowButtonEvents();
+        })
+        .catch(error => {
+            console.error(error);
+        });
+}
+
+async function getOneClient(id, isEditing) {
+    await fetch(`${URL}/client/byId/${id}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Erro ao recuperar cliente`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (isEditing) {
+                const rowId = `row-${id}`;
+                const oldRow = document.getElementById(rowId);
+                if (oldRow) {
+                    const newRow = createTableRow(data);
+                    oldRow.parentNode.replaceChild(newRow, oldRow);
+                }
+
+                const index = clientList.findIndex(client => client.id === id);
+                if (index !== -1) {
+                    clientList[index] = data;
+                }
+            } else {
+                clientList.push(data);
+                addRows([data]);
+            }
         })
         .catch(error => {
             console.error(error);
@@ -104,76 +134,90 @@ function addRows(clients) {
     const tableContent = document.querySelector(".table-content");
 
     clients.forEach((client) => {
-        let newTableRow = `<tr id="row-${client.id}">`;
-        newTableRow += `
+        const newRow = createTableRow(client);
+        tableContent.appendChild(newRow);
+    });
+}
+
+function createTableRow(client) {
+    const newRow = document.createElement('tr');
+    newRow.id = `row-${client.id}`;
+    newRow.innerHTML = `
         <th class="row-checkbox" id="checkbox-${client.id}">
             <div>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                     <path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/>
                 </svg>
             </div>
-        </th>`;
+        </th>
+        <td>${client.name}</td>
+        <td>${client.cnpj ? client.cnpj : client.cpf}</td>
+        <td>${client.company}</td>
+        <td>${client.address.zip_code !== null ? client.address.zip_code : '-'}</td>
+        <td>${client.address.street !== '' ? client.address.street : '-'}</td>
+        <td>${client.address.number !== null ? client.address.number : '-'}</td>
+        <td>${client.address.city.name}</td>
+        <td>${client.address.city.state.name}</td>
+        ${clienteButtons}
+    `;
 
-        const newRowData = `
-            <td>${client.name}</td>
-            <td>${client.cnpj ? client.cnpj : client.cpf}</td>
-            <td>${client.company}</td>
-            <td>${client.address.zip_code}</td>
-            <td>${client.address.street}</td>
-            <td>${client.address.number}</td>
-            <td>${client.address.city.name}</td>
-            <td>${client.address.city.state.name}</td>
-        `
+    addRowButtonEvents(newRow);
 
-        newTableRow += newRowData;
-        newTableRow += clienteButtons;
-        newTableRow += `</tr>`;
-        allIds.push(client.id);
-
-        tableContent.innerHTML += newTableRow;
-    })
+    return newRow;
 }
 
-function addRowButtonEvents() {
-    document.querySelectorAll('.table-buttons').forEach(button => {
-        const sendMessageButton = button.querySelector('.send-message');
-        const deleteButton = button.querySelector('.delete');
-        const editButton = button.querySelector('.edit');
+function addRowButtonEvents(row) {
+    const sendMessageButton = row.querySelector('.send-message');
+    const deleteButton = row.querySelector('.delete');
+    const editButton = row.querySelector('.edit');
 
-        sendMessageButton.addEventListener('click', () => {
-            const rowId = button.closest('tr').id.split('-')[1];
-            const cliente = clientList.find(client => client.id === parseInt(rowId));
-            // TODO add send message logic
-            console.log('Enviar mensagem para cliente: ' + cliente.id)
-        });
-
-        deleteButton.addEventListener('click', () => {
-            const rowId = button.closest('tr').id.split('-')[1];
-            const cliente = clientList.find(client => client.id === parseInt(rowId));
-
-            fetch(`${URL}/client/${cliente.id}`, {
-                method: 'DELETE',
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`Erro ao deletar cliente`);
-                    }
-                })
-                .catch(error => {
-                    console.error('Erro ao criar cliente:', error);
-                });
-        });
-
-        editButton.addEventListener('click', () => {
-            const rowId = button.closest('tr').id.split('-')[1];
-            const client = clientList.find(client => client.id === parseInt(rowId));
-            isEditing = true;
-            resetFields();
-            cleanInvalidClasses();
-            fillFields(client);
-            switchOverlay();
-        });
+    sendMessageButton.addEventListener('click', () => {
+        const rowId = row.id.split('-')[1];
+        const client = clientList.find(client => client.id === parseInt(rowId));
+        // TODO adicionar lógica de enviar mensagem
+        console.log('Enviar mensagem para cliente: ' + client.id);
     });
+
+    deleteButton.addEventListener('click', deleteClient);
+
+    editButton.addEventListener('click', () => {
+        const rowId = row.id.split('-')[1];
+        const client = clientList.find(client => client.id === parseInt(rowId));
+        isEditing = true;
+        resetFields();
+        cleanInvalidClasses();
+        fillFields(client);
+        switchOverlay();
+    });
+}
+
+async function deleteClient() {
+    const rowId = this.closest('tr').id;
+    const id = rowId.split('-')[1];
+
+    const index = clientList.findIndex(client => client.id === parseInt(id));
+    if (index !== -1) {
+        clientList.splice(index, 1);
+    }
+
+    // TODO adicionar confirmação de exclusão
+
+    try {
+        const response = await fetch(`${URL}/client/${id}`, {
+            method: 'DELETE',
+        });
+
+        const responseData = await response.json();
+
+        if (!response.ok) {
+            console.error('Erro: ' + responseData.message);
+        } else {
+            this.closest('tr').remove();
+        }
+
+    } catch (error) {
+        console.error('Erro ao excluir cliente: ', error);
+    }
 }
 
 function addSaveClientEvent(button) {

@@ -161,8 +161,6 @@ function checkClientForm() {
 async function saveClient() {
     if (!checkClientForm()) return;
 
-    console.log(clientForm)
-
     try {
         const response = await fetch(`${URL}/client`, {
             method: isEditing ? 'PUT' : 'POST', headers: {
@@ -175,9 +173,10 @@ async function saveClient() {
         if (!response.ok) {
             console.error('Erro: ' + responseData.message);
             return;
+        } else {
+            await getOneClient(responseData.id, isEditing);
         }
 
-        // TODO resetar o botão de select-all quando adicionada uma nova linha
         switchOverlay();
     } catch (error) {
         console.error(isEditing ? 'Erro ao editar cliente:' : 'Erro ao criar cliente:', error);
