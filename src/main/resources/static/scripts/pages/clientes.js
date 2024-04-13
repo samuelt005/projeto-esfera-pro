@@ -144,7 +144,7 @@ function addRows(clients) {
 
 function createTableRow(client) {
     const newRow = document.createElement('tr');
-    newRow.id = `row-${client.id}`;
+    newRow.setAttribute('data-row-id', client.id);
     newRow.innerHTML = `
         <th class="row-checkbox" data-checkbox-id="${client.id}">
             <div>
@@ -175,17 +175,19 @@ function addRowButtonEvents(row) {
     const editButton = row.querySelector('.edit');
 
     sendMessageButton.addEventListener('click', () => {
-        const rowId = row.id.split('-')[1];
-        const client = clientList.find(client => client.id === parseInt(rowId));
+        const rowId = parseInt(row.getAttribute('data-row-id'));
+        const client = clientList.find(client => client.id === rowId);
         // TODO adicionar lógica de enviar mensagem
         console.log('Enviar mensagem para cliente: ' + client.id);
     });
 
-    deleteButton.addEventListener('click', deleteClient);
+    deleteButton.addEventListener('click', () => {
+        deleteClient(row);
+    });
 
     editButton.addEventListener('click', () => {
-        const rowId = row.id.split('-')[1];
-        const client = clientList.find(client => client.id === parseInt(rowId));
+        const rowId = parseInt(row.getAttribute('data-row-id'));
+        const client = clientList.find(client => client.id === rowId);
         isEditing = true;
         resetFields();
         cleanInvalidClasses();
@@ -194,11 +196,10 @@ function addRowButtonEvents(row) {
     });
 }
 
-async function deleteClient() {
-    const rowId = this.closest('tr').id;
-    const id = rowId.split('-')[1];
+async function deleteClient(row) {
+    const id = parseInt(row.getAttribute('data-row-id'));
 
-    const index = clientList.findIndex(client => client.id === parseInt(id));
+    const index = clientList.findIndex(client => client.id === id);
     if (index !== -1) {
         clientList.splice(index, 1);
     }
@@ -215,10 +216,10 @@ async function deleteClient() {
         if (!response.ok) {
             console.error('Erro: ' + responseData.message);
         } else {
-            this.closest('tr').remove();
+            row.remove();
             addCheckboxesEvents();
 
-            const index = selectedIds.findIndex(index => index === parseInt(id));
+            const index = selectedIds.findIndex(selectedId => selectedId === id);
             if (index !== -1) {
                 selectedIds.splice(index, 1);
             }
