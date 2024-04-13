@@ -46,8 +46,7 @@ async function getOneClient(id, isEditing) {
         })
         .then(data => {
             if (isEditing) {
-                const rowId = `row-${id}`;
-                const oldRow = document.getElementById(rowId);
+                const oldRow = document.querySelector(`tr[data-row-id="${id}"]`);
                 if (oldRow) {
                     const newRow = createTableRow(data);
                     oldRow.parentNode.replaceChild(newRow, oldRow);

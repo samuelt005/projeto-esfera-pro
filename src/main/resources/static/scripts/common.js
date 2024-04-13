@@ -13,8 +13,6 @@ function checkboxClicked(event) {
         selectedIds.push(id);
     }
 
-    console.log(selectedIds)
-
     checkbox.classList.toggle("selected");
 }
 
