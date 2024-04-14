@@ -5,6 +5,7 @@ import com.projetointegrador.projetointegrador.seeds.StateSeeder;
 import jakarta.annotation.PostConstruct;
 import org.springframework.context.annotation.Configuration;
 
+// Configuração dos seeders
 @Configuration
 public class SeederConfig {
     private final StateSeeder stateSeeder;
@@ -15,6 +16,7 @@ public class SeederConfig {
         this.citySeeder = citySeeder;
     }
 
+    // Ordem de execução
     @PostConstruct
     public void seedData() {
         stateSeeder.run();

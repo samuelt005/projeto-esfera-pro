@@ -1,3 +1,4 @@
+// Valida o CNPJ
 function validadeCnpj(maskedCnpj) {
     let cnpj = maskedCnpj.replace(/\D+/g, '');
 

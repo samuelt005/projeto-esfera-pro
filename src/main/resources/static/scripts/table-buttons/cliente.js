@@ -1,3 +1,5 @@
+// Botões de uma linha de clientes
+// Está em um arquivo separado devido ao tamanho da string
 const clienteButtons = `
     <td class="table-buttons">
         <div class="button-table rounded send-message">

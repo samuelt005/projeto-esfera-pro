@@ -12,6 +12,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 
+// Semente para criar estados no banco
 @Component
 public class StateSeeder implements CommandLineRunner {
     private final ResourceLoader resourceLoader;

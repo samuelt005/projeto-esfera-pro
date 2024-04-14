@@ -2,6 +2,7 @@ package com.projetointegrador.projetointegrador.responses;
 
 import org.springframework.http.HttpStatus;
 
+// Semente para criar estados no banco
 public class Response {
     private int status;
     private String error;

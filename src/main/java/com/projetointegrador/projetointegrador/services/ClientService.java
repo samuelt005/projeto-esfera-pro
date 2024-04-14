@@ -23,6 +23,7 @@ public class ClientService {
         this.clientRepository = clientRepository;
     }
 
+    // Encontra um cliente pelo id
     public ResponseEntity<?> findOneClient(Long id) {
         Optional<Client> optionalClient = clientRepository.findById(id);
 
@@ -34,6 +35,7 @@ public class ClientService {
         }
     }
 
+    // Lista todos os clientes ativos
     public ResponseEntity<?> listActiveClients() {
         Client exampleClient = new Client();
         exampleClient.setInactive(false);
@@ -46,6 +48,7 @@ public class ClientService {
         return ResponseEntity.ok().body(clients);
     }
 
+    // Cria um cliente
     public ResponseEntity<?> createClient(Client client) {
         if (validateClient(client)) {
             return ResponseEntity.badRequest().body(new Response(HttpStatus.BAD_REQUEST, "Dados do cliente inválidos."));
@@ -63,6 +66,8 @@ public class ClientService {
         return ResponseEntity.ok().body(createdClient);
     }
 
+
+    // Atualiza um cliente
     public ResponseEntity<?> updateClient(Client client) {
         if (client.getId() == null || client.getAddress().getId() == null) {
             return ResponseEntity.badRequest().body(new Response(HttpStatus.BAD_REQUEST, "IDs de cliente ou endereço não estão presentes."));
@@ -80,6 +85,7 @@ public class ClientService {
         return ResponseEntity.ok().body(updatedClient);
     }
 
+    // Desativa um cliente pelo id
     public ResponseEntity<?> deleteClient(Long id) {
         Optional<Client> optionalClient = clientRepository.findById(id);
 
@@ -95,6 +101,7 @@ public class ClientService {
         }
     }
 
+    // Valida CPF e CNPJ do cliente
     private boolean validateClient(Client client) {
         if (client.getCpf() != null && !isCpfValid(client.getCpf())) {
             return true;
@@ -103,6 +110,7 @@ public class ClientService {
         return client.getCnpj() != null && !isCnpjValid(client.getCnpj());
     }
 
+    // Verifica se o cliente já está cadastrado no banco
     private boolean isAlreadyRegistered(String cpf, String cnpj, Long id) {
         if (cpf != null && isCpfAlreadyRegistered(cpf, id)) {
             return true;
@@ -111,21 +119,25 @@ public class ClientService {
         return cnpj != null && isCnpjAlreadyRegistered(cnpj, id);
     }
 
+    // Verifica se o CPF do cliente é valido
     private Boolean isCpfValid(String cpf) {
         CpfValidator validator = new CpfValidator();
         return validator.isValid(cpf);
     }
 
+    // Verifica se o CNPJ do cliente é valido
     private Boolean isCnpjValid(String cnpj) {
         CnpjValidator validator = new CnpjValidator();
         return validator.isValid(cnpj);
     }
 
+    // Verifica se já possui um cliente com o mesmo CPF
     private boolean isCpfAlreadyRegistered(String cpf, Long id) {
         Optional<Client> existentCpf = clientRepository.findByCpf(cpf);
         return existentCpf.isPresent() && !Objects.equals(existentCpf.get().getId(), id);
     }
 
+    // Verifica se já possui um cliente com o mesmo CNPJ
     private boolean isCnpjAlreadyRegistered(String cnpj, Long id) {
         Optional<Client> existentCnpj = clientRepository.findByCnpj(cnpj);
         return existentCnpj.isPresent() && !Objects.equals(existentCnpj.get().getId(), id);

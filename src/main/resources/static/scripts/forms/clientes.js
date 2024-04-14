@@ -7,6 +7,7 @@ let clientForm = {
 }
 let isEditing = false;
 
+// Restaura o formulário para o padrão
 function resetForm() {
     clientForm = {
         id: null, name: "", cpf: "", cnpj: "", company: "", inactive: false, address: {
@@ -17,6 +18,7 @@ function resetForm() {
     }
 }
 
+// Preenche os campos do modal com os dados do cliente a ser editado
 function fillFields(client) {
     resetForm();
     clientForm.id = client.id;
@@ -42,6 +44,7 @@ function fillFields(client) {
     zipCodeInput.dispatchEvent(new Event('input'));
 }
 
+// Limpa os avisos de erro dos campos do modal
 function cleanInvalidClasses() {
     nameInput.parentElement.classList.remove('invalid');
     cpfInput.parentElement.classList.remove('invalid');
@@ -54,6 +57,7 @@ function cleanInvalidClasses() {
     citySelect.classList.remove('invalid');
 }
 
+// Reinicia os campos do modal
 function resetFields() {
     nameInput.value = "";
     cpfInput.value = "";
@@ -69,6 +73,7 @@ function resetFields() {
     citySelect.classList.add('unselected')
 }
 
+// Coloca máscaras nos inputs do modal
 function setInputMasks() {
     const cpfMask = {
         mask: '000.000.000-00'
@@ -88,7 +93,8 @@ function setInputMasks() {
     IMask(zipCodeInput, zipCodeMask);
 }
 
-function checkClientForm() {
+// Valida os inputs do modal de clientes
+function validateClientForm() {
     cleanInvalidClasses();
     let isFormValid = true;
 
@@ -158,8 +164,9 @@ function checkClientForm() {
     return isFormValid;
 }
 
+// Salva um novo cliente ou sua edição
 async function saveClient() {
-    if (!checkClientForm()) return;
+    if (!validateClientForm()) return;
 
     try {
         const response = await fetch(`${URL}/client`, {

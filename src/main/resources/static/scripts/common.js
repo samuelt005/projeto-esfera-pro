@@ -1,5 +1,9 @@
+// Este arquivo possui funções padrões que podem ser utilizadas em qualquer tabela
+
+// Variável comum para ids selecionados das checkboxes
 let selectedIds = [];
 
+// Altera o estado da checkbox e adiciona/remove o id a lista
 function checkboxClicked(event) {
     const checkbox = event.currentTarget;
     const id = parseInt(checkbox.dataset.checkboxId);
@@ -16,6 +20,7 @@ function checkboxClicked(event) {
     checkbox.classList.toggle("selected");
 }
 
+// Altera o estado da checkbox de selecionar tudo e adiciona/remove todos os ids da lista
 function selectAllHandler() {
     if (selectAllCheckbox.classList.contains("selected")) {
         selectedIds = [];
@@ -34,7 +39,7 @@ function selectAllHandler() {
     selectAllCheckbox.classList.toggle("selected");
 }
 
-
+// Adiciona o evento da checkbox em todas as checkboxes
 function addCheckboxesEvents() {
     checkboxes = document.querySelectorAll('.row-checkbox');
     selectAllCheckbox = document.querySelector('.select-all-checkbox');
@@ -48,6 +53,7 @@ function addCheckboxesEvents() {
     selectAllCheckbox.addEventListener('click', selectAllHandler);
 }
 
+// Altera a visibilidade do overlay (aonde vai os modais)
 function switchOverlay() {
     if (overlay.classList.contains("hidden")) {
         overlay.classList.remove("fade-out");
@@ -61,6 +67,7 @@ function switchOverlay() {
     }
 }
 
+// Adiciona o evento de alterar a visibilidade do overlay
 function addSwitchOverlayEvent(button) {
     button.addEventListener('click', switchOverlay);
 }

@@ -12,6 +12,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 
+// Semente para criar cidades no banco
 @Component
 public class CitySeeder implements CommandLineRunner {
     private final ResourceLoader resourceLoader;

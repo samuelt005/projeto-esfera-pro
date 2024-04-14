@@ -3,8 +3,10 @@ package com.projetointegrador.projetointegrador.controllers;
 import com.projetointegrador.projetointegrador.models.City;
 import com.projetointegrador.projetointegrador.models.State;
 import com.projetointegrador.projetointegrador.repositories.CityRepository;
+import com.projetointegrador.projetointegrador.services.CityService;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,25 +14,16 @@ import java.util.List;
 @RestController
 @RequestMapping("/city")
 public class CityController {
-    final CityRepository cityRepository;
+    private final CityService cityService;
 
-    public CityController(CityRepository cityRepository) {
-        this.cityRepository = cityRepository;
+    public CityController(CityService cityService) {
+        this.cityService = cityService;
     }
 
+    // Rota para buscar cidades pelo ID do estado
     @GetMapping("byState/{stateId}")
-    public List<City> listCitiesPerState(@PathVariable("stateId") Long stateId) {
-        City exampleCity = new City();
-        State exampleState = new State();
-        exampleState.setId(stateId);
-        exampleCity.setState(exampleState);
-
-        ExampleMatcher matcher = ExampleMatcher.matching()
-                .withIgnorePaths("id");
-
-        Example<City> example = Example.of(exampleCity, matcher);
-
-        return cityRepository.findAll(example);
+    public ResponseEntity<?> listCitiesPerState(@PathVariable("stateId") Long stateId) {
+        return cityService.listCitiesPerState(stateId);
     }
 }
 

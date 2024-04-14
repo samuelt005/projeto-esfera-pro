@@ -1,3 +1,4 @@
+// Valida o CPF
 function validadeCpf(maskedCpf) {
     const cpf = maskedCpf.replace(/\D/g, '');
 

@@ -1,7 +1,7 @@
 package com.projetointegrador.projetointegrador.controllers;
 
-import com.projetointegrador.projetointegrador.models.State;
-import com.projetointegrador.projetointegrador.repositories.StateRepository;
+import com.projetointegrador.projetointegrador.services.StateService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -9,14 +9,15 @@ import java.util.List;
 @RestController
 @RequestMapping("/state")
 public class StateController {
-    final StateRepository stateRepository;
+    private final StateService stateService;
 
-    public StateController(StateRepository stateRepository) {
-        this.stateRepository = stateRepository;
+    public StateController(StateService stateService) {
+        this.stateService = stateService;
     }
 
+    // Rota para listar todos os estados
     @GetMapping
-    public List<State> listStates() {
-        return stateRepository.findAll();
+    public ResponseEntity<?> listStates() {
+        return stateService.listStates();
     }
 }

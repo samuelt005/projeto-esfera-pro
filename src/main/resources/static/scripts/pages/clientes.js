@@ -1,4 +1,4 @@
-// Page Elements
+// Elementos da página
 let checkboxes;
 let selectAllCheckbox;
 let buttonAddNew;
@@ -15,10 +15,10 @@ let zipCodeInput;
 let stateSelect;
 let citySelect;
 
-// Page Global Variables
+// Lista de clientes
 let clientList = [];
 
-// Page Functions
+// Buscar todos os clientes
 async function getClients() {
     await fetch(`${URL}/client`)
         .then(response => {
@@ -36,6 +36,7 @@ async function getClients() {
         });
 }
 
+// Busca apenas um cliente pelo id
 async function getOneClient(id, isEditing) {
     await fetch(`${URL}/client/byId/${id}`)
         .then(response => {
@@ -68,6 +69,7 @@ async function getOneClient(id, isEditing) {
         });
 }
 
+// Busca todos os estados
 async function getStates(stateSelect) {
     await fetch(`${URL}/state`)
         .then(response => {
@@ -95,6 +97,7 @@ async function getStates(stateSelect) {
         });
 }
 
+// Busca cidades pelo ID do estado
 async function getCitiesByState(state_id, event) {
     if (event?.target) {
         switchSelectClass(event);
@@ -130,6 +133,7 @@ async function getCitiesByState(state_id, event) {
         });
 }
 
+// Adiciona linhas a tabela de clientes
 function addRows(clients) {
     const tableContent = document.querySelector(".table-content");
 
@@ -141,6 +145,7 @@ function addRows(clients) {
     addCheckboxesEvents();
 }
 
+// Cria um elemento HTML de uma linha da tabela
 function createTableRow(client) {
     const newRow = document.createElement('tr');
     newRow.setAttribute('data-row-id', client.id);
@@ -168,6 +173,7 @@ function createTableRow(client) {
     return newRow;
 }
 
+// Adiciona os eventos dos botões da linha de um cliente
 function addRowButtonEvents(row) {
     const sendMessageButton = row.querySelector('.send-message');
     const deleteButton = row.querySelector('.delete');
@@ -181,7 +187,7 @@ function addRowButtonEvents(row) {
     });
 
     deleteButton.addEventListener('click', () => {
-        deleteClient(row);
+        deleteClient(row).catch(error => console.error(error));
     });
 
     editButton.addEventListener('click', () => {
@@ -195,6 +201,7 @@ function addRowButtonEvents(row) {
     });
 }
 
+// Remove uma linha da tabela de clientes
 async function deleteClient(row) {
     const id = parseInt(row.getAttribute('data-row-id'));
 
@@ -229,16 +236,20 @@ async function deleteClient(row) {
     }
 }
 
+// Adiciona o evento de salvar um cliente no botão de salvar
 function addSaveClientEvent(button) {
     button.addEventListener('click', saveClient);
 }
 
+// Adiciona o evento de buscar cidades ao select de estados
 function addSelectedStateEvent(select) {
     select.addEventListener('change', (event) => {
-        getCitiesByState(event.target.value, event);
+        getCitiesByState(event.target.value, event)
+            .catch(error => console.error(error));
     });
 }
 
+// Adiciona o evento de adicionar novo cliente no botão de adicionar
 function addNewItemEvent(button) {
     button.addEventListener('click', () => {
         isEditing = false;
@@ -248,10 +259,12 @@ function addNewItemEvent(button) {
     });
 }
 
+// Adiciona o evento de alterar a aparência do select ao selecionar um dado
 function addSelectedCityEvent(select) {
     select.addEventListener('change', switchSelectClass);
 }
 
+// Altera a aparência do select ao selecionar um dado
 function switchSelectClass(event) {
     if (!event.target) {
         return
@@ -266,6 +279,7 @@ function switchSelectClass(event) {
     }
 }
 
+// Busca os elementos da página e atribui eles as variáveis globais
 function getDocumentElements() {
     buttonAddNew = document.querySelector('.button-add-new');
     buttonCloseModal = document.querySelector('.close-modal-button');
@@ -282,22 +296,22 @@ function getDocumentElements() {
     citySelect = document.querySelector('select[name="city"]');
 }
 
+// Inicialização da página de clientes
 function clientesStartup() {
     getClients().then(() => {
-            getDocumentElements();
-            addNewItemEvent(buttonAddNew);
-            addSwitchOverlayEvent(buttonCloseModal);
-            addSwitchOverlayEvent(cancelCloseModal);
-            addSwitchOverlayEvent(buttonCloseModal);
-            addSaveClientEvent(saveCloseModal);
+        getDocumentElements();
+        addNewItemEvent(buttonAddNew);
+        addSwitchOverlayEvent(buttonCloseModal);
+        addSwitchOverlayEvent(cancelCloseModal);
+        addSwitchOverlayEvent(buttonCloseModal);
+        addSaveClientEvent(saveCloseModal);
 
-            getStates(stateSelect).then(() => {
-                addSelectedStateEvent(stateSelect);
-                addSelectedCityEvent(citySelect);
-                setInputMasks();
-            });
-        }
-    );
+        getStates(stateSelect).then(() => {
+            addSelectedStateEvent(stateSelect);
+            addSelectedCityEvent(citySelect);
+            setInputMasks();
+        });
+    });
 }
 
 
