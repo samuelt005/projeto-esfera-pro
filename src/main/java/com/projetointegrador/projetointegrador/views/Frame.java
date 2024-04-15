@@ -13,6 +13,7 @@ public class Frame {
     @Value("${APPLICATION_PORT}")
     private String PORT;
 
+    // Rota para pegar o frame base do site
     @GetMapping("/")
     public ModelAndView frame() {
         ModelAndView modelAndView = new ModelAndView();

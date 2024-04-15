@@ -1,0 +1,40 @@
+.input1-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 36px;
+    width: 100%;
+    border-radius: 5px;
+    padding: 10px;
+    box-sizing: border-box;
+    background-color: var(--field);
+    border: 2px solid transparent;
+}
+
+.input1-wrapper.invalid {
+    border: 2px solid var(--red);
+}
+
+.input1-wrapper input {
+    appearance: none;
+    outline: none;
+    border: none;
+    width: 100%;
+    color: var(--text-primary);
+    font-size: 16px;
+    background-color: var(--field);
+}
+
+.input1-wrapper input::placeholder {
+    color: var(--field-placeholder);
+    font-size: 16px;
+}
+
+.input1-wrapper input:focus {
+    background-color: var(--field-focus);
+    outline: none;
+}
+
+.input1-wrapper:focus-within {
+    background-color: var(--field-focus);
+}

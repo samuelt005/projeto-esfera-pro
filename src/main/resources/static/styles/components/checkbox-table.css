@@ -1,0 +1,36 @@
+.select-all-checkbox,
+.row-checkbox {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 60px;
+    max-width: 60px;
+    flex-grow: 0;
+}
+
+.select-all-checkbox div,
+.row-checkbox div {
+    width: 25px;
+    height: 25px;
+    border-radius: 5px;
+    padding: 1px 2px 2px 2px;
+    box-sizing: border-box;
+    user-select: none;
+    border: 3px solid var(--text-primary);
+}
+
+.select-all-checkbox.selected div,
+.row-checkbox.selected div {
+    background-color: var(--text-primary);
+}
+
+
+.select-all-checkbox div svg,
+.row-checkbox div svg {
+    fill: var(--white);
+}
+
+.select-all-checkbox div:hover,
+.row-checkbox div:hover {
+    cursor: pointer;
+}

@@ -1,11 +1,13 @@
-// FUNCTIONS
+// Elementos comuns da página
 const mainContent = document.querySelector(".main-content");
+const overlay = document.querySelector(".overlay");
 const allStyles = document.getElementById("styles");
 const sidebar = document.querySelector(".sidebar");
 const expandButton = document.querySelector(".expand-menu");
 const menuButtons = document.querySelectorAll(".sidebar-button");
 const loading = document.querySelector(".loading");
 
+// Carrega o script específico de cada página ao selecionar um item do menu
 function loadSelectedPageScript(page) {
     switch (page) {
         case 'dashboard':
@@ -33,6 +35,7 @@ function loadSelectedPageScript(page) {
     mainContent.classList.remove("hidden");
 }
 
+// Busca o HTML da página selecionada no menu lateral
 function getMainFrameContent(page) {
     fetch(`${URL}/page${page}`)
         .then(response => {
@@ -46,16 +49,23 @@ function getMainFrameContent(page) {
             tempElement.innerHTML = data;
 
             const contentDiv = tempElement.querySelector('content');
+            const modalDiv = tempElement.querySelector('modal');
             const stylesDiv = tempElement.querySelector('styles');
 
-            if (contentDiv) {
-                mainContent.innerHTML = contentDiv.innerHTML;
-                loadSelectedPageScript(page);
+
+            if (modalDiv) {
+                overlay.innerHTML = modalDiv.innerHTML;
             }
 
             if (stylesDiv) {
                 allStyles.innerHTML = stylesDiv.innerHTML;
             }
+
+            if (contentDiv) {
+                mainContent.innerHTML = contentDiv.innerHTML;
+            }
+
+            loadSelectedPageScript(page);
         })
         .catch(error => {
             console.error(error);
@@ -64,6 +74,7 @@ function getMainFrameContent(page) {
         });
 }
 
+// Expande o menu lateral
 function expandButtonClicked() {
     if (sidebar.classList.contains("expanded")) {
         sidebar.classList.remove("expanded");
@@ -72,6 +83,7 @@ function expandButtonClicked() {
     }
 }
 
+// Modifica os botões laterais ao clicar em um deles
 function menuButtonClicked(event) {
     const button = event.currentTarget;
     const page = button.getAttribute("page");
@@ -94,6 +106,7 @@ function menuButtonClicked(event) {
     getMainFrameContent(page);
 }
 
+// Inicialização do frame do site
 function frameSetup() {
     expandButton.addEventListener("click", expandButtonClicked);
 
@@ -103,3 +116,4 @@ function frameSetup() {
 }
 
 frameSetup();
+menuButtons[2].click(); // TODO remover isso no final

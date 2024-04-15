@@ -4,9 +4,12 @@
     justify-content: space-between;
     height: 100%;
     width: 80px;
+    min-width: 80px;
     padding: 5px;
     box-sizing: border-box;
     transition: width 0.5s;
+    z-index: 3;
+    background-color: var(--white);
 }
 
 .sidebar .top-content {
@@ -30,6 +33,7 @@
     cursor: pointer;
     background-color: transparent;
     transition: background-color 0.5s;
+    user-select: none;
 }
 
 .expand-menu:hover {
@@ -79,6 +83,8 @@
     visibility: hidden;
     transition: opacity 0.2s, visibility 0.2s;
     user-select: none;
+    text-transform: capitalize;
+    width: 0;
 }
 
 .sidebar-button.inactive {

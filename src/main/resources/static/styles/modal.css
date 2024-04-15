@@ -1,0 +1,109 @@
+.modal-container {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    width: 600px;
+    border-radius: 20px;
+    background-color: var(--white);
+}
+
+.modal-container header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    box-sizing: border-box;
+    border-radius: 20px 20px 0 0;
+    height: 60px;
+    width: 100%;
+    background-color: var(--main-purple);
+}
+
+.modal-container header h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--white);
+}
+
+.modal-container header .icon {
+    height: 20px;
+    width: 20px;
+}
+
+.modal-container header .icon:hover {
+    cursor: pointer;
+}
+
+.modal-container main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 30px;
+    padding: 20px;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.modal-container main section {
+    display: flex;
+    gap: 20px;
+    flex-direction: column;
+    width: 100%;
+    flex-grow: 1;
+}
+
+.modal-container main section {
+    border-bottom: 1px solid var(--gray);
+    padding-bottom: 20px;
+    box-sizing: border-box;
+}
+
+.modal-container main section:last-of-type {
+    border-bottom: none;
+}
+
+.modal-container main section h3 {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.inputs-row {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    width: 100%;
+}
+
+.input-wrapper {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.input-wrapper.small {
+    max-width: 120px;
+}
+
+.input-wrapper.medium {
+    max-width: 200px;
+}
+
+.input-wrapper h4 {
+    font-size: 20px;
+    color: var(--text-primary);
+}
+
+.modal-container footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 10px 20px;
+    box-sizing: border-box;
+    border-radius: 0 0 20px 20px;
+    height: 60px;
+    width: 100%;
+}
