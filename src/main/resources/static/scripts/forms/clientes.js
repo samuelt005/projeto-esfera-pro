@@ -10,7 +10,17 @@ let isEditing = false;
 // Restaura o formulário para o padrão
 function resetForm() {
     clientForm = {
-        id: null, name: "", cpf: "", cnpj: "", company: "", inactive: false, address: {
+        id: null,
+        name: "",
+        cpf: "",
+        cnpj: "",
+        company: "",
+        email: "",
+        whatsapp: "",
+        cellphone: "",
+        telephone: "",
+        inactive: false,
+        address: {
             id: null, street: "", zip_code: "", number: null, city: {
                 id: null
             }
@@ -27,6 +37,10 @@ function fillFields(client) {
     cpfInput.value = client.cpf;
     companyInput.value = client.company;
     cnpjInput.value = client.cnpj;
+    emailInput.value = client.email;
+    whatsappInput.value = client.whatsapp;
+    cellphoneInput.value = client.cellphone;
+    telephoneInput.value = client.telephone;
     streetInput.value = client.address.street;
     numberInput.value = client.address.number;
     zipCodeInput.value = client.address.zip_code;
@@ -40,6 +54,10 @@ function fillFields(client) {
 
     cpfInput.dispatchEvent(new Event('input'));
     cnpjInput.dispatchEvent(new Event('input'));
+    emailInput.dispatchEvent(new Event('input'));
+    whatsappInput.dispatchEvent(new Event('input'));
+    cellphoneInput.dispatchEvent(new Event('input'));
+    telephoneInput.dispatchEvent(new Event('input'));
     numberInput.dispatchEvent(new Event('input'));
     zipCodeInput.dispatchEvent(new Event('input'));
 }
@@ -50,6 +68,10 @@ function cleanInvalidClasses() {
     cpfInput.parentElement.classList.remove('invalid');
     companyInput.parentElement.classList.remove('invalid');
     cnpjInput.parentElement.classList.remove('invalid');
+    emailInput.parentElement.classList.remove('invalid');
+    whatsappInput.parentElement.classList.remove('invalid');
+    cellphoneInput.parentElement.classList.remove('invalid');
+    telephoneInput.parentElement.classList.remove('invalid');
     streetInput.parentElement.classList.remove('invalid');
     numberInput.parentElement.classList.remove('invalid');
     zipCodeInput.parentElement.classList.remove('invalid');
@@ -63,6 +85,10 @@ function resetFields() {
     cpfInput.value = "";
     companyInput.value = "";
     cnpjInput.value = "";
+    emailInput.value = "";
+    whatsappInput.value = "";
+    cellphoneInput.value = "";
+    telephoneInput.value = "";
     streetInput.value = "";
     numberInput.value = "";
     zipCodeInput.value = "";
@@ -87,10 +113,17 @@ function setInputMasks() {
     const zipCodeMask = {
         mask: '00000-000'
     }
+    // TODO adicionar mais tipos de telefones compatíveis (internacionais?)
+    const cellphoneMask = {
+        mask: '00 00000-0000'
+    }
     IMask(cpfInput, cpfMask);
     IMask(cnpjInput, cnpjMask);
     IMask(numberInput, numberMask);
     IMask(zipCodeInput, zipCodeMask);
+    IMask(whatsappInput, cellphoneMask);
+    IMask(cellphoneInput, cellphoneMask);
+    IMask(telephoneInput, cellphoneMask);
 }
 
 // Valida os inputs do modal de clientes
@@ -126,6 +159,40 @@ function validateClientForm() {
         clientForm.cnpj = unmaskedCnpj;
     } else {
         cnpjInput.parentElement.classList.add('invalid');
+        isFormValid = false;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Expressão regular para validar o e-mail
+    if (emailInput.value.trim() !== "") {
+        if (emailRegex.test(emailInput.value.trim())) {
+            clientForm.email = emailInput.value.trim();
+        } else {
+            emailInput.parentElement.classList.add('invalid');
+            isFormValid = false;
+        }
+    }
+
+    const unmaskedWhatsapp = whatsappInput.value.replace(/\D+/g, '');
+    if (unmaskedWhatsapp.length === 11 || unmaskedWhatsapp.length === 0) {
+        clientForm.whatsapp = unmaskedWhatsapp;
+    } else {
+        whatsappInput.parentElement.classList.add('invalid');
+        isFormValid = false;
+    }
+
+    const unmaskedCellphone = cellphoneInput.value.replace(/\D+/g, '');
+    if (unmaskedCellphone.length === 11 || unmaskedCellphone.length === 0) {
+        clientForm.cellphone = unmaskedCellphone;
+    } else {
+        cellphoneInput.parentElement.classList.add('invalid');
+        isFormValid = false;
+    }
+
+    const unmaskedTelephone = telephoneInput.value.replace(/\D+/g, '');
+    if (unmaskedTelephone.length === 11 || unmaskedTelephone.length === 0) {
+        clientForm.telephone = unmaskedTelephone;
+    } else {
+        telephoneInput.parentElement.classList.add('invalid');
         isFormValid = false;
     }
 
