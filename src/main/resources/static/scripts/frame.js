@@ -29,6 +29,10 @@ function loadSelectedPageScript(page) {
         case 'interacoes':
             interacoesStartup();
             break;
+
+        case 'error':
+            errorStartup();
+            break;
     }
 
     loading.classList.add("hidden");
