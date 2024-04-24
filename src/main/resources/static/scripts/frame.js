@@ -6,6 +6,7 @@ const sidebar = document.querySelector(".sidebar");
 const expandButton = document.querySelector(".expand-menu");
 const menuButtons = document.querySelectorAll(".sidebar-button");
 const loading = document.querySelector(".loading");
+let currentPage = 0;
 
 // Carrega o script específico de cada página ao selecionar um item do menu
 function loadSelectedPageScript(page) {
@@ -28,6 +29,10 @@ function loadSelectedPageScript(page) {
 
         case 'interacoes':
             interacoesStartup();
+            break;
+
+        case 'error':
+            errorStartup();
             break;
     }
 
@@ -87,6 +92,9 @@ function expandButtonClicked() {
 function menuButtonClicked(event) {
     const button = event.currentTarget;
     const page = button.getAttribute("page");
+    currentPage = Array.from(menuButtons).findIndex((btn) => btn.getAttribute("page") === page);
+
+    showError = false;
 
     if (button.classList.contains("active")) {
         return;
@@ -116,4 +124,8 @@ function frameSetup() {
 }
 
 frameSetup();
-menuButtons[2].click(); // TODO remover isso no final
+if (!showError) {
+    menuButtons[0].click();
+} else {
+    getMainFrameContent('error');
+}

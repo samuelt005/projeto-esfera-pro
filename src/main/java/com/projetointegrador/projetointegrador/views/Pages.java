@@ -41,4 +41,10 @@ public class Pages {
 //        Thread.sleep(2000); // Simulated Lag
         return "pages/propostas";
     }
+
+    @GetMapping("/pageerror")
+    public String pageErro(Model model) throws InterruptedException {
+//        Thread.sleep(2000); // Simulated Lag
+        return "pages/error";
+    }
 }

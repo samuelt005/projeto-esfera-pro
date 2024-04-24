@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Interações</title>
+</head>
+<body>
+<content>
+    <div class="content-container">
+        <div class="emoji-container" th:replace="~{icons/error/frown-emoji :: frown-emoji(120)}">
+        </div>
+        <div class="text-container">
+            <h1>
+                Lamentamos, parece que algo deu errado.
+            </h1>
+        </div>
+        <div class="buttons buttons-container">
+            <div class="dashboard" th:replace="~{components/button2 :: button('dashboard', 'Voltar para a dashboard', false)}"></div>
+            <div class="reload" th:replace="~{components/button2 :: button('reload', 'Recarregar pagina', true)}"></div>
+        </div>
+    </div>
+</content>
+
+<styles>
+    <link rel="stylesheet" th:href="@{/styles/components/button2.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/pages/error.css}"/>
+</styles>
+</body>
+</html>

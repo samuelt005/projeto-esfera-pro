@@ -72,6 +72,7 @@
         const IP = /*[[${IP}]]*/ '';
         const PORT = /*[[${PORT}]]*/ '';
         const URL = 'http://' + IP + ':' + PORT;
+        let showError = /*[[${showError}]]*/ '';
         /*]]>*/
     </script>
     <script src="https://unpkg.com/imask"></script>
@@ -83,6 +84,7 @@
     <script type="text/javascript" th:src="@{/scripts/pages/dashboard.js}"></script>
     <script type="text/javascript" th:src="@{/scripts/pages/interacoes.js}"></script>
     <script type="text/javascript" th:src="@{/scripts/pages/propostas.js}"></script>
+    <script type="text/javascript" th:src="@{/scripts/pages/error.js}"></script>
 
     <script type="text/javascript" th:src="@{/scripts/forms/clientes.js}"></script>
     <script type="text/javascript" th:src="@{/scripts/forms/validadeCpf.js}"></script>
