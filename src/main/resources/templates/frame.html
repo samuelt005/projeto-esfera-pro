@@ -25,7 +25,6 @@
             <div th:replace="~{components/sidebar-button :: button('clientes', 'Clientes', ~{icons/sidebar/clientes :: clientes})}"></div>
             <div th:replace="~{components/sidebar-button :: button('propostas', 'Propostas', ~{icons/sidebar/propostas :: propostas})}"></div>
             <div th:replace="~{components/sidebar-button :: button('interacoes', 'Interações', ~{icons/sidebar/interacoes :: interacoes})}"></div>
-            <div th:replace="~{components/sidebar-button :: button('error', 'Error', ~{icons/sidebar/interacoes :: interacoes})}"></div>
         </div>
     </div>
 
@@ -73,6 +72,7 @@
         const IP = /*[[${IP}]]*/ '';
         const PORT = /*[[${PORT}]]*/ '';
         const URL = 'http://' + IP + ':' + PORT;
+        let showError = /*[[${showError}]]*/ '';
         /*]]>*/
     </script>
     <script src="https://unpkg.com/imask"></script>

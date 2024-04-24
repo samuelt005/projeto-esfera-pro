@@ -32,7 +32,7 @@ async function getClients() {
             addRows(data);
         })
         .catch(error => {
-            console.error(error);
+            getMainFrameContent('error');
         });
 }
 

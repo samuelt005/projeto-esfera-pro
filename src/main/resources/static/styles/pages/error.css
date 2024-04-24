@@ -39,3 +39,7 @@
     margin: 0 1px;
     width: 25rem;
 }
+
+.reload.hidden {
+    display: none;
+}
