@@ -17,6 +17,14 @@ public class Client {
     private String cnpj;
     @Column(length = 50)
     private String company;
+    @Column(length = 50)
+    private String email;
+    @Column(length = 50)
+    private String whatsapp;
+    @Column(length = 50)
+    private String cellphone;
+    @Column(length = 50)
+    private String telephone;
     @Column(nullable = false)
     private Boolean inactive;
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -63,6 +71,38 @@ public class Client {
         this.company = company;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getWhatsapp() {
+        return whatsapp;
+    }
+
+    public void setWhatsapp(String whatsapp) {
+        this.whatsapp = whatsapp;
+    }
+
+    public String getCellphone() {
+        return cellphone;
+    }
+
+    public void setCellphone(String cellphone) {
+        this.cellphone = cellphone;
+    }
+
+    public String getTelephone() {
+        return telephone;
+    }
+
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
+    }
+
     public Boolean getInactive() {
         return inactive;
     }
@@ -84,11 +124,11 @@ public class Client {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Client client = (Client) o;
-        return Objects.equals(id, client.id) && Objects.equals(name, client.name) && Objects.equals(cpf, client.cpf) && Objects.equals(cnpj, client.cnpj) && Objects.equals(company, client.company) && Objects.equals(inactive, client.inactive) && Objects.equals(address, client.address);
+        return Objects.equals(id, client.id) && Objects.equals(name, client.name) && Objects.equals(cpf, client.cpf) && Objects.equals(cnpj, client.cnpj) && Objects.equals(company, client.company) && Objects.equals(email, client.email) && Objects.equals(whatsapp, client.whatsapp) && Objects.equals(cellphone, client.cellphone) && Objects.equals(telephone, client.telephone) && Objects.equals(inactive, client.inactive) && Objects.equals(address, client.address);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, cpf, cnpj, company, inactive, address);
+        return Objects.hash(id, name, cpf, cnpj, company, email, whatsapp, cellphone, telephone, inactive, address);
     }
 }

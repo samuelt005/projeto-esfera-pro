@@ -29,10 +29,24 @@
     user-select: none;
 }
 
+.button-table.disabled {
+    opacity: 0.5;
+}
+
 .button-table:hover {
     cursor: pointer;
     background-color: var(--button-hover);
     transition: background-color 0.5s;
+}
+
+.button-table.disabled:hover {
+    cursor: default;
+    background-color: var(--table-primary);
+    transition: none;
+}
+
+.button-table.disabled:hover .icon {
+    cursor: default;
 }
 
 .button-table.rounded {

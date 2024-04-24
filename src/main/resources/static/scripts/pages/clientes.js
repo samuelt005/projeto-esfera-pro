@@ -9,6 +9,10 @@ let nameInput;
 let cpfInput;
 let companyInput;
 let cnpjInput;
+let emailInput;
+let whatsappInput;
+let cellphoneInput;
+let telephoneInput;
 let streetInput;
 let numberInput;
 let zipCodeInput;
@@ -160,11 +164,9 @@ function createTableRow(client) {
         <td>${client.name}</td>
         <td>${client.cnpj ? client.cnpj : client.cpf}</td>
         <td>${client.company}</td>
-        <td>${client.address.zip_code !== null ? client.address.zip_code : '-'}</td>
-        <td>${client.address.street !== '' ? client.address.street : '-'}</td>
-        <td>${client.address.number !== null ? client.address.number : '-'}</td>
-        <td>${client.address.city.name}</td>
-        <td>${client.address.city.state.name}</td>
+        <td>${client.telephone === "" || client.telephone === null ? '-' : client.telephone}</td>
+        <td>${client.email === "" || client.email === null ? '-' : client.email}</td>
+        <td>${client.address.city.name} - ${client.address.city.state.uf}</td>
         ${clienteButtons}
     `;
 
@@ -179,12 +181,17 @@ function addRowButtonEvents(row) {
     const deleteButton = row.querySelector('.delete');
     const editButton = row.querySelector('.edit');
 
-    sendMessageButton.addEventListener('click', () => {
-        const rowId = parseInt(row.getAttribute('data-row-id'));
-        const client = clientList.find(client => client.id === rowId);
-        // TODO adicionar lógica de enviar mensagem
-        console.log('Enviar mensagem para cliente: ' + client.id);
-    });
+    const rowId = parseInt(row.getAttribute('data-row-id'));
+    const client = clientList.find(client => client.id === rowId);
+    if (client.whatsapp) {
+        sendMessageButton.addEventListener('click', () => {
+            const phoneNumber = client.whatsapp.replace(/\D/g, '');
+            window.open(`https://web.whatsapp.com/send?phone=${phoneNumber}`, '_blank');
+        });
+    } else {
+        sendMessageButton.classList.add('disabled');
+        sendMessageButton.disabled = true;
+    }
 
     deleteButton.addEventListener('click', () => {
         deleteClient(row).catch(error => console.error(error));
@@ -289,6 +296,10 @@ function getDocumentElements() {
     cpfInput = document.querySelector('input[name="cpf"]');
     companyInput = document.querySelector('input[name="company"]');
     cnpjInput = document.querySelector('input[name="cnpj"]');
+    emailInput = document.querySelector('input[name="email"]');
+    whatsappInput = document.querySelector('input[name="whatsapp"]');
+    cellphoneInput = document.querySelector('input[name="cellphone"]');
+    telephoneInput = document.querySelector('input[name="telephone"]');
     streetInput = document.querySelector('input[name="street"]');
     numberInput = document.querySelector('input[name="number"]');
     zipCodeInput = document.querySelector('input[name="zip_code"]');

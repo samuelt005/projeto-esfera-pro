@@ -29,11 +29,9 @@
                     <th>Nome</th>
                     <th>CPF/CNPJ</th>
                     <th>Empresa</th>
-                    <th>CEP</th>
-                    <th>Rua</th>
-                    <th>Número</th>
-                    <th>Cidade</th>
-                    <th>Estado</th>
+                    <th>Telefone</th>
+                    <th>E-mail</th>
+                    <th>Endereço</th>
                     <th>Ações</th>
                 </tr>
                 </thead>
@@ -61,21 +59,44 @@
                 <div class="inputs-row">
                     <div class="input-wrapper">
                         <h4>Nome</h4>
-                        <div th:replace="~{components/input1 :: input('name', 'Digite o nome do cliente')}"></div>
+                        <div th:replace="~{components/input1 :: input('name', 'Digite o nome do cliente', 'text')}"></div>
                     </div>
                     <div class="input-wrapper">
                         <h4>CPF</h4>
-                        <div th:replace="~{components/input1 :: input('cpf', '999.999.999-99')}"></div>
+                        <div th:replace="~{components/input1 :: input('cpf', '999.999.999-99', 'text')}"></div>
                     </div>
                 </div>
                 <div class="inputs-row">
                     <div class="input-wrapper">
                         <h4>Empresa</h4>
-                        <div th:replace="~{components/input1 :: input('company', 'Digite o nome da empresa')}"></div>
+                        <div th:replace="~{components/input1 :: input('company', 'Digite o nome da empresa', 'text')}"></div>
                     </div>
                     <div class="input-wrapper">
                         <h4>CNPJ</h4>
-                        <div th:replace="~{components/input1 :: input('cnpj', '99.999.999/9999-99')}"></div>
+                        <div th:replace="~{components/input1 :: input('cnpj', '99.999.999/9999-99', 'text')}"></div>
+                    </div>
+                </div>
+            </section>
+            <section>
+                <h3>Informações para contato</h3>
+                <div class="inputs-row">
+                    <div class="input-wrapper">
+                        <h4>E-mail</h4>
+                        <div th:replace="~{components/input1 :: input('email', 'Digite o e-mail do cliente', 'email')}"></div>
+                    </div>
+                    <div class="input-wrapper">
+                        <h4>Whatsapp</h4>
+                        <div th:replace="~{components/input1 :: input('whatsapp', '(99) 99999-9999', 'text')}"></div>
+                    </div>
+                </div>
+                <div class="inputs-row">
+                    <div class="input-wrapper">
+                        <h4>Celular</h4>
+                        <div th:replace="~{components/input1 :: input('cellphone', '(99) 99999-9999', 'text')}"></div>
+                    </div>
+                    <div class="input-wrapper">
+                        <h4>Telefone</h4>
+                        <div th:replace="~{components/input1 :: input('telephone', '(99) 99999-9999', 'text')}"></div>
                     </div>
                 </div>
             </section>
@@ -84,15 +105,15 @@
                 <div class="inputs-row">
                     <div class="input-wrapper small">
                         <h4>Número</h4>
-                        <div th:replace="~{components/input1 :: input('number', '99999')}"></div>
+                        <div th:replace="~{components/input1 :: input('number', '99999', 'text')}"></div>
                     </div>
                     <div class="input-wrapper">
                         <h4>Rua</h4>
-                        <div th:replace="~{components/input1 :: input('street', 'Insira a rua')}"></div>
+                        <div th:replace="~{components/input1 :: input('street', 'Insira a rua', 'text')}"></div>
                     </div>
                     <div class="input-wrapper small">
                         <h4>CEP</h4>
-                        <div th:replace="~{components/input1 :: input('zip_code', '99999-999')}"></div>
+                        <div th:replace="~{components/input1 :: input('zip_code', '99999-999', 'text')}"></div>
                     </div>
                 </div>
                 <div class="inputs-row">
