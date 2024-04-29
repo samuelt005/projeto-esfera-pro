@@ -33,7 +33,7 @@ async function getClients() {
         })
         .then(data => {
             clientList.push(...data);
-            addRows(data);
+            addClientRows(data);
         })
         .catch(error => {
             getMainFrameContent('error');
@@ -53,7 +53,7 @@ async function getOneClient(id, isEditing) {
             if (isEditing) {
                 const oldRow = document.querySelector(`tr[data-row-id="${id}"]`);
                 if (oldRow) {
-                    const newRow = createTableRow(data);
+                    const newRow = createClientTableRow(data);
                     oldRow.parentNode.replaceChild(newRow, oldRow);
                 }
 
@@ -65,7 +65,7 @@ async function getOneClient(id, isEditing) {
                 addCheckboxesEvents();
             } else {
                 clientList.push(data);
-                addRows([data]);
+                addClientRows([data]);
             }
         })
         .catch(error => {
@@ -104,7 +104,7 @@ async function getStates(stateSelect) {
 // Busca cidades pelo ID do estado
 async function getCitiesByState(state_id, event) {
     if (event?.target) {
-        switchSelectClass(event);
+        switchClientSelectClass(event);
     }
 
     if (!citySelect.classList.contains('unselected')) {
@@ -138,11 +138,11 @@ async function getCitiesByState(state_id, event) {
 }
 
 // Adiciona linhas a tabela de clientes
-function addRows(clients) {
+function addClientRows(clients) {
     const tableContent = document.querySelector(".table-content");
 
     clients.forEach((client) => {
-        const newRow = createTableRow(client);
+        const newRow = createClientTableRow(client);
         tableContent.appendChild(newRow);
     });
 
@@ -150,7 +150,7 @@ function addRows(clients) {
 }
 
 // Cria um elemento HTML de uma linha da tabela
-function createTableRow(client) {
+function createClientTableRow(client) {
     const newRow = document.createElement('tr');
     newRow.setAttribute('data-row-id', client.id);
     newRow.innerHTML = `
@@ -170,13 +170,13 @@ function createTableRow(client) {
         ${clienteButtons}
     `;
 
-    addRowButtonEvents(newRow);
+    addClientRowButtonEvents(newRow);
 
     return newRow;
 }
 
 // Adiciona os eventos dos botões da linha de um cliente
-function addRowButtonEvents(row) {
+function addClientRowButtonEvents(row) {
     const sendMessageButton = row.querySelector('.send-message');
     const deleteButton = row.querySelector('.delete');
     const editButton = row.querySelector('.edit');
@@ -257,7 +257,7 @@ function addSelectedStateEvent(select) {
 }
 
 // Adiciona o evento de adicionar novo cliente no botão de adicionar
-function addNewItemEvent(button) {
+function addNewClientEvent(button) {
     button.addEventListener('click', () => {
         isEditing = false;
         resetFields();
@@ -268,11 +268,11 @@ function addNewItemEvent(button) {
 
 // Adiciona o evento de alterar a aparência do select ao selecionar um dado
 function addSelectedCityEvent(select) {
-    select.addEventListener('change', switchSelectClass);
+    select.addEventListener('change', switchClientSelectClass);
 }
 
 // Altera a aparência do select ao selecionar um dado
-function switchSelectClass(event) {
+function switchClientSelectClass(event) {
     if (!event.target) {
         return
     }
@@ -287,8 +287,10 @@ function switchSelectClass(event) {
 }
 
 // Busca os elementos da página e atribui eles as variáveis globais
-function getDocumentElements() {
+function getClientElements() {
+    console.log('getDocumentElements');
     buttonAddNew = document.querySelector('.button-add-new');
+    console.log(buttonAddNew);
     buttonCloseModal = document.querySelector('.close-modal-button');
     cancelCloseModal = document.querySelector('.cancel-modal-button');
     saveCloseModal = document.querySelector('.save-modal-button');
@@ -309,9 +311,10 @@ function getDocumentElements() {
 
 // Inicialização da página de clientes
 function clientesStartup() {
+    console.log('clientesStartup')
     getClients().then(() => {
-        getDocumentElements();
-        addNewItemEvent(buttonAddNew);
+        getClientElements();
+        addNewClientEvent(buttonAddNew);
         addSwitchOverlayEvent(buttonCloseModal);
         addSwitchOverlayEvent(cancelCloseModal);
         addSwitchOverlayEvent(buttonCloseModal);
