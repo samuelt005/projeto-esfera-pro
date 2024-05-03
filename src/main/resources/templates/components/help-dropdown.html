@@ -1,0 +1,9 @@
+<div th:fragment="dropdown(question, anwerse)" class="dropdown1 expanded">
+    <div class="dropdown-header">
+        <p th:text="${question}"></p>
+        <div th:replace="~{icons/buttons/dropdown :: dropdown}"></div>
+    </div>
+    <div class="dropdown-content">
+        <p th:text="${anwerse}"></p>
+    </div>
+</div>

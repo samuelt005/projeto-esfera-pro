@@ -42,6 +42,13 @@ public class Pages {
         return "pages/propostas";
     }
 
+    // Rota da página de propostas
+    @GetMapping("/pageconfigs")
+    public String pageConfigs(Model model) throws InterruptedException {
+//        Thread.sleep(2000); // Simulated Lag
+        return "pages/configs";
+    }
+
     @GetMapping("/pageerror")
     public String pageErro(Model model) throws InterruptedException {
 //        Thread.sleep(2000); // Simulated Lag

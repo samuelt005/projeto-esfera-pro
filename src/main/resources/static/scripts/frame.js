@@ -31,6 +31,10 @@ function loadSelectedPageScript(page) {
             interacoesStartup();
             break;
 
+        case 'configs':
+            configsStartup();
+            break;
+
         case 'error':
             errorStartup();
             break;
@@ -125,7 +129,8 @@ function frameSetup() {
 
 frameSetup();
 if (!showError) {
-    menuButtons[0].click();
+    getMainFrameContent('configs'); // TODO temporary setup to test
+    // menuButtons[0].click();
 } else {
     getMainFrameContent('error');
 }
