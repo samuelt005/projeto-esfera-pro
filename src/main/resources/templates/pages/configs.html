@@ -10,29 +10,25 @@
         <div class="menu-header">
             <h2>Configurações</h2>
             <div class="header-options">
-                <div class="header-option">
+                <div class="header-option" data-page="profile">
                     <p>Perfil</p>
                 </div>
-                <div class="header-option">
+                <div class="header-option" data-page="team">
                     <p>Equipe</p>
                 </div>
-                <div class="header-option"
-                ><p>Metas</p>
+                <div class="header-option" data-page="goals">
+                    <p>Metas</p>
                 </div>
-                <div class="header-option selected">
+                <div class="header-option" data-page="help">
                     <p>Ajuda</p>
                 </div>
             </div>
         </div>
 
-        <div class="help-page">
-            <div class="page-title">
-                <h3>Perguntas frequentes</h3>
-            </div>
-            <div class="faq-container">
-                <div th:replace="~{components/help-dropdown :: dropdown('Teste de pergunta?', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Vel facilisis volutpat est velit egestas dui. Ornare quam viverra orci sagittis eu volutpat. Mauris pellentesque pulvinar pellentesque habitant morbi. Proin fermentum leo vel orci porta non pulvinar neque laoreet. Nunc id cursus metus aliquam eleifend mi in nulla posuere. Et odio pellentesque diam volutpat commodo sed egestas. Massa tempor nec feugiat nisl pretium.')}"></div>
-            </div>
-        </div>
+        <div th:replace="~{pages/configs/help :: help()}"></div>
+        <div th:replace="~{pages/configs/profile :: profile()}"></div>
+        <div th:replace="~{pages/configs/team :: team()}"></div>
+        <div th:replace="~{pages/configs/goals :: goals()}"></div>
     </div>
 </content>
 

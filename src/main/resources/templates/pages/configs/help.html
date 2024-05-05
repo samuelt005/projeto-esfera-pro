@@ -1,0 +1,15 @@
+<div th:fragment="help()" class="help-page hidden">
+    <div class="page-title">
+        <h3>Perguntas frequentes</h3>
+    </div>
+    <div class="config-page-container">
+        <div th:replace="~{components/help-dropdown :: dropdown('Como cadastrar novos clientes?', 'Texto de resposta vai aqui')}"></div>
+        <div th:replace="~{components/help-dropdown :: dropdown('Como cadastrar novas propostas?', 'Texto de resposta vai aqui')}"></div>
+        <div th:replace="~{components/help-dropdown :: dropdown('Como cadastrar novas ligações?', 'Texto de resposta vai aqui')}"></div>
+        <div th:replace="~{components/help-dropdown :: dropdown('Como funcionam os indicadores do dashboard?', 'Texto de resposta vai aqui')}"></div>
+        <div th:replace="~{components/help-dropdown :: dropdown('Como definir metas?', 'Texto de resposta vai aqui')}"></div>
+        <div th:replace="~{components/help-dropdown :: dropdown('Como exportar minhas listas?', 'Texto de resposta vai aqui')}"></div>
+        <div th:replace="~{components/help-dropdown :: dropdown('Como criar uma equipe?', 'Texto de resposta vai aqui')}"></div>
+        <div th:replace="~{components/help-dropdown :: dropdown('Como entrar em uma equipe?', 'Texto de resposta vai aqui')}"></div>
+    </div>
+</div>
