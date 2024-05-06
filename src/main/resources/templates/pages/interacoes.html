@@ -7,12 +7,147 @@
 <body>
 <content>
     <div class="content-container">
-        <h2>Interações</h2>
+        <div class="table-header">
+            <h2>Ligações</h2>
+            <div th:replace="~{components/search :: search('pesquisar', 'Pesquisar', ~{icons/search/magnifying-glass :: magnifying-glass})}"></div>
+            <div class="buttons">
+                <div th:replace="~{components/button1 :: button('filtrar', 'Filtrar', ~{icons/buttons/filters :: filters})}"></div>
+                <div th:replace="~{components/button1 :: button('exportar', 'Exportar', ~{icons/buttons/export :: export})}"></div>
+            </div>
+        </div>
+        <div class="table-container">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th class="select-all-checkbox">
+                        <div>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                <path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/>
+                            </svg>
+                        </div>
+                    </th>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Resultado</th>
+                    <th>Descrição</th>
+                    <th>Data</th>
+                    <th>Hora</th>
+                    <th>Duração</th>
+                    <th>Contato</th>
+                    <th>Ações</th>
+                </tr>
+                </thead>
+                <tbody class="table-content">
+                </tbody>
+            </table>
+            <div th:replace="~{components/button-add-new :: button}"></div>
+        </div>
     </div>
 </content>
 
+<modal>
+    <div class="modal-container">
+        <header>
+            <h2>
+                Cadastrar cliente
+            </h2>
+            <div class="close-modal-button">
+                <div th:replace="~{icons/buttons/close :: close}"></div>
+            </div>
+        </header>
+        <main>
+            <section>
+                <h3>Dados básicos</h3>
+                <div class="inputs-row">
+                    <div class="input-wrapper">
+                        <h4>Nome</h4>
+                        <div th:replace="~{components/input1 :: input('name', 'Digite o nome do cliente', 'text')}"></div>
+                    </div>
+                    <div class="input-wrapper">
+                        <h4>CPF</h4>
+                        <div th:replace="~{components/input1 :: input('cpf', '999.999.999-99', 'text')}"></div>
+                    </div>
+                </div>
+                <div class="inputs-row">
+                    <div class="input-wrapper">
+                        <h4>Empresa</h4>
+                        <div th:replace="~{components/input1 :: input('company', 'Digite o nome da empresa', 'text')}"></div>
+                    </div>
+                    <div class="input-wrapper">
+                        <h4>CNPJ</h4>
+                        <div th:replace="~{components/input1 :: input('cnpj', '99.999.999/9999-99', 'text')}"></div>
+                    </div>
+                </div>
+            </section>
+            <section>
+                <h3>Informações para contato</h3>
+                <div class="inputs-row">
+                    <div class="input-wrapper">
+                        <h4>E-mail</h4>
+                        <div th:replace="~{components/input1 :: input('email', 'Digite o e-mail do cliente', 'email')}"></div>
+                    </div>
+                    <div class="input-wrapper">
+                        <h4>Whatsapp</h4>
+                        <div th:replace="~{components/input1 :: input('whatsapp', '(99) 99999-9999', 'text')}"></div>
+                    </div>
+                </div>
+                <div class="inputs-row">
+                    <div class="input-wrapper">
+                        <h4>Celular</h4>
+                        <div th:replace="~{components/input1 :: input('cellphone', '(99) 99999-9999', 'text')}"></div>
+                    </div>
+                    <div class="input-wrapper">
+                        <h4>Telefone</h4>
+                        <div th:replace="~{components/input1 :: input('telephone', '(99) 99999-9999', 'text')}"></div>
+                    </div>
+                </div>
+            </section>
+            <section>
+                <h3>Endereço</h3>
+                <div class="inputs-row">
+                    <div class="input-wrapper small">
+                        <h4>Número</h4>
+                        <div th:replace="~{components/input1 :: input('number', '99999', 'text')}"></div>
+                    </div>
+                    <div class="input-wrapper">
+                        <h4>Rua</h4>
+                        <div th:replace="~{components/input1 :: input('street', 'Insira a rua', 'text')}"></div>
+                    </div>
+                    <div class="input-wrapper small">
+                        <h4>CEP</h4>
+                        <div th:replace="~{components/input1 :: input('zip_code', '99999-999', 'text')}"></div>
+                    </div>
+                </div>
+                <div class="inputs-row">
+                    <div class="input-wrapper medium">
+                        <h4>Estado</h4>
+                        <div th:replace="~{components/input-select :: input('state', 'Selecione', false)}"></div>
+                    </div>
+                    <div class="input-wrapper">
+                        <h4>Cidade</h4>
+                        <div th:replace="~{components/input-select :: input('city', 'Selecione', true)}"></div>
+                    </div>
+                </div>
+            </section>
+        </main>
+        <footer>
+            <div th:replace="~{components/button2 :: button('cancel-modal-button', 'Cancelar', false)}"></div>
+            <div th:replace="~{components/button2 :: button('save-modal-button', 'Salvar', true)}"></div>
+        </footer>
+    </div>
+</modal>
+
 <styles>
     <link rel="stylesheet" th:href="@{/styles/pages/interacoes.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/modal.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/components/search.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/components/button1.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/components/button2.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/components/button3.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/components/input1.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/components/input-select.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/components/button-table.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/components/checkbox-table.css}"/>
 </styles>
 </body>
 </html>
