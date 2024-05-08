@@ -1,6 +1,7 @@
 // Elementos comuns da página
 const mainContent = document.querySelector(".main-content");
 const overlay = document.querySelector(".overlay");
+const header = document.querySelector(".main")
 const allStyles = document.getElementById("styles");
 const sidebar = document.querySelector(".sidebar");
 const expandButton = document.querySelector(".expand-menu");
@@ -126,7 +127,6 @@ function frameSetup() {
         button.addEventListener("click", menuButtonClicked);
     })
 }
-
 frameSetup();
 if (!showError) {
     getMainFrameContent('configs'); // TODO temporary setup to test
