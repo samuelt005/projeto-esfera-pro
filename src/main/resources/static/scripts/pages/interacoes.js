@@ -3,6 +3,13 @@ let buttonAddNewinteractions;
 let buttonCloseModalinteractions;
 let cancelCloseModalInteracitons;
 let saveCloseModalInteractons;
+let clientInputInteraction;
+let contactSelectInteraction;
+let dateInputInteraction;
+let resultSelectInteraction;
+let timeInputInteraction;
+let durationInputInteraction;
+let descriptionInputInteraction;
 
 
 // Lista de interacoes
@@ -10,6 +17,43 @@ let interactionList = [];
 
 // Buscar todos os interacoes
 
+
+// Criar opções do select do tipo de contato
+function setContactSelect() {
+    const options = [
+        {name: 'Ligação', value: 1},
+        {name: 'Whatsapp', value: 2},
+        {name: 'E-mail', value: 3}
+    ]
+
+    options.forEach((option) => {
+        const newOption = document.createElement('option');
+        newOption.value = option.value;
+        newOption.textContent = option.name;
+        newOption.classList.add('contact-option');
+
+        contactSelectInteraction.appendChild(newOption);
+    })
+}
+
+// Criar opções do select do tipo de resultado
+function setResultSelect() {
+    const options = [
+        {name: 'Desligado', value: 1},
+        {name: 'Ocupado', value: 2},
+        {name: 'Cx. Postal', value: 3},
+        {name: 'Atendido', value: 4}
+    ]
+
+    options.forEach((option) => {
+        const newOption = document.createElement('option');
+        newOption.value = option.value;
+        newOption.textContent = option.name;
+        newOption.classList.add('result-option');
+
+        resultSelectInteraction.appendChild(newOption);
+    })
+}
 
 // Adiciona linhas a tabela de interacoes
 function addInteractionRows(interactions) {
@@ -74,9 +118,9 @@ function addInteractionRowButtonEvents(row) {
     editButton.addEventListener('click', () => {
         const rowId = parseInt(row.getAttribute('data-row-id'));
         const interaction = interactionList.find(interaction => interaction.id === rowId);
-        isEditing = true;
+        isEditingInteraction = true;
         resetInteractionFields();
-        cleanInvalidClasses();
+        cleanInvalidClassesInteraction();
         fillFieldsInt(interaction);
         switchOverlay();
     });
@@ -98,10 +142,10 @@ async function deleteInteraction(row) {
             method: 'DELETE',
         });
 
-        const responseData = await response.json();
+        const responseDataInteraction = await response.json();
 
         if (!response.ok) {
-            console.error('Erro: ' + responseData.message);
+            console.error('Erro: ' + responseDataInteraction.message);
         } else {
             row.remove();
             addCheckboxesEvents();
@@ -119,63 +163,46 @@ async function deleteInteraction(row) {
 
 // Adiciona o evento de salvar um interação no botão de salvar
 function addSaveInteractionEvent(button) {
-    function saveInteraction() {
-
-    }
-
     button.addEventListener('click', saveInteraction);
 }
 
-// Adiciona o evento de adicionar novo interação no botão de adicionar
+// Adiciona o evento de adicionar nova interação no botão de adicionar
 function addNewInteractionEvent(button) {
     button.addEventListener('click', () => {
-        isEditing = false;
+        isEditingInteraction = false;
         resetInteractionFields();
-        cleanInvalidClasses();
+        cleanInvalidClassesInteraction();
         switchOverlay();
     });
 }
 
-// Adiciona o evento de alterar a aparência do select ao selecionar um dado
-function addSelectedCityEvent(select) {
-    select.addEventListener('change', switchInteractionSelectClass);
-}
-
-// Altera a aparência do select ao selecionar um dado
-function switchInteractionSelectClass(event) {
-    if (!event.target) {
-        return
-    }
-
-    const id = event.target.value;
-
-    if (id !== 0) {
-        event.target.classList.remove('unselected');
-    } else if (!event.target.classList.contains('unselected')) {
-        event.target.classList.add('unselected');
-    }
-}
-
 // Busca os elementos da página e atribui eles as variáveis globais
 function getInteractionElements() {
-    console.log('getDocumentElements');
     buttonAddNewinteractions = document.querySelector('.button-add-new');
-    console.log(buttonAddNewinteractions);
     buttonCloseModalinteractions = document.querySelector('.close-modal-button');
     cancelCloseModalInteracitons = document.querySelector('.cancel-modal-button');
     saveCloseModalInteractons = document.querySelector('.save-modal-button');
+    clientInputInteraction = document.querySelector('input[name="client"]');
+    contactSelectInteraction = document.querySelector('select[name="contact"]');
+    dateInputInteraction = document.querySelector('input[name="date"]');
+    resultSelectInteraction = document.querySelector('select[name="result"]');
+    timeInputInteraction = document.querySelector('input[name="time"]');
+    durationInputInteraction = document.querySelector('input[name="duration"]');
+    descriptionInputInteraction = document.querySelector('input[name="description"]');
 }
 
 // Inicialização da página de interacoes
 function interacoesStartup() {
-    console.log('interacoesStartup')
-        getInteractionElements();
-        addNewInteractionEvent(buttonAddNewinteractions);
-        addSwitchOverlayEvent(buttonCloseModalinteractions);
-        addSwitchOverlayEvent(cancelCloseModalInteracitons);
-        addSwitchOverlayEvent(buttonCloseModalinteractions);
-        addSaveInteractionEvent(saveCloseModalInteractons);
+    getInteractionElements();
+    addNewInteractionEvent(buttonAddNewinteractions);
+    addSwitchOverlayEvent(buttonCloseModalinteractions);
+    addSwitchOverlayEvent(cancelCloseModalInteracitons);
+    addSwitchOverlayEvent(buttonCloseModalinteractions);
+    addSaveInteractionEvent(saveCloseModalInteractons);
 
+    setContactSelect();
+    setResultSelect();
+    setInputMasksForInteractions();
 }
 
 
