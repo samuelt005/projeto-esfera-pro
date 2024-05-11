@@ -27,6 +27,11 @@
     transition: background-color 0.5s;
 }
 
+/* Desativado*/
+.notifications-button {
+    display: none;
+}
+
 .user-profile {
     display: flex;
     gap: 10px;
