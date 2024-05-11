@@ -9,6 +9,7 @@
     <link rel="stylesheet" th:href="@{/styles/sidebar.css}"/>
     <link rel="stylesheet" th:href="@{/styles/header.css}"/>
     <link rel="stylesheet" th:href="@{/styles/loading.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/components/header-menu.css}"/>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
@@ -48,6 +49,8 @@
             <div th:replace="~{icons/header/user :: user}"></div>
         </div>
     </header>
+
+    <div th:replace="~{components/header-menu :: header-menu}"></div>
 
     <div class="frame" id="mainFrame">
         <div class="main-content hidden">
@@ -97,6 +100,7 @@
     <script type="text/javascript" th:src="@{/scripts/forms/validadeCnpj.js}"></script>
 
     <script type="text/javascript" th:src="@{/scripts/frame.js}"></script>
+    <script type="text/javascript" th:src="@{/scripts/header.js}"></script>
     <script type="text/javascript" th:src="@{/scripts/common.js}"></script>
 
 </div>
