@@ -1,0 +1,106 @@
+.header-menu {
+    position: fixed;
+    right: 20px;
+    top: 60px;
+    z-index: 10;
+}
+
+.header-menu.hidden {
+    display: none;
+}
+
+.top-section {
+    display: flex;
+    width: 300px;
+    background-color: #3D0053;
+    color: #FFFFFF;
+    padding: 10px 10px;
+}
+
+.top-icon img {
+    width: 50px;
+}
+
+.bottom-section {
+    background-color: #FFFFFF;
+    border-radius: 0 0 10px 10px;
+    display: flex;
+    flex-direction: column;
+    padding: 10px 10px;
+    gap: 20px;
+}
+
+.config-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.config-icon {
+}
+
+.email-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.email-icon {
+}
+
+.equipes-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.equipes-icon {
+}
+
+.servicos-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.servicos-icon {
+}
+
+.dados-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.dados-icon {
+}
+
+.lixeira-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.lixeira-icon {
+}
+
+.sair-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.sair-icon {
+}
+
+.ajuda-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.ajuda-icon {
+}
+
+
+
