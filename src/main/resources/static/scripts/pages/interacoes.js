@@ -113,11 +113,7 @@ function createInteractionTableRow(interaction) {
     newRow.setAttribute('data-row-id', interaction.id);
     newRow.innerHTML = `
         <th class="row-checkbox" data-checkbox-id="${interaction.id}">
-            <div>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                    <path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/>
-                </svg>
-            </div>
+            ${rowCheckboxIcon}
         </th>
         <td>${interaction.id}</td>
         <td>${interaction.client.company ? interaction.client.company : interaction.name}</td>
@@ -136,21 +132,8 @@ function createInteractionTableRow(interaction) {
 
 // Adiciona os eventos dos botões da linha de um interação
 function addInteractionRowButtonEvents(row) {
-    const sendMessageButton = row.querySelector('.send-message');
     const deleteButton = row.querySelector('.delete');
     const editButton = row.querySelector('.edit');
-
-    const rowId = parseInt(row.getAttribute('data-row-id'));
-    const interaction = interactionList.find(interaction => interaction.id === rowId);
-    if (interaction.whatsapp) {
-        sendMessageButton.addEventListener('click', () => {
-            const phoneNumber = interaction.whatsapp.replace(/\D/g, '');
-            window.open(`https://web.whatsapp.com/send?phone=${phoneNumber}`, '_blank');
-        });
-    } else {
-        sendMessageButton.classList.add('disabled');
-        sendMessageButton.disabled = true;
-    }
 
     deleteButton.addEventListener('click', () => {
         deleteInteraction(row).catch(error => console.error(error));
