@@ -28,7 +28,7 @@ function loadSelectedPageScript(page) {
             break;
 
         case 'interacoes':
-            interacoesStartup();
+            interactionStartup();
             break;
 
         case 'configs':
@@ -129,8 +129,8 @@ function frameSetup() {
 
 frameSetup();
 if (!showError) {
-    getMainFrameContent('configs'); // TODO temporary setup to test
-    // menuButtons[0].click();
+    // getMainFrameContent('configs'); // TODO temporary setup to test
+    menuButtons[4].click();
 } else {
     getMainFrameContent('error');
 }

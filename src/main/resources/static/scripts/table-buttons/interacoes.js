@@ -1,6 +1,6 @@
-// Bot�es de uma linha de Interacoes
-// Est� em um arquivo separado devido ao tamanho da string
-const interacoesButtons = `
+// Botões de uma linha de Interações
+// Este em um arquivo separado devido ao tamanho da string
+const interactionButtons = `
     <td class="table-buttons">
         <div class="button-table rounded send-message">
             <div th:fragment="export" class="icon">

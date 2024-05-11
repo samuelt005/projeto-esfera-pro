@@ -1,8 +1,8 @@
 // Elementos da página
-let buttonAddNewinteractions;
-let buttonCloseModalinteractions;
-let cancelCloseModalInteracitons;
-let saveCloseModalInteractons;
+let buttonAddNewInteraction;
+let buttonCloseModalInteraction;
+let cancelCloseModalInteraction;
+let saveCloseModalInteraction;
 let clientInputInteraction;
 let contactSelectInteraction;
 let dateInputInteraction;
@@ -12,11 +12,51 @@ let durationInputInteraction;
 let descriptionInputInteraction;
 
 
-// Lista de interacoes
+// Lista de interações
 let interactionList = [];
 
-// Buscar todos os interacoes
+// Buscar todas as interações
+async function getInteraction() {
+    await fetch(`${URL}/interaction`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Erro ao recuperar interações`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            interactionList.push(...data);
+            addInteractionRows(data);
+        })
+        .catch(error => {
+            getMainFrameContent('error');
+        });
+}
 
+// Busca todos os clientes
+async function getAllClients(clientSelect) {
+    await fetch(`${URL}/client`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Erro ao recuperar clientes`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            data.forEach((data) => {
+                const newOption = document.createElement('option');
+                newOption.value = data.id;
+                newOption.textContent = data.id + ' - ' + data.name;
+                newOption.classList.add('contact-option');
+
+                clientSelect.appendChild(newOption);
+            })
+            clientSelect.disabled = false;
+        })
+        .catch(error => {
+            console.error(error);
+        });
+}
 
 // Criar opções do select do tipo de contato
 function setContactSelect() {
@@ -55,7 +95,7 @@ function setResultSelect() {
     })
 }
 
-// Adiciona linhas a tabela de interacoes
+// Adiciona linhas a tabela de interações
 function addInteractionRows(interactions) {
     const tableContent = document.querySelector(".table-content");
 
@@ -79,13 +119,14 @@ function createInteractionTableRow(interaction) {
                 </svg>
             </div>
         </th>
-        <td>${interaction.name}</td>
-        <td>${interaction.cnpj ? interaction.cnpj : interaction.cpf}</td>
-        <td>${interaction.company}</td>
-        <td>${interaction.telephone === "" || interaction.telephone === null ? '-' : interaction.telephone}</td>
-        <td>${interaction.email === "" || interaction.email === null ? '-' : interaction.email}</td>
-        <td>${interaction.address.city.name} - ${interaction.address.city.state.uf}</td>
-        ${interacoesButtons}
+        <td>${interaction.id}</td>
+        <td>${interaction.client.company ? interaction.client.company : interaction.name}</td>
+        <td>${getResultDiv(interaction.result)}</td>
+        <td>${getContactText(interaction.contact)}</td>
+        <td class="description">${interaction.description === "" ? '-' : interaction.description}</td>
+        <td>${getDataFormatted(interaction.date) + ' - ' + interaction.time}</td>
+        <td>${interaction.duration}</td>
+        ${interactionButtons}
     `;
 
     addInteractionRowButtonEvents(newRow);
@@ -126,7 +167,7 @@ function addInteractionRowButtonEvents(row) {
     });
 }
 
-// Remove uma linha da tabela de interacoes
+// Remove uma linha da tabela de interações
 async function deleteInteraction(row) {
     const id = parseInt(row.getAttribute('data-row-id'));
 
@@ -161,7 +202,7 @@ async function deleteInteraction(row) {
     }
 }
 
-// Adiciona o evento de salvar um interação no botão de salvar
+// Adiciona o evento de salvar uma interação no botão de salvar
 function addSaveInteractionEvent(button) {
     button.addEventListener('click', saveInteraction);
 }
@@ -178,11 +219,11 @@ function addNewInteractionEvent(button) {
 
 // Busca os elementos da página e atribui eles as variáveis globais
 function getInteractionElements() {
-    buttonAddNewinteractions = document.querySelector('.button-add-new');
-    buttonCloseModalinteractions = document.querySelector('.close-modal-button');
-    cancelCloseModalInteracitons = document.querySelector('.cancel-modal-button');
-    saveCloseModalInteractons = document.querySelector('.save-modal-button');
-    clientInputInteraction = document.querySelector('input[name="client"]');
+    buttonAddNewInteraction = document.querySelector('.button-add-new');
+    buttonCloseModalInteraction = document.querySelector('.close-modal-button');
+    cancelCloseModalInteraction = document.querySelector('.cancel-modal-button');
+    saveCloseModalInteraction = document.querySelector('.save-modal-button');
+    clientInputInteraction = document.querySelector('select[name="client"]');
     contactSelectInteraction = document.querySelector('select[name="contact"]');
     dateInputInteraction = document.querySelector('input[name="date"]');
     resultSelectInteraction = document.querySelector('select[name="result"]');
@@ -191,18 +232,22 @@ function getInteractionElements() {
     descriptionInputInteraction = document.querySelector('input[name="description"]');
 }
 
-// Inicialização da página de interacoes
-function interacoesStartup() {
-    getInteractionElements();
-    addNewInteractionEvent(buttonAddNewinteractions);
-    addSwitchOverlayEvent(buttonCloseModalinteractions);
-    addSwitchOverlayEvent(cancelCloseModalInteracitons);
-    addSwitchOverlayEvent(buttonCloseModalinteractions);
-    addSaveInteractionEvent(saveCloseModalInteractons);
+// Inicialização da página de interações
+function interactionStartup() {
+    getInteraction().then(() => {
+        getInteractionElements();
+        addNewInteractionEvent(buttonAddNewInteraction);
+        addSwitchOverlayEvent(buttonCloseModalInteraction);
+        addSwitchOverlayEvent(cancelCloseModalInteraction);
+        addSwitchOverlayEvent(buttonCloseModalInteraction);
+        addSaveInteractionEvent(saveCloseModalInteraction);
 
-    setContactSelect();
-    setResultSelect();
-    setInputMasksForInteractions();
+        getAllClients(clientInputInteraction).then();
+
+        setContactSelect();
+        setResultSelect();
+        setInputMasksForInteractions();
+    })
 }
 
 

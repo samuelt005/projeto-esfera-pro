@@ -20,7 +20,7 @@ public class InteractionService {
         this.interactionRepository = interactionRepository;
     }
 
-    // Lista todos as interações ativas
+    // Lista todas as interações ativas
     public ResponseEntity<?> listActiveInteraction() {
         Interaction exampleInteraction = new Interaction();
         exampleInteraction.setInactive(false);
@@ -60,10 +60,10 @@ public class InteractionService {
             Interaction interaction = optionalInteraction.get();
             interaction.setInactive(true);
             interactionRepository.save(interaction);
-            Response response = new Response(HttpStatus.OK, "Interação inativado.");
+            Response response = new Response(HttpStatus.OK, "Interação inativada.");
             return ResponseEntity.ok().body(response);
         } else {
-            Response response = new Response(HttpStatus.NOT_FOUND, "Interação não encontrado.");
+            Response response = new Response(HttpStatus.NOT_FOUND, "Interação não encontrada.");
             return ResponseEntity.badRequest().body(response);
         }
     }

@@ -20,7 +20,7 @@ public class InteractionController {
         this.interactionService = interactionService;
     }
 
-    // Rota para listar todos as interações ativos
+    // Rota para listar todas as interações ativos
     @GetMapping
     public ResponseEntity<?> listInteractions() {
         return interactionService.listActiveInteraction();

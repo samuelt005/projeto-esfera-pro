@@ -311,7 +311,6 @@ function getClientElements() {
 
 // Inicialização da página de clientes
 function clientesStartup() {
-    console.log('clientesStartup')
     getClients().then(() => {
         getClientElements();
         addNewClientEvent(buttonAddNew);
