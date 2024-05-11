@@ -288,9 +288,7 @@ function switchClientSelectClass(event) {
 
 // Busca os elementos da página e atribui eles as variáveis globais
 function getClientElements() {
-    console.log('getDocumentElements');
     buttonAddNew = document.querySelector('.button-add-new');
-    console.log(buttonAddNew);
     buttonCloseModal = document.querySelector('.close-modal-button');
     cancelCloseModal = document.querySelector('.cancel-modal-button');
     saveCloseModal = document.querySelector('.save-modal-button');
@@ -311,7 +309,6 @@ function getClientElements() {
 
 // Inicialização da página de clientes
 function clientesStartup() {
-    console.log('clientesStartup')
     getClients().then(() => {
         getClientElements();
         addNewClientEvent(buttonAddNew);

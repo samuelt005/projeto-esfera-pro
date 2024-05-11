@@ -3,43 +3,31 @@
         <div class="top-icon">
             <div th:replace="~{icons/header-menu/user-header :: user-header}"></div>
         </div>
-        <div class="top-content">
+        <div class="top-text">
             <p>Meu perfil</p>
             <p>Disponível</p>
         </div>
     </div>
     <div class="bottom-section" id="conteudo">
-            <div class="config-container">
-                <div th:replace="~{icons/header-menu/config-header :: config-header}" class="config-icon"></div>
-                <p>Configurações de perfil</p>
-            </div>
-            <div class="email-container">
-                <div th:replace="~{icons/header-menu/email-header :: email-header}" class="email-icon"></div>
-                <p>Configurações de e-mail</p>
-            </div>
-            <div class="equipes-container">
-                <div th:replace="~{icons/header-menu/equipes-header :: equipes-header}" class="equipes-icon"></div>
-                <p>Equipes</p>
-            </div>
-            <div class="servicos-container">
-                <div th:replace="~{icons/header-menu/servicos-header :: servicos-header}" class="servicos-icon"></div>
-                <p>Criar serviços</p>
-            </div>
-            <div class="dados-container">
-                <div th:replace="~{icons/header-menu/dados-header :: dados-header}" class="dados-icon"></div>
-                <p>Importar dados</p>
-            </div>
-            <div class="lixeira-container">
-                <div th:replace="~{icons/header-menu/lixeira-header :: lixeira-header}" class="lixeira-icon"></div>
-                <p>Lixeira</p>
-            </div>
-            <div class="sair-container">
-                <div th:replace="~{icons/header-menu/sair-header :: sair-header}" class="sair-icon"></div>
-                <p>Sair</p>
-            </div>
-            <div class="ajuda-container">
-                <div th:replace="~{icons/header-menu/help-header :: help-header}" class="ajuda-icon"></div>
-                <p>Obter ajuda</p>
-            </div>
+        <div class="menu-item-container profile-configs">
+            <div th:replace="~{icons/header-menu/config-header :: config-header}"></div>
+            <p>Configurações de perfil</p>
+        </div>
+        <div class="menu-item-container email-configs">
+            <div th:replace="~{icons/header-menu/email-header :: email-header}"></div>
+            <p>Configurações de e-mail</p>
+        </div>
+        <div class="menu-item-container team-configs">
+            <div th:replace="~{icons/header-menu/team-header :: team-header}"></div>
+            <p>Equipes</p>
+        </div>
+        <div class="menu-item-container log-out">
+            <div th:replace="~{icons/header-menu/sing-out-header :: sing-out-header}"></div>
+            <p>Sair</p>
+        </div>
+        <div class="menu-item-container help-configs">
+            <div th:replace="~{icons/header-menu/help-header :: help-header}"></div>
+            <p>Obter ajuda</p>
+        </div>
     </div>
 </div>
