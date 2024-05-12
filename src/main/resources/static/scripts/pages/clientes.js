@@ -35,7 +35,7 @@ async function getClients() {
             clientList.push(...data);
             addClientRows(data);
         })
-        .catch(error => {
+        .catch(() => {
             getMainFrameContent('error');
         });
 }
@@ -104,7 +104,7 @@ async function getStates(stateSelect) {
 // Busca cidades pelo ID do estado
 async function getCitiesByState(state_id, event) {
     if (event?.target) {
-        switchClientSelectClass(event);
+        switchSelectClass(event);
     }
 
     if (!citySelect.classList.contains('unselected')) {
@@ -262,26 +262,6 @@ function addNewClientEvent(button) {
     });
 }
 
-// Adiciona o evento de alterar a aparência do select ao selecionar um dado
-function addSelectedCityEvent(select) {
-    select.addEventListener('change', switchClientSelectClass);
-}
-
-// Altera a aparência do select ao selecionar um dado
-function switchClientSelectClass(event) {
-    if (!event.target) {
-        return
-    }
-
-    const id = event.target.value;
-
-    if (id !== 0) {
-        event.target.classList.remove('unselected');
-    } else if (!event.target.classList.contains('unselected')) {
-        event.target.classList.add('unselected');
-    }
-}
-
 // Busca os elementos da página e atribui eles as variáveis globais
 function getClientElements() {
     buttonAddNew = document.querySelector('.button-add-new');
@@ -315,7 +295,7 @@ function clientesStartup() {
 
         getStates(stateSelect).then(() => {
             addSelectedStateEvent(stateSelect);
-            addSelectedCityEvent(citySelect);
+            addSelectedDataEvent(citySelect);
             setInputMasks();
         });
     });

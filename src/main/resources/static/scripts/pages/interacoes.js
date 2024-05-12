@@ -3,7 +3,7 @@ let buttonAddNewInteraction;
 let buttonCloseModalInteraction;
 let cancelCloseModalInteraction;
 let saveCloseModalInteraction;
-let clientInputInteraction;
+let clientSelectInteraction;
 let contactSelectInteraction;
 let dateInputInteraction;
 let resultSelectInteraction;
@@ -28,8 +28,41 @@ async function getInteraction() {
             interactionList.push(...data);
             addInteractionRows(data);
         })
-        .catch(error => {
+        .catch(() => {
             getMainFrameContent('error');
+        });
+}
+
+// Busca apenas uma interação pelo id
+async function getOneInteraction(id, isEditing) {
+    await fetch(`${URL}/interaction/byId/${id}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Erro ao recuperar interação`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (isEditing) {
+                const oldRow = document.querySelector(`tr[data-row-id="${id}"]`);
+                if (oldRow) {
+                    const newRow = createInteractionTableRow(data);
+                    oldRow.parentNode.replaceChild(newRow, oldRow);
+                }
+
+                const index = interactionList.findIndex(interaction => interaction.id === id);
+                if (index !== -1) {
+                    interactionList[index] = data;
+                }
+
+                addCheckboxesEvents();
+            } else {
+                interactionList.push(data);
+                addInteractionRows([data]);
+            }
+        })
+        .catch(error => {
+            console.error(error);
         });
 }
 
@@ -120,7 +153,7 @@ function createInteractionTableRow(interaction) {
         <td>${getResultDiv(interaction.result)}</td>
         <td>${getContactText(interaction.contact)}</td>
         <td class="description">${interaction.description === "" ? '-' : interaction.description}</td>
-        <td>${getDataFormatted(interaction.date) + ' - ' + interaction.time}</td>
+        <td>${getDateFormatted(interaction.date) + ' - ' + interaction.time}</td>
         <td>${interaction.duration}</td>
         ${interactionButtons}
     `;
@@ -145,7 +178,7 @@ function addInteractionRowButtonEvents(row) {
         isEditingInteraction = true;
         resetInteractionFields();
         cleanInvalidClassesInteraction();
-        fillFieldsInt(interaction);
+        fillFieldsInteraction(interaction);
         switchOverlay();
     });
 }
@@ -206,13 +239,13 @@ function getInteractionElements() {
     buttonCloseModalInteraction = document.querySelector('.close-modal-button');
     cancelCloseModalInteraction = document.querySelector('.cancel-modal-button');
     saveCloseModalInteraction = document.querySelector('.save-modal-button');
-    clientInputInteraction = document.querySelector('select[name="client"]');
+    clientSelectInteraction = document.querySelector('select[name="client"]');
     contactSelectInteraction = document.querySelector('select[name="contact"]');
     dateInputInteraction = document.querySelector('input[name="date"]');
     resultSelectInteraction = document.querySelector('select[name="result"]');
     timeInputInteraction = document.querySelector('input[name="time"]');
     durationInputInteraction = document.querySelector('input[name="duration"]');
-    descriptionInputInteraction = document.querySelector('input[name="description"]');
+    descriptionInputInteraction = document.querySelector('textarea[name="description"]');
 }
 
 // Inicialização da página de interações
@@ -225,7 +258,11 @@ function interactionStartup() {
         addSwitchOverlayEvent(buttonCloseModalInteraction);
         addSaveInteractionEvent(saveCloseModalInteraction);
 
-        getAllClients(clientInputInteraction).then();
+        getAllClients(clientSelectInteraction).then(() => {
+            addSelectedDataEvent(clientSelectInteraction);
+            addSelectedDataEvent(resultSelectInteraction);
+            addSelectedDataEvent(contactSelectInteraction);
+        });
 
         setContactSelect();
         setResultSelect();

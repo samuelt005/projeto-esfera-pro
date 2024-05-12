@@ -1,65 +1,81 @@
 let interactionForm = {
-    id: null, name: "", cpf: "", cnpj: "", company: "", inactive: false, address: {
-        id: null, street: "", zip_code: "", number: null, city: {
-            id: null
-        }
+    id: null,
+    date: "",
+    time: "",
+    duration: "",
+    result: null,
+    contact: null,
+    description: "",
+    inactive: false,
+    client: {
+        id: null
     }
 }
 let isEditingInteraction = false;
 
-// Restaura o formul�rio para o padr�o
-function resetFormInt() {
+// Restaura o formulário para o padrão
+function resetFormInteraction() {
     interactionForm = {
         id: null,
-        name: "",
-        cpf: "",
-        cnpj: "",
-        company: "",
-        email: "",
-        whatsapp: "",
-        cellphone: "",
-        telephone: "",
+        date: "",
+        time: "",
+        duration: "",
+        result: null,
+        contact: null,
+        description: "",
         inactive: false,
-        address: {
-            id: null, street: "", zip_code: "", number: null, city: {
-                id: null
-            }
+        client: {
+            id: null
         }
     }
 }
 
-// Preenche os campos do modal com os dados do interação a ser editado
-function fillFieldsInt(interaction) {
-    resetFormInt();
-    interactionForm.id = interaction.id;
-    interactionForm.address.id = interaction.address.id;
-    cpfInput.value = interaction.cpf;
-    companyInput.value = interaction.company;
-    cnpjInput.value = interaction.cnpj;
-    emailInput.value = interaction.email;
-    whatsappInput.value = interaction.whatsapp;
-    telephoneInput.value = interaction.telephone;
-    streetInput.value = interaction.address.street;
-    numberInput.value = interaction.address.number;
-    zipCodeInput.value = interaction.address.zip_code;
-    stateSelect.value = interaction.address.city.state.id;
-    stateSelect.classList.remove('unselected')
+// Preenche os campos do modal com os dados de interação a ser editado
+function fillFieldsInteraction(interaction) {
+    resetFormInteraction();
 
-    cpfInput.dispatchEvent(new Event('input'));
-    cnpjInput.dispatchEvent(new Event('input'));
-    emailInput.dispatchEvent(new Event('input'));
-    whatsappInput.dispatchEvent(new Event('input'));
-    telephoneInput.dispatchEvent(new Event('input'));
-    numberInput.dispatchEvent(new Event('input'));
-    zipCodeInput.dispatchEvent(new Event('input'));
+    interactionForm.id = interaction.id;
+    clientSelectInteraction.value = interaction.client.id;
+    contactSelectInteraction.value = interaction.contact;
+    resultSelectInteraction.value = interaction.result;
+    dateInputInteraction.value = getDateFormatted(interaction.date);
+    timeInputInteraction.value = interaction.time;
+    durationInputInteraction.value = interaction.duration;
+    descriptionInputInteraction.value = interaction.description;
+
+    clientSelectInteraction.classList.remove('unselected');
+    contactSelectInteraction.classList.remove('unselected');
+    resultSelectInteraction.classList.remove('unselected');
+
+    dateInputInteraction.dispatchEvent(new Event('input'));
+    timeInputInteraction.dispatchEvent(new Event('input'));
+    durationInputInteraction.dispatchEvent(new Event('input'));
 }
 
 // Limpa os avisos de erro dos campos do modal
 function cleanInvalidClassesInteraction() {
+    clientSelectInteraction.classList.remove('invalid');
+    contactSelectInteraction.classList.remove('invalid');
+    resultSelectInteraction.classList.remove('invalid');
+    dateInputInteraction.parentElement.classList.remove('invalid');
+    timeInputInteraction.parentElement.classList.remove('invalid');
+    durationInputInteraction.parentElement.classList.remove('invalid');
+    descriptionInputInteraction.parentElement.classList.remove('invalid');
 }
 
 // Reinicia os campos do modal
 function resetInteractionFields() {
+    clientSelectInteraction.value = 0;
+    contactSelectInteraction.value = 0;
+    resultSelectInteraction.value = 0;
+    dateInputInteraction.value = "";
+    timeInputInteraction.value = "";
+    durationInputInteraction.value = "";
+    descriptionInputInteraction.value = "";
+
+    clientSelectInteraction.classList.add('unselected')
+    contactSelectInteraction.classList.add('unselected')
+    resultSelectInteraction.classList.add('unselected')
 }
 
 // Coloca máscaras nos inputs do modal
@@ -83,102 +99,103 @@ function setInputMasksForInteractions() {
         lazy: false
     };
 
-    var timeInput = IMask(timeInputInteraction, hourMask);
-    var duration = IMask(durationInputInteraction, hourMask);
+    const dateMask = {
+        mask: 'DD/MM/YYYY',
+        blocks: {
+            DD: {
+                mask: IMask.MaskedRange,
+                from: 1,
+                to: 31,
+                maxLength: 2,
+            },
+            MM: {
+                mask: IMask.MaskedRange,
+                from: 1,
+                to: 12,
+                maxLength: 2,
+            },
+            YYYY: {
+                mask: IMask.MaskedRange,
+                from: 2000,
+                to: 3000,
+                maxLength: 4,
+            }
+        },
+        lazy: false
+    };
+
+    const dateInput = IMask(dateInputInteraction, dateMask);
+    const timeInput = IMask(timeInputInteraction, hourMask);
+    const durationInput = IMask(durationInputInteraction, hourMask);
 }
 
-// Valida os inputs do modal de interacoes
+// Valida os inputs do modal de interações
 function validateInteractionForm() {
     cleanInvalidClassesInteraction();
     let isFormValid = true;
 
-    if (nameInputInteraction.value.trim() !== "") {
-        interactionForm.name = nameInputInteraction.value;
+    const clientIdValue = parseInt(clientSelectInteraction.value.trim());
+    if (clientIdValue === null || clientIdValue === 0) {
+        clientSelectInteraction.classList.add('invalid');
+        isFormValid = false;
     } else {
-        interactionForm.name = null;
-        nameInputInteraction.parentElement.classList.add('invalid');
+        interactionForm.client.id = clientIdValue;
+    }
+
+    const contactIdValue = parseInt(contactSelectInteraction.value.trim());
+    if (contactIdValue === null || contactIdValue === 0) {
+        contactSelectInteraction.classList.add('invalid');
+        isFormValid = false;
+    } else {
+        interactionForm.contact = contactIdValue;
+    }
+
+    if (dateInputInteraction.value.trim() !== "") {
+        interactionForm.date = getDateISO(dateInputInteraction.value);
+    } else {
+        interactionForm.date = "";
+        dateInputInteraction.parentElement.classList.add('invalid');
         isFormValid = false;
     }
 
-    const unmaskedCpf = cpfInput.value.replace(/\D+/g, '');
-    if (validadeCpf(unmaskedCpf)) {
-        interactionForm.cpf = unmaskedCpf;
+    const resultIdValue = parseInt(resultSelectInteraction.value.trim());
+    if (resultIdValue === null || resultIdValue === 0) {
+        resultSelectInteraction.classList.add('invalid');
+        isFormValid = false;
     } else {
-        cpfInput.parentElement.classList.add('invalid');
+        interactionForm.result = resultIdValue;
+    }
+
+    if (timeInputInteraction.value.trim() !== "") {
+        interactionForm.time = timeInputInteraction.value;
+    } else {
+        interactionForm.time = "";
+        timeInputInteraction.parentElement.classList.add('invalid');
         isFormValid = false;
     }
 
-    if (companyInput.value.trim() !== "") {
-        interactionForm.company = companyInput.value;
+    if (durationInputInteraction.value.trim() !== "") {
+        interactionForm.duration = durationInputInteraction.value;
     } else {
-        companyInput.parentElement.classList.add('invalid');
+        interactionForm.duration = "";
+        durationInputInteraction.parentElement.classList.add('invalid');
         isFormValid = false;
     }
 
-    const unmaskedCnpj = cnpjInput.value.replace(/\D+/g, '');
-    if (validadeCnpj(unmaskedCnpj)) {
-        interactionForm.cnpj = unmaskedCnpj;
+    if (descriptionInputInteraction.value.trim() !== "") {
+        interactionForm.description = descriptionInputInteraction.value;
     } else {
-        cnpjInput.parentElement.classList.add('invalid');
-        isFormValid = false;
-    }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Express�o regular para validar o e-mail
-    if (emailInput.value.trim() !== "") {
-        if (emailRegex.test(emailInput.value.trim())) {
-            interactionForm.email = emailInput.value.trim();
-        } else {
-            emailInput.parentElement.classList.add('invalid');
-            isFormValid = false;
-        }
-    }
-
-    const unmaskedWhatsapp = whatsappInput.value.replace(/\D+/g, '');
-    if (unmaskedWhatsapp.length === 11 || unmaskedWhatsapp.length === 0) {
-        interactionForm.whatsapp = unmaskedWhatsapp;
-    } else {
-        whatsappInput.parentElement.classList.add('invalid');
-        isFormValid = false;
-    }
-
-    if (streetInput.value.trim() !== "") {
-        interactionForm.address.street = streetInput.value;
-    }
-
-    const numberValue = parseInt(numberInput.value.trim());
-    if (!isNaN(numberValue)) {
-        interactionForm.address.number = numberValue;
-    }
-
-    const unmaskedZipCode = zipCodeInput.value.replace(/\D+/g, '');
-    if (unmaskedZipCode.length === 8) {
-        interactionForm.address.zip_code = unmaskedZipCode;
-    } else if (unmaskedZipCode.length === 0) {
-        interactionForm.address.zip_code = null;
-    } else {
-        zipCodeInput.parentElement.classList.add('invalid');
-    }
-
-    const stateIdValue = parseInt(stateSelect.value.trim());
-    if (stateIdValue === null || stateIdValue === 0) {
-        stateSelect.classList.add('invalid');
-        isFormValid = false;
-    }
-
-    const cityIdValue = parseInt(citySelect.value.trim());
-    if (cityIdValue === null || cityIdValue === 0) {
-        citySelect.classList.add('invalid');
-        isFormValid = false;
-    } else {
-        interactionForm.address.city.id = cityIdValue;
+        interactionForm.description = "";
     }
 
     return isFormValid;
 }
 
-// Salva um novo interação ou sua edi��o
+// Salva uma nova interação ou sua edição
 async function saveInteraction() {
     if (!validateInteractionForm()) return;
+
+    console.log(interactionForm)
 
     try {
         const response = await fetch(`${URL}/interaction`, {

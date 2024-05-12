@@ -1,5 +1,6 @@
 package com.projetointegrador.projetointegrador.services;
 
+import com.projetointegrador.projetointegrador.models.Client;
 import com.projetointegrador.projetointegrador.models.Interaction;
 import com.projetointegrador.projetointegrador.repositories.InteractionRepository;
 import com.projetointegrador.projetointegrador.responses.Response;
@@ -18,6 +19,18 @@ public class InteractionService {
 
     public InteractionService(InteractionRepository interactionRepository) {
         this.interactionRepository = interactionRepository;
+    }
+
+    // Encontra uma interação pelo id
+    public ResponseEntity<?> findOneInteraction(Long id) {
+        Optional<Interaction> optionalInteraction = interactionRepository.findById(id);
+
+        if (optionalInteraction.isPresent()) {
+            return ResponseEntity.ok().body(optionalInteraction);
+        } else {
+            Response response = new Response(HttpStatus.NOT_FOUND, "Interação não encontrada.");
+            return ResponseEntity.badRequest().body(response);
+        }
     }
 
     // Lista todas as interações ativas

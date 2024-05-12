@@ -114,9 +114,15 @@ function addSwitchOverlayEvent(button) {
 }
 
 // Converte tipo date para formato DD/MM/YYYY
-function getDataFormatted(dataISO) {
-    const parts = dataISO.split('T')[0].split('-');
-    return parts[2] + '/' + parts[1] + '/' + parts[0];
+function getDateFormatted(dateISO) {
+    const dateParts = dateISO.split('T')[0].split('-');
+    return dateParts[2] + '/' + dateParts[1] + '/' + dateParts[0];
+}
+
+// Converte formato DD/MM/YYYY para tipo date
+function getDateISO(date) {
+    const dateParts = date.split('/');
+    return dateParts[2] + '-' + dateParts[1] + '-' + dateParts[0];
 }
 
 // Recebe um id de result e retorna um fragmento de HTML
@@ -162,5 +168,25 @@ function getContactText(contactId) {
             return 'Whatsapp'
         case 3:
             return 'E-mail'
+    }
+}
+
+// Adiciona o evento de alterar a aparência do select ao selecionar um dado
+function addSelectedDataEvent(select) {
+    select.addEventListener('change', switchSelectClass);
+}
+
+// Altera a aparência do select ao selecionar um dado
+function switchSelectClass(event) {
+    if (!event.target) {
+        return
+    }
+
+    const id = event.target.value;
+
+    if (id !== 0) {
+        event.target.classList.remove('unselected');
+    } else if (!event.target.classList.contains('unselected')) {
+        event.target.classList.add('unselected');
     }
 }

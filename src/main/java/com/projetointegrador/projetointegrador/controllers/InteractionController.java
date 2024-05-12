@@ -20,6 +20,12 @@ public class InteractionController {
         this.interactionService = interactionService;
     }
 
+    // Rota para encontrar uma interação pelo ID
+    @GetMapping("byId/{id}")
+    public ResponseEntity<?> findInteraction(@PathVariable("id") Long id) {
+        return interactionService.findOneInteraction(id);
+    }
+
     // Rota para listar todas as interações ativos
     @GetMapping
     public ResponseEntity<?> listInteractions() {
