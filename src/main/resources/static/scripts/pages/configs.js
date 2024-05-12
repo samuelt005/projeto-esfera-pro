@@ -58,5 +58,11 @@ function getConfigElements() {
 function configsStartup() {
     getConfigElements();
     setupConfigHeaderButtons();
-    configsButtons[3].click();
+
+    isConfigPageOpened = true;
+
+    menuButtons.forEach(button => {
+        button.classList.add("inactive");
+        button.classList.remove("active");
+    });
 }
