@@ -1,5 +1,6 @@
 package com.projetointegrador.projetointegrador.controllers;
 
+import com.projetointegrador.projetointegrador.dto.UserDTO;
 import com.projetointegrador.projetointegrador.models.User;
 import com.projetointegrador.projetointegrador.services.UserService;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class UserController {
     }
 
     @PostMapping("/validation")
-    public ResponseEntity<?> validateUser(@RequestBody User user) {
+    public ResponseEntity<?> validateUser(@RequestBody UserDTO user) {
         return userService.userValidation(user);
     }
 

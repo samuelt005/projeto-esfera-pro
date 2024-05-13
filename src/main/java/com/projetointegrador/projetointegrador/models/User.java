@@ -1,5 +1,8 @@
 package com.projetointegrador.projetointegrador.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 import java.util.Objects;
@@ -18,17 +21,13 @@ public class User {
     private String email;
 
     @Column(length = 100, nullable = false)
+    @JsonIgnore
     private String password;
 
     @Column(length = 30, nullable = false)
     private String phone;
 
     public User() {
-    }
-
-    public User(String email, String password) {
-        this.email = email;
-        this.password = password;
     }
 
     public Long getId() {
@@ -55,6 +54,7 @@ public class User {
         this.email = email;
     }
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     public String getPassword() {
         return password;
     }

@@ -1,11 +1,13 @@
 package com.projetointegrador.projetointegrador.services;
 
+import com.projetointegrador.projetointegrador.dto.UserDTO;
 import com.projetointegrador.projetointegrador.models.User;
 import com.projetointegrador.projetointegrador.repositories.UserRepository;
 import com.projetointegrador.projetointegrador.responses.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import static com.projetointegrador.projetointegrador.utils.PasswordUtils.*;
 
 import java.util.Optional;
 
@@ -42,18 +44,25 @@ public class UserService {
             return ResponseEntity.ok().body(clients);
         }*/
 
-        public ResponseEntity<?> userValidation(User user) {
+        // Validação de usuário
+        public ResponseEntity<?> userValidation(UserDTO user) {
             try {
-                if (user.getEmail() == null || user.getPassword() == null) {
+
+                // Verifica se o email e a senha estão presentes
+                if (user.getEmail().isBlank() || user.getPassword().isBlank()) {
                     return ResponseEntity.badRequest().body(new Response(HttpStatus.BAD_REQUEST, "Email ou senha não estão presentes."));
                 }
 
+                // Busca usuário pelo email
                 Optional<User> existentUser = userRepository.findByEmail(user.getEmail());
+
+                // Verifica se o usuário existe
                 if (existentUser.isPresent()) {
-                    if (user.getPassword().equals(existentUser.get().getPassword())) {
+                    // Verifica se a senha está correta
+                    if (verifyPassword(user.getPassword(), existentUser.get().getPassword())) {
                         return ResponseEntity.ok().body("Pode entrar");
                     } else {
-                        return ResponseEntity.badRequest().body(new Response(HttpStatus.BAD_REQUEST, "Senha incorreta."));
+                        return ResponseEntity.badRequest().body(new Response(HttpStatus.BAD_REQUEST, "Senha ou Email incorretos."));
                     }
                 } else {
                     return ResponseEntity.badRequest().body(new Response(HttpStatus.BAD_REQUEST, "Usuário não encontrado."));
@@ -65,10 +74,20 @@ public class UserService {
 
         // Cria um usuário
         public ResponseEntity<?> createUser(User user) {
-            user.setId(null);
-
-            User createdUser = userRepository.save(user);
-            return ResponseEntity.ok().body(createdUser);
+            try {
+                if (user.getEmail().isBlank() || user.getPassword().isBlank() || user.getName().isBlank() || user.getPhone().isBlank()) {
+                    return ResponseEntity.badRequest().body(new Response(HttpStatus.BAD_REQUEST, "Por favor, preencha todos os campos obrigatórios: nome, email, telefone e senha."));
+                }
+                if (userRepository.findByEmail(user.getEmail()).isPresent()){
+                    throw new Exception("Email já cadastrado.");
+                }
+                user.setId(null);
+                user.setPassword(encryptPassword(user.getPassword()));
+                User createdUser = userRepository.save(user);
+                return ResponseEntity.ok().body(createdUser);
+            }catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage()));
+            }
         }
 
 
