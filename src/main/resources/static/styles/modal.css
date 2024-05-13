@@ -91,6 +91,10 @@
     max-width: 200px;
 }
 
+.input-wrapper.half-space {
+    max-width: calc(50% - 10px);
+}
+
 .input-wrapper h4 {
     font-size: 20px;
     color: var(--text-primary);

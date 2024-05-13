@@ -7,8 +7,8 @@ const expandButton = document.querySelector(".expand-menu");
 const menuButtons = document.querySelectorAll(".sidebar-button");
 const helpSidebarButton = document.querySelector(".need-help");
 const loading = document.querySelector(".loading");
-let currentPage = 0;
 let isConfigPageOpened = false;
+let currentPage = 0;
 
 // Carrega o script específico de cada página ao selecionar um item do menu
 function loadSelectedPageScript(page) {
@@ -30,7 +30,7 @@ function loadSelectedPageScript(page) {
             break;
 
         case 'interacoes':
-            interacoesStartup();
+            interactionStartup();
             break;
 
         case 'configs':
@@ -124,9 +124,13 @@ function menuButtonClicked(event) {
 // Definição do evento quando clica no botão de ajuda
 function helpSidebarButtonSetup() {
     helpSidebarButton.addEventListener("click", () => {
-        getMainFrameContent('configs').then(() => {
+        if (isConfigPageOpened) {
             configsButtons[3].click();
-        });
+        } else {
+            getMainFrameContent('configs').then(() => {
+                configsButtons[3].click();
+            });
+        }
     });
 }
 
