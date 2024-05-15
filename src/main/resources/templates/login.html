@@ -2,18 +2,45 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Propostas</title>
+    <title>Login</title>
 </head>
 <body>
 <content>
     <div class="content-container">
-        <h2>OI</h2>
+        <div class="div-logo">
+            <div class="relative">
+                <div class="logo">
+                    <img class="logo-img" th:src="@{/images/logo.png}" alt="logo">
+                </div>
+                <div class="circle left-top"></div>
+                <div class="circle right-top"></div>
+                <div class="circle left-bottom"></div>
+            </div>
+        </div>
+        <div class="div-form">
+            <div class="inputs-row">
+                <div class="input-wrapper">
+                    <h4>Email</h4>
+                    <div th:replace="~{components/input1 :: input('email', 'Digite seu email', 'email')}"></div>
+                </div>
+                <div class="input-wrapper">
+                    <h4>Senha</h4>
+                    <div th:replace="~{components/input1 :: input('senha', 'Digite sua senha', 'password')}"></div>
+                </div>
+            </div>
+        </div>
     </div>
 </content>
 
 <styles>
-    <link rel="stylesheet" th:href="@{/styles/pages/propostas.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/modal.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/variables.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/components/input1.css}">
+    <link rel="stylesheet" th:href="@{/styles/reset.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/global.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/login.css}"/>
 </styles>
 
+<script th:src="@{/scripts/login.js}"></script>
 </body>
 </html>
