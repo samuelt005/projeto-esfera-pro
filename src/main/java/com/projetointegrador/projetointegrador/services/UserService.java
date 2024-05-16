@@ -81,24 +81,28 @@ public class UserService {
 
                 user.setId(null);
                 user.setPassword(encryptPassword(user.getPassword()));
-                if (user.getRole() == null || user.getStatus() == null){
-                    throw new Exception("Cargo ou status não fornecidos.");
-                }
 
-                Role role = roleService.findById(user.getRole().getId());
-                Status status = statusService.findById(user.getStatus().getId());
                 if (user.getTeam() != null){
                     Team team = teamService.findById(user.getTeam().getId());
-                    if (team == null || role == null || status == null){
+                    if (team == null){
                         throw new Exception("Time não encontrado.");
                     }
                     user.setTeam(team);
                 }
-                if (role == null || status == null){
-                    throw new Exception("Cargo ou status não encontrado.");
+                if (user.getRole() != null){
+                    Role role = roleService.findById(user.getRole().getId());
+                    if (role == null){
+                        throw new Exception("Cargo não encontrado.");
+                    }
+                    user.setRole(role);
                 }
-                user.setRole(role);
-                user.setStatus(status);
+                if (user.getStatus() != null){
+                    Status status = statusService.findById(user.getStatus().getId());
+                    if (status == null){
+                        throw new Exception("Status não encontrado.");
+                    }
+                    user.setStatus(status);
+                }
 
                 User createdUser = userRepository.save(user);
                 return ResponseEntity.ok().body(createdUser);

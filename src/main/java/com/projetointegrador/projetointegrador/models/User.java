@@ -33,12 +33,12 @@ public class User {
     @Column(length = 100, nullable = true)
     private String image_key;
 
-    @JoinColumn(name = "role_id", nullable = false)
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "role_id", nullable = true)
+    @ManyToOne(fetch = FetchType.EAGER, optional = true)
     private Role role;
 
-    @JoinColumn(name = "status_id", nullable = false)
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "status_id", nullable = true)
+    @ManyToOne(fetch = FetchType.EAGER, optional = true)
     private Status status;
 
     @JoinColumn(name = "team_id")
@@ -48,6 +48,7 @@ public class User {
 
     public User() {
     }
+
     public User(String name, String email, String password, String phone, String image_key, Role role, Status status, Team team) {
         this.name = name;
         this.email = email;
