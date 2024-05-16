@@ -1,6 +1,5 @@
 package com.projetointegrador.projetointegrador.services;
 
-import com.projetointegrador.projetointegrador.models.Client;
 import com.projetointegrador.projetointegrador.models.Interaction;
 import com.projetointegrador.projetointegrador.repositories.InteractionRepository;
 import com.projetointegrador.projetointegrador.responses.Response;
@@ -73,7 +72,7 @@ public class InteractionService {
             Interaction interaction = optionalInteraction.get();
             interaction.setInactive(true);
             interactionRepository.save(interaction);
-            Response response = new Response(HttpStatus.OK, "Interação inativada.");
+            Response response = new Response(HttpStatus.OK, "Interacao inativada.");
             return ResponseEntity.ok().body(response);
         } else {
             Response response = new Response(HttpStatus.NOT_FOUND, "Interação não encontrada.");

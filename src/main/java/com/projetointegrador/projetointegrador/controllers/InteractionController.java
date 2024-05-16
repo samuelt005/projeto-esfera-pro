@@ -1,15 +1,9 @@
 package com.projetointegrador.projetointegrador.controllers;
 
-import com.projetointegrador.projetointegrador.models.Client;
 import com.projetointegrador.projetointegrador.models.Interaction;
-import com.projetointegrador.projetointegrador.services.CityService;
 import com.projetointegrador.projetointegrador.services.InteractionService;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/interaction")
