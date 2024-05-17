@@ -92,8 +92,8 @@ body {
     background-color: #FFFFFF;
     width: 75%;
     height: 75%;
-    border-bottom-left-radius: 5%;
-    border-bottom-right-radius: 5%;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
     box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
     font-weight: bold;
     color: var(--purple-contrast);
@@ -101,6 +101,7 @@ body {
 
 form {
     display: flex;
+    width: 100%;
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -114,8 +115,8 @@ form {
     color: darkgrey;
     width: 73%;
     padding: 1%;
-    border-top-left-radius: 5%;
-    border-top-right-radius: 5%;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
 }
 
 .toggle-btn {
@@ -134,6 +135,7 @@ form {
 }
 
 .form-content {
+    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -150,7 +152,7 @@ form {
 }
 
 .form h1 {
-    font-size: 3.5rem;
+    font-size: 2rem;
 }
 
 .div-input label {
@@ -160,6 +162,7 @@ form {
 
 .div-input{
     display: flex;
+    width: 90%;
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
@@ -167,26 +170,27 @@ form {
 }
 
 .div-input input {
-    width: 600px;
+    width: 100%;
     height: 44px;
     border-radius: 10px;
     border: 1px solid #D9D9D9;
     padding: 10px;
-    font-size: 20px;
+    font-size: 15px;
     box-sizing: border-box;
 }
 
 .div-input input:focus {
     outline: none;
-    animation: border-flash 1s infinite;
+    border: 3px solid var(--main-purple);
+
 }
 
 .div-button {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 60px;
-    width: 100%;
+    margin-top: 40px;
+    width: 90%;
 }
 
 .form .button2 {
@@ -196,7 +200,7 @@ form {
     flex-direction: row;
     border-radius: 10px;
     height: 44px;
-    width: 600px;
+    width: 100%;
     box-sizing: border-box;
     font-size: 20px;
     white-space: nowrap;
@@ -213,16 +217,8 @@ form {
     border: 2px solid var(--ligth-purple);
 }
 
-@keyframes border-flash {
-    0% {
-        border: 1px solid var(--main-purple);
-    }
-    50% {
-        border: 3px solid var(--main-purple);
-    }
-    100% {
-        border: 1px solid var(--main-purple);
-    }
+.invalid {
+    border: 3px solid red;
 }
 
 @keyframes formulario {

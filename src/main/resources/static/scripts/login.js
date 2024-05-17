@@ -6,69 +6,163 @@ const form = document.querySelector('#login-register');
 const buttonLogar = document.querySelector('#logar');
 const buttonCadastrar = document.querySelector('#cadastrar');
 
-function login(){
-    buttonLogar.addEventListener('click', (event) => {
-        event.preventDefault();
-        const inputEmail = document.querySelector('#email').value;
-        const inputSenha = document.querySelector('#password').value;
+const inputEmail = document.querySelector('#email').value;
+const inputSenha = document.querySelector('#password').value;
 
-        const data = {
-            email: inputEmail,
-            password: inputSenha
+const inputNome = document.querySelector('#nome').value;
+const inputTelefone = document.querySelector('#telefone').value;
+const RinputEmail = document.querySelector('#Remail').value;
+const RinputSenha = document.querySelector('#Rpassword').value;
+
+let data = {
+    name: inputNome,
+    email: RinputEmail,
+    password: RinputSenha,
+    phone: inputTelefone
+}
+
+let dataLogin = {
+    email: inputEmail,
+    password: inputSenha
+}
+
+function cleanInvalidClasses() {
+    inputEmail.classList.remove('invalid');
+    inputSenha.classList.remove('invalid');
+    inputNome.classList.remove('invalid');
+    inputTelefone.classList.remove('invalid');
+    RinputEmail.classList.remove('invalid');
+    RinputEmail.classList.remove('invalid');
+}
+
+function maskInputs(){
+    const inputTelefone = document.querySelector('#telefone').value;
+    // TODO adicionar mais tipos de telefones compat�veis (internacionais?)
+    const cellphoneMask = {
+        mask: '00 00000-0000'
+    }
+    IMask(inputTelefone, cellphoneMask);
+}
+
+function validateFormLogin() {
+    let isFormValid = true;
+
+    cleanInvalidClasses();
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Express�o regular para validar o e-mail
+    if (inputEmail.value.trim() !== "") {
+        if (emailRegex.test(inputEmail.value.trim())) {
+            dataLogin.email = inputEmail.value.trim();
+        } else {
+            inputEmail.classList.add('invalid');
+            isFormValid = false;
         }
+    }
 
-        console.log(data)
+    const password = RinputSenha.value;
+    if (password.length >= 8){
+        dataLogin.password = password;
+    } else {
+        RinputSenha.classList.add('invalid');
+        isFormValid = false;
+    }
 
-        const response = fetch('/user/validation', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        }).then(response => {
-            if (response.ok) {
-                console.log(response)
-                window.location.href = '/';
-            }else{
-                alert("Email ou senha incorretos");
-                window.location.href = '/login';
-            }
-        })
+    return isFormValid;
+}
+
+function validateFormRegister(){
+    let isFormValid = true;
+
+    cleanInvalidClasses();
+
+    if (inputNome.value.trim() !== "") {
+        data.name = inputNome.value;
+    } else {
+        data.name = null;
+        inputNome.classList.add('invalid');
+        isFormValid = false;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Express�o regular para validar o e-mail
+    if (RinputEmail.value.trim() !== "") {
+        if (emailRegex.test(RinputEmail.value.trim())) {
+            data.email = RinputEmail.value.trim();
+        } else {
+            RinputEmail.classList.add('invalid');
+            isFormValid = false;
+        }
+    }
+
+    const unmaskedWhatsapp = inputTelefone.value.replace(/\D+/g, '');
+    if (unmaskedWhatsapp.length === 11 || unmaskedWhatsapp.length === 0) {
+        data.phone = unmaskedWhatsapp;
+    } else {
+        inputTelefone.classList.add('invalid');
+        isFormValid = false;
+    }
+
+    const password = RinputSenha.value;
+    if (password.length >= 8){
+        data.password = password;
+    } else {
+      RinputSenha.classList.add('invalid');
+      isFormValid = false;
+    }
+
+    return isFormValid;
+}
+
+function login(){
+    buttonLogar.addEventListener('click', () => {
+        console.log(validateFormLogin())
+        if(validateFormLogin()){
+            const response = fetch('/user/validation', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            }).then(response => {
+                if (response.ok) {
+                    console.log(response);
+                    localStorage.setItem("logado", true);
+                    window.location.href = '/';
+                }else{
+                    window.location.href = '/login';
+                    localStorage.setItem("logado", false);
+                }
+            })
+        } else {
+            console.log("ERRO!");
+            localStorage.setItem("logado", false);
+        }
     })
 }
 
 function cadastrar(){
     buttonCadastrar.addEventListener('click', (event) => {
         event.preventDefault();
-        const inputNome = document.querySelector('#nome').value;
-        const inputTelefone = document.querySelector('#telefone').value;
-        const inputEmail = document.querySelector('#Remail').value;
-        const inputSenha = document.querySelector('#Rpassword').value;
-
-        const data = {
-            name: inputNome,
-            email: inputEmail,
-            password: inputSenha,
-            phone: inputTelefone
+        if (validateFormRegister()){
+            const response = fetch('/user/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            }).then(response => {
+                if (response.ok) {
+                    console.log(response)
+                    alert("CADASTRADO COM SUCESSO! REALIZE O LOGIN.")
+                    window.location.href = '/login';
+                }else{
+                    window.location.href = '/login';
+                }
+            })
+        } else {
+            console.log("ERRO!");
+            localStorage.setItem("logado", false);
         }
 
-        console.log(data)
-
-        const response = fetch('/user/register', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        }).then(response => {
-            if (response.ok) {
-                console.log(response)
-                window.location.href = '/login';
-            }else{
-                alert("Erro ao cadastrar");
-                window.location.href = '/login';
-            }
-        })
     })
 
 }
@@ -97,6 +191,8 @@ function toggleButtonClick(){
 
 function loginStartup(){
     console.log("Login");
+    localStorage.setItem("logado", false);
+    maskInputs()
     toggleButtonClick();
     login();
     cadastrar();

@@ -47,41 +47,46 @@ function loadSelectedPageScript(page) {
 
 // Busca o HTML da página selecionada no menu lateral
 function getMainFrameContent(page) {
-    fetch(`${URL}/page${page}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Erro ao recuperar tela: ${page}`);
-            }
-            return response.text();
-        })
-        .then(data => {
-            const tempElement = document.createElement("div");
-            tempElement.innerHTML = data;
+    const logado = localStorage.getItem("logado");
+    if (logado === 'true') {
+        fetch(`${URL}/page${page}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Erro ao recuperar tela: ${page}`);
+                }
+                return response.text();
+            })
+            .then(data => {
+                const tempElement = document.createElement("div");
+                tempElement.innerHTML = data;
 
-            const contentDiv = tempElement.querySelector('content');
-            const modalDiv = tempElement.querySelector('modal');
-            const stylesDiv = tempElement.querySelector('styles');
+                const contentDiv = tempElement.querySelector('content');
+                const modalDiv = tempElement.querySelector('modal');
+                const stylesDiv = tempElement.querySelector('styles');
 
 
-            if (modalDiv) {
-                overlay.innerHTML = modalDiv.innerHTML;
-            }
+                if (modalDiv) {
+                    overlay.innerHTML = modalDiv.innerHTML;
+                }
 
-            if (stylesDiv) {
-                allStyles.innerHTML = stylesDiv.innerHTML;
-            }
+                if (stylesDiv) {
+                    allStyles.innerHTML = stylesDiv.innerHTML;
+                }
 
-            if (contentDiv) {
-                mainContent.innerHTML = contentDiv.innerHTML;
-            }
+                if (contentDiv) {
+                    mainContent.innerHTML = contentDiv.innerHTML;
+                }
 
-            loadSelectedPageScript(page);
-        })
-        .catch(error => {
-            console.error(error);
-            loading.classList.add("hidden");
-            mainContent.classList.add("hidden");
-        });
+                loadSelectedPageScript(page);
+            })
+            .catch(error => {
+                console.error(error);
+                loading.classList.add("hidden");
+                mainContent.classList.add("hidden");
+            });
+    }else{
+        window.location.href = "/login";
+    }
 }
 
 // Expande o menu lateral
