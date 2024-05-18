@@ -62,9 +62,6 @@
     z-index: 1;
 }
 
-.table tbody {
-}
-
 .table tr {
     display: flex;
     align-items: center;
@@ -109,7 +106,8 @@
 
 .table tr th:last-child,
 .table tr td:last-child {
-    min-width: 180px;
+    min-width: 220px;
+    width: 220px;
     box-sizing: border-box;
     padding-right: 20px;
 }
