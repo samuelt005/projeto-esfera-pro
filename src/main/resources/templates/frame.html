@@ -4,12 +4,15 @@
     <meta charset="UTF-8">
     <title>Esfera</title>
     <link rel="stylesheet" th:href="@{/styles/reset.css}">
+    <link rel="stylesheet" th:href="@{/styles/modal.css}"/>
     <link rel="stylesheet" th:href="@{/styles/colors.css}"/>
     <link rel="stylesheet" th:href="@{/styles/frame.css}"/>
     <link rel="stylesheet" th:href="@{/styles/sidebar.css}"/>
     <link rel="stylesheet" th:href="@{/styles/header.css}"/>
     <link rel="stylesheet" th:href="@{/styles/loading.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/components/button2.css}"/>
     <link rel="stylesheet" th:href="@{/styles/components/header-menu.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/components/import-modal.css}"/>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
@@ -64,6 +67,10 @@
 
     <div class="overlay hidden fade-out">
     </div>
+
+    <div class="overlay-import hidden fade-out">
+        <div th:replace="~{components/import-modal :: import-modal}"></div>
+    </div>
 </section>
 
 <div id="styles">
@@ -101,9 +108,10 @@
     <script type="text/javascript" th:src="@{/scripts/forms/validadeCpf.js}"></script>
     <script type="text/javascript" th:src="@{/scripts/forms/validadeCnpj.js}"></script>
 
+    <script type="text/javascript" th:src="@{/scripts/import.js}"></script>
     <script type="text/javascript" th:src="@{/scripts/frame.js}"></script>
-    <script type="text/javascript" th:src="@{/scripts/header.js}"></script>
     <script type="text/javascript" th:src="@{/scripts/common.js}"></script>
+    <script type="text/javascript" th:src="@{/scripts/header.js}"></script>
 
 </div>
 </body>

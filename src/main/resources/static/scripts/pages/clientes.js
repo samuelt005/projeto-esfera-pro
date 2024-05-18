@@ -5,6 +5,7 @@ let buttonAddNew;
 let buttonCloseModal;
 let cancelCloseModal;
 let saveCloseModal;
+let importOpenModal;
 let nameInput;
 let cpfInput;
 let companyInput;
@@ -268,6 +269,7 @@ function getClientElements() {
     buttonCloseModal = document.querySelector('.close-modal-button');
     cancelCloseModal = document.querySelector('.cancel-modal-button');
     saveCloseModal = document.querySelector('.save-modal-button');
+    importOpenModal = document.querySelector('#import');
     nameInput = document.querySelector('input[name="name"]');
     cpfInput = document.querySelector('input[name="cpf"]');
     companyInput = document.querySelector('input[name="company"]');
@@ -292,6 +294,7 @@ function clientesStartup() {
         addSwitchOverlayEvent(cancelCloseModal);
         addSwitchOverlayEvent(buttonCloseModal);
         addSaveClientEvent(saveCloseModal);
+        addSwitchOverlayImportEvent(importOpenModal);
 
         getStates(stateSelect).then(() => {
             addSelectedStateEvent(stateSelect);

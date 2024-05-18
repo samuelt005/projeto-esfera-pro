@@ -28,8 +28,17 @@
     user-select: none;
 }
 
+.button1.filled {
+    background-color: var(--main-purple);
+    color: var(--white);
+}
+
 .button1:hover {
     cursor: pointer;
     background-color: var(--button-hover);
     transition: background-color 0.5s;
+}
+
+.button1.filled:hover {
+    background-color: var(--ligth-purple);
 }
