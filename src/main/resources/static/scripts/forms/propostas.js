@@ -35,10 +35,10 @@ function fillFieldsProposal(proposal) {
 
     proposalForm.id = proposal.id;
     clientSelectProposal.value = proposal.client.id;
-    serviceTypeSelectProposal.value = proposal.contact;
-    statusSelectProposal.value = proposal.result;
-    offerDateInputProposal.value = getDateFormatted(proposal.date);
-    valueInputProposal.value = proposal.time;
+    serviceTypeSelectProposal.value = proposal.serviceType;
+    statusSelectProposal.value = proposal.status;
+    offerDateInputProposal.value = getDateFormatted(proposal.offerDate);
+    valueInputProposal.value = proposal.value;
     descriptionInputProposal.value = proposal.description;
 
     clientSelectProposal.classList.remove('unselected');
@@ -75,6 +75,17 @@ function resetProposalFields() {
 
 // Coloca máscaras nos inputs do modal
 function setInputMasksForProposals() {
+    const currencyMask = {
+        mask: 'R$ num',
+        blocks: {
+            num: {
+                mask: Number,
+                thousandsSeparator: '.',
+                radix: ','
+            }
+        }
+    };
+
     const dateMask = {
         mask: 'DD/MM/YYYY',
         blocks: {
@@ -100,6 +111,7 @@ function setInputMasksForProposals() {
         lazy: false
     };
 
+    const valueInput = IMask(valueInputProposal, currencyMask);
     const dateInput = IMask(offerDateInputProposal, dateMask);
 }
 
@@ -116,36 +128,39 @@ function validateProposalForm() {
         proposalForm.client.id = clientIdValue;
     }
 
-    const contactIdValue = parseInt(serviceTypeSelectProposal.value.trim());
-    if (contactIdValue === null || contactIdValue === 0) {
+    const serviceTypeIdValue = parseInt(serviceTypeSelectProposal.value.trim());
+    if (serviceTypeIdValue === null || serviceTypeIdValue === 0) {
         serviceTypeSelectProposal.classList.add('invalid');
         isFormValid = false;
     } else {
-        proposalForm.contact = contactIdValue;
+        proposalForm.serviceType = serviceTypeIdValue;
     }
 
     if (offerDateInputProposal.value.trim() !== "") {
-        proposalForm.date = getDateISO(offerDateInputProposal.value);
+        proposalForm.offerDate = getDateISO(offerDateInputProposal.value);
     } else {
-        proposalForm.date = "";
+        proposalForm.offerDate = "";
         offerDateInputProposal.parentElement.classList.add('invalid');
         isFormValid = false;
     }
 
-    const resultIdValue = parseInt(statusSelectProposal.value.trim());
-    if (resultIdValue === null || resultIdValue === 0) {
+    const proposalValue = valueInputProposal.value.trim();
+    const cleanedString = proposalValue.replace(/[^\d,.-]/g, '');
+    const stringWithoutDots = cleanedString.replace(/\./g, '');
+    if (!stringWithoutDots || parseFloat(stringWithoutDots) === 0) {
+        valueInputProposal.classList.add('invalid');
+        isFormValid = false;
+    } else {
+        valueInputProposal.classList.remove('invalid');
+        proposalForm.value = parseFloat(stringWithoutDots.replace(',', '.'));
+    }
+
+    const statusIdValue = parseInt(statusSelectProposal.value.trim());
+    if (statusIdValue === null || statusIdValue === 0) {
         statusSelectProposal.classList.add('invalid');
         isFormValid = false;
     } else {
-        proposalForm.result = resultIdValue;
-    }
-
-    if (valueInputProposal.value.trim() !== "") {
-        proposalForm.time = valueInputProposal.value;
-    } else {
-        proposalForm.time = "";
-        valueInputProposal.parentElement.classList.add('invalid');
-        isFormValid = false;
+        proposalForm.status = statusIdValue;
     }
 
     if (descriptionInputProposal.value.trim() !== "") {
@@ -154,6 +169,7 @@ function validateProposalForm() {
         proposalForm.description = "";
     }
 
+    console.log(proposalForm)
     return isFormValid;
 }
 
