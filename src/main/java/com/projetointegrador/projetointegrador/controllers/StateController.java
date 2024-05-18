@@ -17,6 +17,7 @@ public class StateController {
 
     // Rota para listar todos os estados
     @GetMapping
+    @ResponseBody
     public ResponseEntity<?> listStates() {
         return stateService.listStates();
     }

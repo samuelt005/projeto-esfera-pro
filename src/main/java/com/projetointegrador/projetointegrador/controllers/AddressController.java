@@ -21,6 +21,7 @@ public class AddressController {
 
     // Rota para buscar um endereço pelo ID
     @GetMapping("/{id}")
+    @ResponseBody
     public ResponseEntity<?> findOneAddress(@PathVariable Long id) {
         return addressService.findOneAddress(id);
     }

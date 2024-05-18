@@ -22,6 +22,7 @@ public class CityController {
 
     // Rota para buscar cidades pelo ID do estado
     @GetMapping("byState/{stateId}")
+    @ResponseBody
     public ResponseEntity<?> listCitiesPerState(@PathVariable("stateId") Long stateId) {
         return cityService.listCitiesPerState(stateId);
     }
