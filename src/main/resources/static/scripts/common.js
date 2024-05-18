@@ -113,6 +113,24 @@ function addSwitchOverlayEvent(button) {
     button.addEventListener('click', switchOverlay);
 }
 
+// Converte um CPF no formato padrão para exibição
+function getCpfFormatted(cpfString) {
+    cpfString = cpfString.replace(/\D/g, '');
+    return cpfString.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
+}
+
+// Converte um CNPJ no formato padrão para exibição
+function getCnpjFormatted(cnpjString) {
+    cnpjString = cnpjString.replace(/\D/g, '');
+    return cnpjString.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, "$1.$2.$3/$4-$5");
+}
+
+// Converte um telefone no formato padrão para exibição
+function getTelephoneFormated(phoneNumber) {
+    phoneNumber = phoneNumber.replace(/\D/g, '');
+    return phoneNumber.replace(/(\d{2})(\d{5})(\d{4})/, "$1 $2-$3");
+}
+
 // Converte tipo date para formato DD/MM/YYYY
 function getDateFormatted(dateISO) {
     const dateParts = dateISO.split('T')[0].split('-');
@@ -160,6 +178,7 @@ function getResultDiv(resultId) {
     return resultContainer.outerHTML;
 }
 
+// Recebe um id de meio de contato e retorna um texto
 function getContactText(contactId) {
     switch (contactId) {
         case 1:
