@@ -66,31 +66,6 @@ async function getOneInteraction(id, isEditing) {
         });
 }
 
-// Busca todos os clientes
-async function getAllClients(clientSelect) {
-    await fetch(`${URL}/client`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Erro ao recuperar clientes`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            data.forEach((data) => {
-                const newOption = document.createElement('option');
-                newOption.value = data.id;
-                newOption.textContent = data.id + ' - ' + data.name;
-                newOption.classList.add('contact-option');
-
-                clientSelect.appendChild(newOption);
-            })
-            clientSelect.disabled = false;
-        })
-        .catch(error => {
-            console.error(error);
-        });
-}
-
 // Criar opções do select do tipo de contato
 function setContactSelect() {
     const options = [

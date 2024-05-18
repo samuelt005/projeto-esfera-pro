@@ -1,108 +1,247 @@
-document.addEventListener('DOMContentLoaded', function () {
-    propostasStartup();  // Chama a função que inicializa a página de propostas.
-    anexarEventosDeOrdenacaoTabela();  // Configura os eventos de ordenação para as colunas da tabela.
-    anexarManipuladoresDeEventosModal();  // Configura os manipuladores de eventos para os botões do modal.
-});
+// Elementos da página
+let buttonAddNewProposal;
+let buttonCloseModalProposal;
+let cancelCloseModalProposal;
+let saveCloseModalProposal;
+let clientSelectProposal;
+let serviceTypeSelectProposal;
+let offerDateInputProposal;
+let statusSelectProposal;
+let valueInputProposal;
+let descriptionInputProposal;
 
-// Inicializa a funcionalidade da página de propostas.
-function propostasStartup() {
-    console.log("EXECUTOU PROPOSTAS");
-    getElementosProposta(); // Captura e loga elementos do DOM específicos da página de propostas.
-}
 
-// Captura elementos do DOM relacionados à proposta e loga o botão de adicionar novo.
-function getElementosProposta() {
-    console.log('Obtendo Elementos do Documento');
-    const botaoAdicionarNovo = document.querySelector('.button-add-new'); // Botão para adicionar uma nova proposta
-    console.log(botaoAdicionarNovo);
-    // Os seletores abaixo capturam os elementos do formulário e botões do modal.
-    const botaoFecharModal = document.querySelector('.close-modal-button'); // Botão para fechar o modal
-    const botaoCancelarModal = document.querySelector('.cancel-modal-button'); // Botão para cancelar o modal
-    const botaoSalvarModal = document.querySelector('.save-modal-button'); // Botão para salvar a proposta
-    const selectNomeCliente = document.querySelector('select[name="client-name"]'); // Dropdown para o nome do cliente
-    const selectTipoSolucao = document.querySelector('select[name="solution-type"]'); // Dropdown para o tipo de solução
-    const inputDataConclusao = document.querySelector('input[name="completion-date"]'); // Input para a data de conclusão
-    const selectStatusProposta = document.querySelector('select[name="proposal-status"]'); // Dropdown para o status da proposta
-    const inputValores = document.querySelector('input[name="values"]'); // Input para os valores
-    const inputAnexarArquivo = document.querySelector('input[name="attachment"]'); // Input para anexar arquivo
-    const textareaDescricaoProposta = document.querySelector('textarea[name="proposal-description"]'); // Área de texto para a descrição da proposta
+// Lista de interações
+let proposalList = [];
 
-    // Adiciona evento de clique para abrir o modal
-    if (botaoAdicionarNovo) {
-        botaoAdicionarNovo.addEventListener('click', () => alternarVisibilidadeModal(true));
-    }
-}
-
-// Configura eventos de clique para colunas ordenáveis da tabela.
-function anexarEventosDeOrdenacaoTabela() {
-    const cabecalhosOrdenaveis = document.querySelectorAll('.sortable'); // Seleciona todos os cabeçalhos de tabela ordenáveis
-    cabecalhosOrdenaveis.forEach((cabecalho, indice) => {
-        cabecalho.addEventListener('click', () => {
-            sortTable(indice + 1);  // Chama a função de ordenar a tabela baseada na coluna clicada.
+// Buscar todas as interações
+async function getProposal() {
+    await fetch(`${URL}/proposal`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Erro ao recuperar propostas`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log(data)
+            proposalList.push(...data);
+            addProposalRows(data);
+        })
+        .catch((e) => {
+            getMainFrameContent('error');
         });
+}
+
+// Busca apenas uma interação pelo id
+async function getOneProposal(id, isEditing) {
+    await fetch(`${URL}/proposal/byId/${id}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Erro ao recuperar interação`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (isEditing) {
+                const oldRow = document.querySelector(`tr[data-row-id="${id}"]`);
+                if (oldRow) {
+                    const newRow = createProposalTableRow(data);
+                    oldRow.parentNode.replaceChild(newRow, oldRow);
+                }
+
+                const index = proposalList.findIndex(proposal => proposal.id === id);
+                if (index !== -1) {
+                    proposalList[index] = data;
+                }
+
+                addCheckboxesEvents();
+            } else {
+                proposalList.push(data);
+                addProposalRows([data]);
+            }
+        })
+        .catch(error => {
+            console.error(error);
+        });
+}
+
+// Criar opções do select do tipo de serviço
+function setServiceTypeSelect() {
+    const options = [
+        {name: 'Consultoria', value: 1},
+        {name: 'Acompanhamento', value: 2},
+        {name: 'Treinamento', value: 3}
+    ]
+
+    options.forEach((option) => {
+        const newOption = document.createElement('option');
+        newOption.value = option.value;
+        newOption.textContent = option.name;
+        newOption.classList.add('contact-option');
+
+        serviceTypeSelectProposal.appendChild(newOption);
+    })
+}
+
+// Criar opções do select do tipo de status
+function setStatusSelect() {
+    const options = [
+        {name: 'Parado', value: 1},
+        {name: 'Negociação', value: 2},
+        {name: 'Acompanhar', value: 3},
+        {name: 'Fechado', value: 4}
+    ]
+
+    options.forEach((option) => {
+        const newOption = document.createElement('option');
+        newOption.value = option.value;
+        newOption.textContent = option.name;
+        newOption.classList.add('result-option');
+
+        statusSelectProposal.appendChild(newOption);
+    })
+}
+
+// Adiciona linhas a tabela de interações
+function addProposalRows(proposals) {
+    const tableContent = document.querySelector(".table-content");
+
+    proposals.forEach((proposal) => {
+        const newRow = createProposalTableRow(proposal);
+        tableContent.appendChild(newRow);
+    });
+
+    addCheckboxesEvents();
+}
+
+// Cria um elemento HTML de uma linha da tabela
+function createProposalTableRow(proposal) {
+    const newRow = document.createElement('tr');
+    newRow.setAttribute('data-row-id', proposal.id);
+    newRow.innerHTML = `
+        <th class="row-checkbox" data-checkbox-id="${proposal.id}">
+            ${rowCheckboxIcon}
+        </th>
+        <td>${proposal.id}</td>
+        <td>${proposal.client.company ? proposal.client.company : proposal.name}</td>
+        <td>${getServiceTypeText(proposal.serviceType)}</td>
+        <td>${getStatusDiv(proposal.status)}</td>
+        <td class="description">${proposal.description === "" ? '-' : proposal.description}</td>
+        <td>${getDateFormatted(proposal.offerDate)}</td>
+        <td>${formatCurrency(proposal.value)}</td>
+        ${proposalButtons}
+    `;
+
+    addProposalRowButtonEvents(newRow);
+
+    return newRow;
+}
+
+// Adiciona os eventos dos botões da linha de um interação
+function addProposalRowButtonEvents(row) {
+    const deleteButton = row.querySelector('.delete');
+    const editButton = row.querySelector('.edit');
+
+    deleteButton.addEventListener('click', () => {
+        deleteProposal(row).catch(error => console.error(error));
+    });
+
+    editButton.addEventListener('click', () => {
+        const rowId = parseInt(row.getAttribute('data-row-id'));
+        const proposal = proposalList.find(proposal => proposal.id === rowId);
+        isEditingProposal = true;
+        resetProposalFields();
+        cleanInvalidClassesProposal();
+        fillFieldsProposal(proposal);
+        switchOverlay();
     });
 }
 
-// Ordena a tabela de propostas com base na coluna especificada.
-function sortTable(coluna) {
-    var tabela, linhas, trocando, i, x, y, deveTrocar, direcao, contagemTroca = 0;
-    tabela = document.querySelector(".table"); // Seleciona a tabela
-    trocando = true;
-    direcao = "asc"; // Direção inicial de ordenação
-    while (trocando) {
-        trocando = false;
-        linhas = tabela.getElementsByTagName("TR"); // Obtém todas as linhas da tabela
-        for (i = 1; i < (linhas.length - 1); i++) {
-            deveTrocar = false;
-            x = linhas[i].getElementsByTagName("TD")[coluna]; // Célula da linha atual
-            y = linhas[i + 1].getElementsByTagName("TD")[coluna]; // Célula da próxima linha
-            // Compara as duas linhas com base na direção atual de ordenação
-            if (direcao === "asc" ? x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase() : x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
-                deveTrocar = true;
-                break;
+// Remove uma linha da tabela de interações
+async function deleteProposal(row) {
+    const id = parseInt(row.getAttribute('data-row-id'));
+
+    const index = proposalList.findIndex(proposal => proposal.id === id);
+    if (index !== -1) {
+        proposalList.splice(index, 1);
+    }
+
+    // TODO adicionar confirmação de exclusão
+
+    try {
+        const response = await fetch(`${URL}/proposal/${id}`, {
+            method: 'DELETE',
+        });
+
+        const responseDataProposal = await response.json();
+
+        if (!response.ok) {
+            console.error('Erro: ' + responseDataProposal.message);
+        } else {
+            row.remove();
+            addCheckboxesEvents();
+
+            const index = selectedIds.findIndex(selectedId => selectedId === id);
+            if (index !== -1) {
+                selectedIds.splice(index, 1);
             }
         }
-        if (deveTrocar) {
-            linhas[i].parentNode.insertBefore(linhas[i + 1], linhas[i]); // Troca as linhas
-            trocando = true;
-            contagemTroca++;
-        } else if (contagemTroca === 0 && direcao === "asc") {
-            direcao = "desc"; // Se nenhuma troca foi feita, muda a direção e repete
-            trocando = true;
-        }
+
+    } catch (error) {
+        console.error('Erro ao excluir interação: ', error);
     }
-    atualizarSetas(coluna, direcao); // Atualiza a seta de direção no cabeçalho
 }
 
-// Atualiza as setas indicativas de direção da ordenação nas colunas.
-function atualizarSetas(coluna, direcao) {
-    document.querySelectorAll(".sort-arrow").forEach(seta => {
-        seta.style.display = "none";  // Oculta todas as setas primeiro.
+// Adiciona o evento de salvar uma interação no botão de salvar
+function addSaveProposalEvent(button) {
+    button.addEventListener('click', saveProposal);
+}
+
+// Adiciona o evento de adicionar nova interação no botão de adicionar
+function addNewProposalEvent(button) {
+    button.addEventListener('click', () => {
+        isEditingProposal = false;
+        resetProposalFields();
+        cleanInvalidClassesProposal();
+        switchOverlay();
     });
-    var seta = document.querySelectorAll(".sortable")[coluna - 1].querySelector(".sort-arrow");
-    seta.style.display = "inline";  // Exibe a seta na coluna ordenada.
-    seta.innerHTML = direcao === "asc" ? "&#9650;" : "&#9660;"; // Atualiza a direção da seta
 }
 
-// Configura os manipuladores de eventos para os botões no modal de propostas.
-function anexarManipuladoresDeEventosModal() {
-    const botaoFecharModal = document.querySelector('.close-modal-button'); // Botão para fechar o modal
-    const botaoCancelarModal = document.querySelector('.cancel-modal-button'); // Botão para cancelar o modal
-    const botaoSalvarModal = document.querySelector('.save-modal-button'); // Botão para salvar a proposta
-
-    if (botaoFecharModal) botaoFecharModal.addEventListener('click', () => alternarVisibilidadeModal(false)); // Fecha o modal ao clicar
-    if (botaoCancelarModal) botaoCancelarModal.addEventListener('click', () => alternarVisibilidadeModal(false)); // Cancela e fecha o modal ao clicar
-    if (botaoSalvarModal) botaoSalvarModal.addEventListener('click', () => salvarProposta()); // Salva a proposta ao clicar
+// Busca os elementos da página e atribui eles as variáveis globais
+function getProposalElements() {
+    buttonAddNewProposal = document.querySelector('.button-add-new');
+    buttonCloseModalProposal = document.querySelector('.close-modal-button');
+    cancelCloseModalProposal = document.querySelector('.cancel-modal-button');
+    saveCloseModalProposal = document.querySelector('.save-modal-button');
+    clientSelectProposal = document.querySelector('select[name="client"]');
+    serviceTypeSelectProposal = document.querySelector('select[name="serviceType"]');
+    offerDateInputProposal = document.querySelector('input[name="offerDate"]');
+    statusSelectProposal = document.querySelector('select[name="status"]');
+    valueInputProposal = document.querySelector('input[name="value"]');
+    descriptionInputProposal = document.querySelector('textarea[name="description"]');
 }
 
-// Alterna a visibilidade do modal de propostas.
-function alternarVisibilidadeModal(visivel) {
-    const modal = document.querySelector('.modal-container');
-    if (modal) modal.style.display = visivel ? 'block' : 'none'; // Mostra ou oculta o modal com base no parâmetro 'visivel'
+// Inicialização da página de interações
+function propostasStartup() {
+    getProposal().then(() => {
+        getProposalElements();
+        addNewProposalEvent(buttonAddNewProposal);
+        addSwitchOverlayEvent(buttonCloseModalProposal);
+        addSwitchOverlayEvent(cancelCloseModalProposal);
+        addSwitchOverlayEvent(buttonCloseModalProposal);
+        addSaveProposalEvent(saveCloseModalProposal);
+
+        getAllClients(clientSelectProposal).then(() => {
+            addSelectedDataEvent(clientSelectProposal);
+            addSelectedDataEvent(statusSelectProposal);
+            addSelectedDataEvent(serviceTypeSelectProposal);
+        });
+
+        setServiceTypeSelect();
+        setStatusSelect();
+        setInputMasksForProposals();
+    })
 }
 
-// Salva a proposta coletando dados dos inputs e possivelmente enviando para um servidor.
-function salvarProposta() {
-    console.log("Salvando proposta...");
-    // Implementação futura para coletar dados de entrada e enviar para o servidor.
-}
+
