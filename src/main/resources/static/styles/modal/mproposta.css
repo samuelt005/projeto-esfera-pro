@@ -1,0 +1,108 @@
+.modal-container {
+    display: flex;
+    flex-direction: column;
+    width: 800px;
+    border-radius: 20px;
+    background-color: var(--white);
+    overflow: hidden;
+}
+
+.modal-container header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    background-color: var(--main-purple);
+}
+
+.modal-container header h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--white);
+}
+
+.modal-container header .close-modal-button {
+    cursor: pointer;
+}
+
+.modal-container main {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    gap: 20px;
+}
+
+.inputs-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.input-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1;
+}
+
+.input-wrapper.half {
+    flex: 0 0 48%;
+}
+
+.input-wrapper.full {
+    flex: 1 0 100%;
+}
+
+.input-wrapper h4 {
+    font-size: 14px;
+    color: var(--text-primary);
+}
+
+.input-wrapper select,
+.input-wrapper input,
+.input-wrapper textarea {
+    padding: 10px;
+    border: 1px solid var(--gray);
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.file-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    border: 1px dashed var(--gray);
+    border-radius: 5px;
+    cursor: pointer;
+    color: var(--text-primary);
+    font-size: 14px;
+}
+
+.modal-container footer {
+    display: flex;
+    justify-content: flex-end;
+    padding: 20px;
+    gap: 10px;
+    background-color: var(--main-purple);
+}
+
+.modal-container footer button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    color: var(--white);
+}
+
+.cancel-modal-button {
+    background-color: var(--gray);
+}
+
+.save-modal-button {
+    background-color: var(--main-purple);
+}

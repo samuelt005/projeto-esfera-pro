@@ -4,16 +4,136 @@
     <meta charset="UTF-8">
     <title>Propostas</title>
 </head>
+
 <body>
 <content>
     <div class="content-container">
-        <h2>Propostas</h2>
+        <div class="table-header">
+            <h2>Propostas</h2>
+            <!-- Componente de busca -->
+            <div th:replace="~{components/search :: search('pesquisar', 'Pesquisar', ~{icons/search/magnifying-glass :: magnifying-glass})}"></div>
+            <div class="buttons">
+                <!-- Botão de filtrar -->
+                <div th:replace="~{components/button1 :: button('filtrar', 'Filtrar', ~{icons/buttons/filters :: filters})}"></div>
+                <!-- Botão de exportar -->
+                <div th:replace="~{components/button1 :: button('exportar', 'Exportar', ~{icons/buttons/export :: export})}"></div>
+            </div>
+        </div>
+        <div class="table-container">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th class="select-all-checkbox">
+                        <div>
+                            <!-- Ícone de seleção de todos -->
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                <path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/>
+                            </svg>
+                        </div>
+                    </th>
+                    <th>ID</th>
+                    <th class="sortable" onclick="sortTable(1)">Cliente <span class="sort-arrow">&#9650;</span></th>
+                    <th class="sortable" onclick="sortTable(2)">CPF/CNPJ <span class="sort-arrow">&#9650;</span></th>
+                    <th class="sortable" onclick="sortTable(3)">Serviço <span class="sort-arrow">&#9650;</span></th>
+                    <th class="sortable" onclick="sortTable(4)">Status <span class="sort-arrow">&#9650;</span></th>
+                    <th>Descrição</th>
+                    <th class="sortable" onclick="sortTable(6)">Data <span class="sort-arrow">&#9650;</span></th>
+                    <th class="sortable" onclick="sortTable(7)">Valor <span class="sort-arrow">&#9650;</span></th>
+                    <th>Anexo</th>
+                </tr>
+                </thead>
+                <tbody class="table-content">
+                </tbody>
+            </table>
+            <!-- Botão flutuante para adicionar nova proposta -->
+            <div class="button-add-new" onclick="alternarVisibilidadeModal(true)">
+                <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M30 17.1429H17.1429V30H12.8571V17.1429H0V12.8571H12.8571V0H17.1429V12.8571H30V17.1429Z" fill="white"/>
+                </svg>
+            </div>
+        </div>
     </div>
 </content>
+<modal>
+    <div class="modal-container">
+        <header>
+            <h2>Cadastrar Proposta</h2>
+            <div class="close-modal-button">
+                <!-- Botão para fechar o modal -->
+                <div th:replace="~{icons/buttons/close :: close}"></div>
+            </div>
+        </header>
+        <main>
+            <section>
+                <!-- Inputs do formulário de cadastro de proposta -->
+                <div class="inputs-row">
+                    <div class="input-wrapper">
+                        <h4>Nome do Cliente</h4>
+                        <select name="client-name">
+                            <option value="">Selecione ou digite o nome</option>
+                            <!-- Opções aqui -->
+                        </select>
+                    </div>
+                    <div class="input-wrapper">
+                        <h4>Tipo de Solução</h4>
+                        <select name="solution-type">
+                            <option value="">Escolha a solução</option>
+                            <!-- Opções aqui -->
+                        </select>
+                    </div>
+                </div>
+                <div class="inputs-row">
+                    <div class="input-wrapper">
+                        <h4>Data de Conclusão</h4>
+                        <input type="date" name="completion-date">
+                    </div>
+                    <div class="input-wrapper">
+                        <h4>Status da Proposta</h4>
+                        <select name="proposal-status">
+                            <option value="">Escolha o status</option>
+                            <!-- Opções aqui -->
+                        </select>
+                    </div>
+                </div>
+                <div class="inputs-row">
+                    <div class="input-wrapper">
+                        <h4>Valores</h4>
+                        <input type="text" name="values" placeholder="R$ 9.999,99">
+                    </div>
+                </div>
+                <div class="inputs-row">
+                    <div class="input-wrapper">
+                        <h4>Anexar Arquivo</h4>
+                        <input type="file" name="attachment">
+                    </div>
+                </div>
+                <div class="inputs-row">
+                    <div class="input-wrapper full">
+                        <h4>Descrição da Proposta</h4>
+                        <textarea name="proposal-description" placeholder="Escreva informações sobre a proposta"></textarea>
+                    </div>
+                </div>
+            </section>
+        </main>
+        <footer>
+            <!-- Botões de cancelar e salvar no modal -->
+            <button class="cancel-modal-button" onclick="alternarVisibilidadeModal(false)">Cancelar</button>
+            <button class="save-modal-button">Salvar</button>
+        </footer>
+    </div>
+</modal>
 
 <styles>
+    <!-- Importação dos arquivos de estilo -->
+    <link rel="stylesheet" th:href="@{/styles/modal.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/components/search.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/components/button1.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/components/button2.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/components/input1.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/components/input-select.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/components/checkbox-table.css}"/>
     <link rel="stylesheet" th:href="@{/styles/pages/propostas.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/modal/mpropostas.css}"/>
 </styles>
-
 </body>
 </html>
