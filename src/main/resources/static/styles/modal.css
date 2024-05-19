@@ -2,9 +2,12 @@
     display: flex;
     justify-content: space-between;
     flex-direction: column;
-    width: 600px;
+    min-height: 200px;
+    max-height: calc(100% - 40px);
+    max-width: 600px;
     border-radius: 20px;
     background-color: var(--white);
+    flex-grow: 1;
 }
 
 .modal-container header {
@@ -16,6 +19,7 @@
     border-radius: 20px 20px 0 0;
     height: 60px;
     width: 100%;
+    max-height: calc(100% - 40px);
     background-color: var(--main-purple);
 }
 
@@ -41,8 +45,10 @@
     flex-direction: column;
     gap: 30px;
     padding: 20px;
+    min-height: 200px;
     height: 100%;
     box-sizing: border-box;
+    overflow-y: auto;
 }
 
 .modal-container main section {
