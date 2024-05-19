@@ -9,6 +9,17 @@ body {
     font-style: normal;
 }
 
+.error {
+    display: none;
+}
+
+.error.invalid {
+    display: block;
+    font-size: x-small;
+    font-weight: bold;
+    color: red;
+}
+
 .content-container {
     display: flex;
     width: 100vw;
@@ -157,7 +168,7 @@ form {
 
 .div-input label {
     font-size: 15px;
-    margin: 10px;
+    margin: 3px;
 }
 
 .div-input{
@@ -166,7 +177,7 @@ form {
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
-    margin-top: 20px;
+    margin-top: 2px;
 }
 
 .div-input input {
@@ -215,10 +226,6 @@ form {
 .form .button2:hover {
     background-color: var(--ligth-purple);
     border: 2px solid var(--ligth-purple);
-}
-
-.invalid {
-    border: 3px solid red;
 }
 
 @keyframes formulario {

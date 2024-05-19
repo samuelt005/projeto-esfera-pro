@@ -35,7 +35,7 @@ async function getClients() {
             clientList.push(...data);
             addClientRows(data);
         })
-        .catch(error => {
+        .catch(() => {
             getMainFrameContent('error');
         });
 }
@@ -104,7 +104,7 @@ async function getStates(stateSelect) {
 // Busca cidades pelo ID do estado
 async function getCitiesByState(state_id, event) {
     if (event?.target) {
-        switchClientSelectClass(event);
+        switchSelectClass(event);
     }
 
     if (!citySelect.classList.contains('unselected')) {
@@ -155,11 +155,7 @@ function createClientTableRow(client) {
     newRow.setAttribute('data-row-id', client.id);
     newRow.innerHTML = `
         <th class="row-checkbox" data-checkbox-id="${client.id}">
-            <div>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                    <path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/>
-                </svg>
-            </div>
+            ${rowCheckboxIcon}
         </th>
         <td>${client.name}</td>
         <td>${client.cnpj ? client.cnpj : client.cpf}</td>
@@ -266,31 +262,9 @@ function addNewClientEvent(button) {
     });
 }
 
-// Adiciona o evento de alterar a aparência do select ao selecionar um dado
-function addSelectedCityEvent(select) {
-    select.addEventListener('change', switchClientSelectClass);
-}
-
-// Altera a aparência do select ao selecionar um dado
-function switchClientSelectClass(event) {
-    if (!event.target) {
-        return
-    }
-
-    const id = event.target.value;
-
-    if (id !== 0) {
-        event.target.classList.remove('unselected');
-    } else if (!event.target.classList.contains('unselected')) {
-        event.target.classList.add('unselected');
-    }
-}
-
 // Busca os elementos da página e atribui eles as variáveis globais
 function getClientElements() {
-    console.log('getDocumentElements');
     buttonAddNew = document.querySelector('.button-add-new');
-    console.log(buttonAddNew);
     buttonCloseModal = document.querySelector('.close-modal-button');
     cancelCloseModal = document.querySelector('.cancel-modal-button');
     saveCloseModal = document.querySelector('.save-modal-button');
@@ -311,7 +285,6 @@ function getClientElements() {
 
 // Inicialização da página de clientes
 function clientesStartup() {
-    console.log('clientesStartup')
     getClients().then(() => {
         getClientElements();
         addNewClientEvent(buttonAddNew);
@@ -322,7 +295,7 @@ function clientesStartup() {
 
         getStates(stateSelect).then(() => {
             addSelectedStateEvent(stateSelect);
-            addSelectedCityEvent(citySelect);
+            addSelectedDataEvent(citySelect);
             setInputMasks();
         });
     });

@@ -6,7 +6,9 @@ const allStyles = document.getElementById("styles");
 const sidebar = document.querySelector(".sidebar");
 const expandButton = document.querySelector(".expand-menu");
 const menuButtons = document.querySelectorAll(".sidebar-button");
+const helpSidebarButton = document.querySelector(".need-help");
 const loading = document.querySelector(".loading");
+let isConfigPageOpened = false;
 let currentPage = 0;
 
 // Carrega o script específico de cada página ao selecionar um item do menu
@@ -29,7 +31,7 @@ function loadSelectedPageScript(page) {
             break;
 
         case 'interacoes':
-            interacoesStartup();
+            interactionStartup();
             break;
 
         case 'configs':
@@ -46,19 +48,18 @@ function loadSelectedPageScript(page) {
 }
 
 // Busca o HTML da página selecionada no menu lateral
-function getMainFrameContent(page) {
-    const logado = localStorage.getItem("logado");
+async function getMainFrameContent(page) {
     if (logado === 'true') {
-        fetch(`${URL}/page${page}`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`Erro ao recuperar tela: ${page}`);
-                }
-                return response.text();
-            })
-            .then(data => {
-                const tempElement = document.createElement("div");
-                tempElement.innerHTML = data;
+    await fetch(`${URL}/page${page}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Erro ao recuperar tela: ${page}`);
+            }
+            return response.text();
+        })
+        .then(data => {
+            const tempElement = document.createElement("div");
+            tempElement.innerHTML = data;
 
                 const contentDiv = tempElement.querySelector('content');
                 const modalDiv = tempElement.querySelector('modal');
@@ -100,6 +101,7 @@ function expandButtonClicked() {
 
 // Modifica os botões laterais ao clicar em um deles
 function menuButtonClicked(event) {
+    isConfigPageOpened = false;
     const button = event.currentTarget;
     const page = button.getAttribute("page");
     currentPage = Array.from(menuButtons).findIndex((btn) => btn.getAttribute("page") === page);
@@ -121,7 +123,20 @@ function menuButtonClicked(event) {
     button.classList.remove("inactive");
     button.classList.add("active");
 
-    getMainFrameContent(page);
+    getMainFrameContent(page).then();
+}
+
+// Definição do evento quando clica no botão de ajuda
+function helpSidebarButtonSetup() {
+    helpSidebarButton.addEventListener("click", () => {
+        if (isConfigPageOpened) {
+            configsButtons[3].click();
+        } else {
+            getMainFrameContent('configs').then(() => {
+                configsButtons[3].click();
+            });
+        }
+    });
 }
 
 // Inicialização do frame do site
@@ -131,11 +146,12 @@ function frameSetup() {
     menuButtons.forEach(button => {
         button.addEventListener("click", menuButtonClicked);
     })
+
+    helpSidebarButtonSetup();
 }
 frameSetup();
-if (!showError) {
-    getMainFrameContent('configs'); // TODO temporary setup to test
-    // menuButtons[0].click();
+if (!showError) { // TODO temporary setup to test
+    menuButtons[0].click();
 } else {
-    getMainFrameContent('error');
+    getMainFrameContent('error').then();
 }

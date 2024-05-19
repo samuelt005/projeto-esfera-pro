@@ -30,11 +30,13 @@
                         </div>
                         <div class="div-input">
                             <label for="email">Email</label>
-                            <input type="email" name="email" id="email">
+                            <input type="email" name="email" id="email" placeholder="Digite seu email">
+                            <label class="error" id="email-error">Preencha este campo com um e-mail valido</label>
                         </div>
                         <div class="div-input">
                             <label for="password">Senha</label>
-                            <input type="password" name="password" id="password">
+                            <input type="password" name="password" id="password" placeholder="Digite sua senha">
+                            <label class="error" id="password-error">A senha deve conter mais de 8 caracteres</label>
                         </div>
                         <div class="div-button">
                             <button id="logar" class="button2">ENTRAR</button>
@@ -46,19 +48,23 @@
                         </div>
                         <div class="div-input">
                             <label for="nome">Seu nome</label>
-                            <input type="text" name="nome" id="nome">
+                            <input type="text" name="nome" id="nome" placeholder="Informe seu nome">
+                            <label class="error" id="name-error">Preencha este campo com um nome valido</label>
                         </div>
                         <div class="div-input">
                             <label for="telefone">Número de telefone</label>
-                            <input type="text" name="telefone" id="telefone">
+                            <input type="text" name="telefone" id="telefone" placeholder="00 00000-0000">
+                            <label class="error" id="phone-error">Preencha este campo com um telefone valido</label>
                         </div>
                         <div class="div-input">
                             <label for="Remail">Email</label>
-                            <input type="email" name="email" id="Remail">
+                            <input type="email" name="email" id="Remail" placeholder="Informe seu email">
+                            <label class="error" id="Remail-error">Preencha este campo com um e-mail valido</label>
                         </div>
                         <div class="div-input">
                             <label for="Rpassword">Senha</label>
-                            <input type="password" name="password" id="Rpassword">
+                            <input type="password" name="password" id="Rpassword" placeholder="Informe sua senha">
+                            <label class="error" id="Rpassword-error">A senha deve conter mais de 8 caracteres</label>
                         </div>
                         <div class="div-button">
                             <button id="cadastrar" type="submit" class="button2">CADASTRAR</button>
@@ -77,8 +83,11 @@
     <link rel="stylesheet" th:href="@{/styles/global.css}"/>
     <link rel="stylesheet" th:href="@{/styles/colors.css}"/>
     <link rel="stylesheet" th:href="@{/styles/login.css}"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 </styles>
 
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script src="https://unpkg.com/imask"></script>
 <script th:src="@{/scripts/login.js}"></script>
 </body>
 </html>
