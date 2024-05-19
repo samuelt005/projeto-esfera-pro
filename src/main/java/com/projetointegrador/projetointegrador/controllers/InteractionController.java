@@ -23,7 +23,7 @@ public class InteractionController {
         return interactionService.findOneInteraction(id);
     }
 
-    // Rota para listar todas as interações ativos
+    // Rota para listar todas as interações ativos com paginação
     @GetMapping("/{page}")
     @ResponseBody
     public ResponseEntity<Page<Interaction>> listInteractions(

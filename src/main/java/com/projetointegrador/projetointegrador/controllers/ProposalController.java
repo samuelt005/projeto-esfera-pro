@@ -16,14 +16,14 @@ public class ProposalController {
         this.proposalService = proposalService;
     }
 
-    // Rota para encontrar uma interação pelo ID
+    // Rota para encontrar uma proposta pelo ID
     @GetMapping("byId/{id}")
     @ResponseBody
     public ResponseEntity<?> findProposal(@PathVariable("id") Long id) {
         return proposalService.findOneProposal(id);
     }
 
-    // Rota para listar todas as interações ativos
+    // Rota para listar todas as propostas ativos com paginação
     @GetMapping("/{page}")
     @ResponseBody
     public ResponseEntity<?> listProposals(
@@ -35,21 +35,21 @@ public class ProposalController {
         return ResponseEntity.ok().body(proposals);
     }
 
-    // Rota para criar uma interação
+    // Rota para criar uma proposta
     @PostMapping
     @ResponseBody
-    public ResponseEntity<?> createProposals(@RequestBody Proposal interaction) {
-        return proposalService.createProposal(interaction);
+    public ResponseEntity<?> createProposals(@RequestBody Proposal proposal) {
+        return proposalService.createProposal(proposal);
     }
 
-    // Rota para atualizar uma interação
+    // Rota para atualizar uma proposta
     @PutMapping
     @ResponseBody
-    public ResponseEntity<?> updateProposals(@RequestBody Proposal interaction) {
-        return proposalService.updateProposal(interaction);
+    public ResponseEntity<?> updateProposals(@RequestBody Proposal proposal) {
+        return proposalService.updateProposal(proposal);
     }
 
-    // Rota para desativar uma interação
+    // Rota para desativar uma proposta
     @DeleteMapping("/{id}")
     @ResponseBody
     public ResponseEntity<?> deleteProposals(@PathVariable Long id) {

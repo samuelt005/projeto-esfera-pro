@@ -23,7 +23,7 @@ public class ClientController {
         return clientService.findOneClient(id);
     }
 
-    // Rota para listar todos os clientes ativos
+    // Rota para listar todos os clientes ativos com paginação
     @GetMapping("/{page}")
     @ResponseBody
     public ResponseEntity<?> listClients(
