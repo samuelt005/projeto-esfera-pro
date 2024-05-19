@@ -1,7 +1,6 @@
 // Elementos comuns da página
 const mainContent = document.querySelector(".main-content");
 const overlay = document.querySelector(".overlay");
-const header = document.querySelector(".main")
 const allStyles = document.getElementById("styles");
 const sidebar = document.querySelector(".sidebar");
 const expandButton = document.querySelector(".expand-menu");
@@ -56,17 +55,19 @@ function loadSelectedPageScript(page) {
 
 // Busca o HTML da página selecionada no menu lateral
 async function getMainFrameContent(page) {
-    if (logado === 'true') {
-    await fetch(`${URL}/page${page}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Erro ao recuperar tela: ${page}`);
-            }
-            return response.text();
-        })
-        .then(data => {
-            const tempElement = document.createElement("div");
-            tempElement.innerHTML = data;
+    const loggedIn = JSON.parse(localStorage.getItem('isLogged'));
+
+    if (loggedIn) {
+        await fetch(`${URL}/page${page}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Erro ao recuperar tela: ${page}`);
+                }
+                return response.text();
+            })
+            .then(data => {
+                const tempElement = document.createElement("div");
+                tempElement.innerHTML = data;
 
                 const contentDiv = tempElement.querySelector('content');
                 const modalDiv = tempElement.querySelector('modal');
@@ -93,7 +94,7 @@ async function getMainFrameContent(page) {
                 mainContent.classList.add("hidden");
                 canChangePage = true;
             });
-    }else{
+    } else {
         window.location.href = "/login";
     }
 }
@@ -109,12 +110,14 @@ function expandButtonClicked() {
 
 // Modifica os botões laterais ao clicar em um deles
 function menuButtonClicked(event) {
-    if (!canChangePage) return;
+    const button = event.currentTarget;
+    const page = button.getAttribute("page");
+    const disabled = button.getAttribute('data-disabled');
+
+    if (disabled || !canChangePage) return;
 
     canChangePage = false;
     isConfigPageOpened = false;
-    const button = event.currentTarget;
-    const page = button.getAttribute("page");
     currentPage = Array.from(menuButtons).findIndex((btn) => btn.getAttribute("page") === page);
 
     showError = false;
@@ -161,7 +164,7 @@ function frameSetup() {
 
 frameSetup();
 if (!showError) { // TODO temporary setup to test
-    menuButtons[0].click();
+    menuButtons[2].click();
 } else {
     getMainFrameContent('error').then();
 }

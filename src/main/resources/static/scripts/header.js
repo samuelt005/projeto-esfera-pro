@@ -60,8 +60,8 @@ function teamConfigsButtonSetup() {
 
 function logOutButtonSetup() {
     logOutButton.addEventListener("click", () => {
-        console.log('BOTÃO DE DESLOGAR')
-        // TODO adicionar comportamento de deslogar
+        localStorage.setItem("isLogged", JSON.stringify(false));
+        window.location.href = "/login";
     });
 }
 

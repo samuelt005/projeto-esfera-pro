@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', (event) => {
+document.addEventListener('DOMContentLoaded', () => {
     const toggleButtons = document.querySelectorAll('.toggle-btn');
     const formContents = document.querySelectorAll('.form-content');
     const buttonLogar = document.querySelector('#logar');
@@ -16,10 +16,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     function showToastErro(message) {
         Toastify({
-            text: message,
-            duration: 3000,
-            close: true,
-            gravity: "bottom", // `top` or `bottom`
+            text: message, duration: 3000, close: true, gravity: "bottom", // `top` or `bottom`
             position: "right", // `left`, `center` or `right`
             backgroundColor: "#da3a3a",
         }).showToast();
@@ -27,25 +24,18 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     function showToastSucesful(message) {
         Toastify({
-            text: message,
-            duration: 3000,
-            close: true,
-            gravity: "bottom", // `top` or `bottom`
+            text: message, duration: 3000, close: true, gravity: "bottom", // `top` or `bottom`
             position: "right", // `left`, `center` or `right`
             backgroundColor: "#3ab640",
         }).showToast();
     }
 
     let data = {
-        name: '',
-        email: '',
-        password: '',
-        phone: ''
+        name: '', email: '', password: '', phone: ''
     };
 
     let dataLogin = {
-        email: '',
-        password: ''
+        email: '', password: ''
     };
 
     function cleanInvalidClasses() {
@@ -140,26 +130,25 @@ document.addEventListener('DOMContentLoaded', (event) => {
             event.preventDefault();
             if (validateFormLogin()) {
                 fetch('/user/validation', {
-                    method: 'POST',
-                    headers: {
+                    method: 'POST', headers: {
                         'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(dataLogin)
+                    }, body: JSON.stringify(dataLogin)
                 }).then(response => {
                     if (response.ok) {
-                        localStorage.setItem("logado", true);
+                        localStorage.setItem("isLogged", JSON.stringify(true));
                         window.location.href = '/';
                     } else {
-                        localStorage.setItem("logado", false);
+                        localStorage.setItem("isLogged", JSON.stringify(false));
                         showToastErro("Erro ao realizar login");
                     }
-                }).catch(error => {
+                }).catch((error) => {
                     showToastErro("Erro ao realizar login");
-                    localStorage.setItem("logado", false);
+                    console.error(error)
+                    localStorage.setItem("isLogged", JSON.stringify(false));
                 });
             } else {
-                console.log("Erro na validação do login");
-                localStorage.setItem("logado", false);
+                console.error("Erro na validação do login");
+                localStorage.setItem("isLogged", JSON.stringify(false));
             }
         });
     }
@@ -169,15 +158,15 @@ document.addEventListener('DOMContentLoaded', (event) => {
             event.preventDefault();
             if (validateFormRegister()) {
                 fetch('/user/register', {
-                    method: 'POST',
-                    headers: {
+                    method: 'POST', headers: {
                         'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(data)
+                    }, body: JSON.stringify(data)
                 }).then(response => {
                     if (response.ok) {
                         showToastSucesful("Usuário cadastrado com sucesso! Você será redirecionado para a página de login.");
-                        setTimeout(() => { window.location.href = '/login'; }, 3000);
+                        setTimeout(() => {
+                            window.location.href = '/login';
+                        }, 3000);
                     } else {
                         return response.json();
                     }
@@ -185,14 +174,14 @@ document.addEventListener('DOMContentLoaded', (event) => {
                     showToastErro(responseJSON.message);
                 });
             } else {
-                localStorage.setItem("logado", false);
+                localStorage.setItem("isLogged", JSON.stringify(false));
             }
         });
     }
 
     function toggleButtonClick() {
         toggleButtons.forEach(button => {
-            button.addEventListener('click', function() {
+            button.addEventListener('click', function () {
                 const target = button.getAttribute('data-target');
                 formContents.forEach(content => {
                     if (content.id === target) {
@@ -213,7 +202,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     }
 
     function loginStartup() {
-        localStorage.setItem("logado", false);
+        localStorage.setItem("isLogged", JSON.stringify(false));
         maskInputs();
         toggleButtonClick();
         login();

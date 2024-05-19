@@ -21,11 +21,11 @@
             <div th:replace="~{icons/sidebar/expand :: expand}"></div>
         </div>
         <div class="buttons">
-            <div th:replace="~{components/sidebar-button :: button('dashboard', 'Dashboard', ~{icons/sidebar/dashboard :: dashboard})}"></div>
-            <div th:replace="~{components/sidebar-button :: button('calendario', 'Calendário', ~{icons/sidebar/calendario :: calendario})}"></div>
-            <div th:replace="~{components/sidebar-button :: button('clientes', 'Clientes', ~{icons/sidebar/clientes :: clientes})}"></div>
-            <div th:replace="~{components/sidebar-button :: button('propostas', 'Propostas', ~{icons/sidebar/propostas :: propostas})}"></div>
-            <div th:replace="~{components/sidebar-button :: button('interacoes', 'Interações', ~{icons/sidebar/interacoes :: interacoes})}"></div>
+            <div th:replace="~{components/sidebar-button :: button('dashboard', 'Dashboard', ~{icons/sidebar/dashboard :: dashboard}, false)}"></div>
+            <div th:replace="~{components/sidebar-button :: button('calendario', 'Calendário', ~{icons/sidebar/calendario :: calendario}, false)}"></div>
+            <div th:replace="~{components/sidebar-button :: button('clientes', 'Clientes', ~{icons/sidebar/clientes :: clientes}, true)}"></div>
+            <div th:replace="~{components/sidebar-button :: button('propostas', 'Propostas', ~{icons/sidebar/propostas :: propostas}, true)}"></div>
+            <div th:replace="~{components/sidebar-button :: button('interacoes', 'Interações', ~{icons/sidebar/interacoes :: interacoes}, true)}"></div>
         </div>
     </div>
 
