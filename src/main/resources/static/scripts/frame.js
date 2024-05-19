@@ -13,6 +13,8 @@ let canChangePage = true;
 
 // Carrega o script específico de cada página ao selecionar um item do menu
 function loadSelectedPageScript(page) {
+    let timeout = 1000;
+
     switch (page) {
         case 'dashboard':
             dashboardStartup();
@@ -39,6 +41,7 @@ function loadSelectedPageScript(page) {
             break;
 
         case 'error':
+            timeout = 200;
             errorStartup();
             break;
     }
@@ -47,7 +50,7 @@ function loadSelectedPageScript(page) {
         loading.classList.add("hidden");
         mainContent.classList.remove("hidden");
         canChangePage = true;
-    }, 1000);
+    }, timeout);
 }
 
 // Busca o HTML da página selecionada no menu lateral
