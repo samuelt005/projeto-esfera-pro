@@ -6,16 +6,16 @@ import com.projetointegrador.projetointegrador.repositories.InteractionRepositor
 import com.projetointegrador.projetointegrador.responses.Response;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 public class InteractionServiceTests {
@@ -44,13 +44,28 @@ public class InteractionServiceTests {
     }
 
     @Test
-    void testlistActiveInteractions() {
-        ResponseEntity<?> responseEntity = interactionService.listActiveInteraction();
+    void testListActiveInteraction() {
+        Interaction interaction1 = new Interaction();
+        interaction1.setId(1L);
+        interaction1.setInactive(false);
 
-        assertEquals(HttpStatusCode.valueOf(200), responseEntity.getStatusCode());
+        Interaction interaction2 = new Interaction();
+        interaction2.setId(2L);
+        interaction2.setInactive(false);
 
-        Object body = responseEntity.getBody();
-        assertTrue(body instanceof List);
+        List<Interaction> interactions = Arrays.asList(interaction1, interaction2);
+
+        Page<Interaction> page = new PageImpl<>(interactions);
+
+        when(interactionRepository.findAll(any(Example.class), any(Pageable.class))).thenReturn(page);
+
+        Page<Interaction> resultPage = interactionService.listActiveInteraction(PageRequest.of(0, 20));
+
+        // Verificando se o método retornou uma página não nula
+        assertNotNull(resultPage);
+
+        // Verificando se a página contém as interações simuladas
+        assertEquals(interactions, resultPage.getContent());
     }
 
     @Test

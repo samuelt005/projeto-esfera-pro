@@ -169,7 +169,6 @@ function validateProposalForm() {
         proposalForm.description = "";
     }
 
-    console.log(proposalForm)
     return isFormValid;
 }
 

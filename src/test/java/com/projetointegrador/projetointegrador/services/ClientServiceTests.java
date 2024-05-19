@@ -6,14 +6,16 @@ import com.projetointegrador.projetointegrador.repositories.ClientRepository;
 import com.projetointegrador.projetointegrador.responses.Response;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -45,12 +47,27 @@ public class ClientServiceTests {
 
     @Test
     void testlistActiveClients() {
-        ResponseEntity<?> responseEntity = clientService.listActiveClients();
+        Client interaction1 = new Client();
+        interaction1.setId(1L);
+        interaction1.setInactive(false);
 
-        assertEquals(HttpStatusCode.valueOf(200), responseEntity.getStatusCode());
+        Client interaction2 = new Client();
+        interaction2.setId(2L);
+        interaction2.setInactive(false);
 
-        Object body = responseEntity.getBody();
-        assertTrue(body instanceof List);
+        List<Client> clients = Arrays.asList(interaction1, interaction2);
+
+        Page<Client> page = new PageImpl<>(clients);
+
+        when(clientRepository.findAll(any(Example.class), any(Pageable.class))).thenReturn(page);
+
+        Page<Client> resultPage = clientService.listActiveClients(PageRequest.of(0, 20));
+
+        // Verificando se o método retornou uma página não nula
+        assertNotNull(resultPage);
+
+        // Verificando se a página contém as interações simuladas
+        assertEquals(clients, resultPage.getContent());
     }
 
     @Test

@@ -101,9 +101,7 @@ function expandButtonClicked() {
 
 // Modifica os botões laterais ao clicar em um deles
 function menuButtonClicked(event) {
-    if (!canChangePage) {
-        return;
-    }
+    if (!canChangePage) return;
 
     canChangePage = false;
     isConfigPageOpened = false;
@@ -113,9 +111,7 @@ function menuButtonClicked(event) {
 
     showError = false;
 
-    if (button.classList.contains("active")) {
-        return;
-    }
+    if (button.classList.contains("active")) return;
 
     mainContent.classList.add("hidden");
     loading.classList.remove("hidden");

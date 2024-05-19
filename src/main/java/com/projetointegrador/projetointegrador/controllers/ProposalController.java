@@ -2,6 +2,8 @@ package com.projetointegrador.projetointegrador.controllers;
 
 import com.projetointegrador.projetointegrador.models.Proposal;
 import com.projetointegrador.projetointegrador.services.ProposalService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,9 +23,14 @@ public class ProposalController {
     }
 
     // Rota para listar todas as interações ativos
-    @GetMapping
-    public ResponseEntity<?> listProposals() {
-        return proposalService.listActiveProposal();
+    @GetMapping("/{page}")
+    public ResponseEntity<?> listProposals(
+            @PathVariable int page
+    ) {
+        int size = 20;
+        PageRequest pageRequest = PageRequest.of(page, size);
+        Page<Proposal> proposals = proposalService.listActiveProposal(pageRequest);
+        return ResponseEntity.ok().body(proposals);
     }
 
     // Rota para criar uma interação

@@ -9,14 +9,21 @@ let offerDateInputProposal;
 let statusSelectProposal;
 let valueInputProposal;
 let descriptionInputProposal;
-
+let tableContainerProposal;
 
 // Lista de interações
-let proposalList = [];
+let proposalList;
+let proposalPage;
+let shouldLoadMoreProposals;
+let isLoadingMoreProposals;
 
 // Buscar todas as interações
 async function getProposal() {
-    await fetch(`${URL}/proposal`)
+    if (!shouldLoadMoreProposals || isLoadingMoreProposals) return;
+
+    isLoadingMoreProposals = true;
+
+    await fetch(`${URL}/proposal/${proposalPage}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error(`Erro ao recuperar propostas`);
@@ -24,9 +31,25 @@ async function getProposal() {
             return response.json();
         })
         .then(data => {
-            console.log(data)
-            proposalList.push(...data);
-            addProposalRows(data);
+            if (proposalPage + 1 === data.totalPages) {
+                shouldLoadMoreProposals = false;
+            }
+
+            const itemsToAdd = [];
+            data.content.forEach((item) => {
+                const isDuplicate = proposalList.some((existingItem) => {
+                    return existingItem.id === item.id;
+                });
+
+                if (!isDuplicate) {
+                    itemsToAdd.push(item);
+                }
+            });
+
+            proposalPage++;
+            isLoadingMoreProposals = false;
+            proposalList.push(...itemsToAdd);
+            addProposalRows(itemsToAdd);
         })
         .catch((e) => {
             getMainFrameContent('error');
@@ -220,10 +243,16 @@ function getProposalElements() {
     statusSelectProposal = document.querySelector('select[name="status"]');
     valueInputProposal = document.querySelector('input[name="value"]');
     descriptionInputProposal = document.querySelector('textarea[name="description"]');
+    tableContainerProposal = document.querySelector('.table-container');
 }
 
 // Inicialização da página de interações
 function propostasStartup() {
+    proposalList = [];
+    proposalPage = 0;
+    shouldLoadMoreProposals = true;
+    isLoadingMoreProposals = false;
+
     getProposal().then(() => {
         getProposalElements();
         addNewProposalEvent(buttonAddNewProposal);
@@ -241,6 +270,7 @@ function propostasStartup() {
         setServiceTypeSelect();
         setStatusSelect();
         setInputMasksForProposals();
+        setInfiniteScroll(tableContainerProposal);
     })
 }
 

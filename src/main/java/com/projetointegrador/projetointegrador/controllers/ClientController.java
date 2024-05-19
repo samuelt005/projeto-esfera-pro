@@ -2,6 +2,8 @@ package com.projetointegrador.projetointegrador.controllers;
 
 import com.projetointegrador.projetointegrador.models.Client;
 import com.projetointegrador.projetointegrador.services.ClientService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,9 +23,14 @@ public class ClientController {
     }
 
     // Rota para listar todos os clientes ativos
-    @GetMapping
-    public ResponseEntity<?> listClients() {
-        return clientService.listActiveClients();
+    @GetMapping("/{page}")
+    public ResponseEntity<?> listClients(
+            @PathVariable int page
+    ) {
+        int size = 20;
+        PageRequest pageRequest = PageRequest.of(page, size);
+        Page<Client> clients = clientService.listActiveClients(pageRequest);
+        return ResponseEntity.ok().body(clients);
     }
 
     // Rota para criar um cliente

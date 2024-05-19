@@ -25,7 +25,10 @@
 }
 
 
-.select-all-checkbox div svg,
+.select-all-checkbox div svg {
+    fill: var(--table-secondary);
+}
+
 .row-checkbox div svg {
     fill: var(--white);
 }

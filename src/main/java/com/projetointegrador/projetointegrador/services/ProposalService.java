@@ -5,11 +5,12 @@ import com.projetointegrador.projetointegrador.repositories.ProposalRepository;
 import com.projetointegrador.projetointegrador.responses.Response;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -33,7 +34,7 @@ public class ProposalService {
     }
 
     // Lista todas as propostas ativas
-    public ResponseEntity<?> listActiveProposal() {
+    public Page<Proposal> listActiveProposal(Pageable pageable) {
         Proposal exampleProposal = new Proposal();
         exampleProposal.setInactive(false);
 
@@ -41,8 +42,7 @@ public class ProposalService {
 
         Example<Proposal> example = Example.of(exampleProposal, matcher);
 
-        List<Proposal> clients = proposalRepository.findAll(example);
-        return ResponseEntity.ok().body(clients);
+        return proposalRepository.findAll(example, pageable);
     }
 
     // Cria uma proposta

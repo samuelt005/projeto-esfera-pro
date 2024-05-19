@@ -304,3 +304,22 @@ async function getAllClients(clientSelect) {
             console.error(error);
         });
 }
+
+// Função para definir o evento do scroll infinito na tabela
+function setInfiniteScroll(tableContainer) {
+    tableContainer.addEventListener('scroll', function () {
+        if (tableContainer.scrollTop + tableContainer.offsetHeight >= tableContainer.scrollHeight) {
+            switch (currentPage) {
+                case 2:
+                    getClients().then();
+                    break;
+                case 3:
+                    getProposal().then();
+                    break;
+                case 4:
+                    getInteractions().then();
+                    break;
+            }
+        }
+    });
+}

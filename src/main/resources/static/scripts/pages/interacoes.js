@@ -10,14 +10,21 @@ let resultSelectInteraction;
 let timeInputInteraction;
 let durationInputInteraction;
 let descriptionInputInteraction;
+let tableContainerInteraction;
 
-
-// Lista de interações
-let interactionList = [];
+// Variáveis de interações
+let interactionList;
+let interactionPage;
+let shouldLoadMoreInteractions;
+let isLoadingMoreInteractions;
 
 // Buscar todas as interações
-async function getInteraction() {
-    await fetch(`${URL}/interaction`)
+async function getInteractions() {
+    if (!shouldLoadMoreInteractions || isLoadingMoreInteractions) return;
+
+    isLoadingMoreInteractions = true;
+
+    await fetch(`${URL}/interaction/${interactionPage}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error(`Erro ao recuperar interações`);
@@ -25,8 +32,25 @@ async function getInteraction() {
             return response.json();
         })
         .then(data => {
-            interactionList.push(...data);
-            addInteractionRows(data);
+            if (interactionPage + 1 === data.totalPages) {
+                shouldLoadMoreInteractions = false;
+            }
+
+            const itemsToAdd = [];
+            data.content.forEach((item) => {
+                const isDuplicate = interactionList.some((existingItem) => {
+                    return existingItem.id === item.id;
+                });
+
+                if (!isDuplicate) {
+                    itemsToAdd.push(item);
+                }
+            });
+
+            interactionPage++;
+            isLoadingMoreInteractions = false;
+            interactionList.push(...itemsToAdd);
+            addInteractionRows(itemsToAdd);
         })
         .catch(() => {
             getMainFrameContent('error');
@@ -221,11 +245,17 @@ function getInteractionElements() {
     timeInputInteraction = document.querySelector('input[name="time"]');
     durationInputInteraction = document.querySelector('input[name="duration"]');
     descriptionInputInteraction = document.querySelector('textarea[name="description"]');
+    tableContainerInteraction = document.querySelector('.table-container');
 }
 
 // Inicialização da página de interações
 function interactionStartup() {
-    getInteraction().then(() => {
+    interactionList = [];
+    interactionPage = 0;
+    shouldLoadMoreInteractions = true;
+    isLoadingMoreInteractions = false;
+
+    getInteractions().then(() => {
         getInteractionElements();
         addNewInteractionEvent(buttonAddNewInteraction);
         addSwitchOverlayEvent(buttonCloseModalInteraction);
@@ -242,6 +272,7 @@ function interactionStartup() {
         setContactSelect();
         setResultSelect();
         setInputMasksForInteractions();
+        setInfiniteScroll(tableContainerInteraction);
     })
 }
 
