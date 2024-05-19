@@ -46,7 +46,8 @@ body {
     left: 0;
     top: 0;
     width: 100vw;
-    height: 100vh;
+    height: calc(100vh - 40px);
+    padding: 20px 0;
     background-color: var(--overlay-background);
     z-index: 10;
     opacity: 0;
