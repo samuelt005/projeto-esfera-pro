@@ -13,6 +13,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 </head>
 <body>
 <section class="sidebar">
@@ -78,6 +79,7 @@
         let showError = /*[[${showError}]]*/ '';
         /*]]>*/
     </script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script src="https://unpkg.com/imask"></script>
 
     <script type="text/javascript" th:src="@{/scripts/table-buttons/cliente.js}"></script>
@@ -103,10 +105,11 @@
     <script type="text/javascript" th:src="@{/scripts/forms/validadeCpf.js}"></script>
     <script type="text/javascript" th:src="@{/scripts/forms/validadeCnpj.js}"></script>
 
+
+    <script type="text/javascript" th:src="@{/scripts/toasts.js}"></script>
     <script type="text/javascript" th:src="@{/scripts/frame.js}"></script>
     <script type="text/javascript" th:src="@{/scripts/header.js}"></script>
     <script type="text/javascript" th:src="@{/scripts/common.js}"></script>
-
 </div>
 </body>
 </html>

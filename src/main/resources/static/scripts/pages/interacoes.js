@@ -87,6 +87,7 @@ async function getOneInteraction(id, isEditing) {
         })
         .catch(error => {
             console.error(error);
+            showErrorToast("Erro ao buscar interação!");
         });
 }
 
@@ -168,7 +169,9 @@ function addInteractionRowButtonEvents(row) {
     const editButton = row.querySelector('.edit');
 
     deleteButton.addEventListener('click', () => {
-        deleteInteraction(row).catch(error => console.error(error));
+        deleteInteraction(row).catch(error => {
+            console.error(error)
+        });
     });
 
     editButton.addEventListener('click', () => {
@@ -210,10 +213,13 @@ async function deleteInteraction(row) {
             if (index !== -1) {
                 selectedIds.splice(index, 1);
             }
+
+            showSuccessToast("Interação excluída com sucesso!");
         }
 
     } catch (error) {
         console.error('Erro ao excluir interação: ', error);
+        showErrorToast("Erro ao excluir interação!");
     }
 }
 

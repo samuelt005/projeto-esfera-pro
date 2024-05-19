@@ -14,22 +14,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const RinputEmail = document.querySelector('#Remail');
     const RinputSenha = document.querySelector('#Rpassword');
 
-    function showToastErro(message) {
-        Toastify({
-            text: message, duration: 3000, close: true, gravity: "bottom", // `top` or `bottom`
-            position: "right", // `left`, `center` or `right`
-            backgroundColor: "#da3a3a",
-        }).showToast();
-    }
-
-    function showToastSucesful(message) {
-        Toastify({
-            text: message, duration: 3000, close: true, gravity: "bottom", // `top` or `bottom`
-            position: "right", // `left`, `center` or `right`
-            backgroundColor: "#3ab640",
-        }).showToast();
-    }
-
     let data = {
         name: '', email: '', password: '', phone: ''
     };
@@ -139,10 +123,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         window.location.href = '/';
                     } else {
                         localStorage.setItem("isLogged", JSON.stringify(false));
-                        showToastErro("Erro ao realizar login");
+                        showErrorToast("Erro ao realizar login");
                     }
                 }).catch((error) => {
-                    showToastErro("Erro ao realizar login");
+                    showErrorToast("Erro ao realizar login");
                     console.error(error)
                     localStorage.setItem("isLogged", JSON.stringify(false));
                 });
@@ -163,7 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }, body: JSON.stringify(data)
                 }).then(response => {
                     if (response.ok) {
-                        showToastSucesful("Usuário cadastrado com sucesso! Você será redirecionado para a página de login.");
+                        showSuccessToast("Usuário cadastrado com sucesso! Você será redirecionado para a página de login.");
                         setTimeout(() => {
                             window.location.href = '/login';
                         }, 3000);
@@ -171,7 +155,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         return response.json();
                     }
                 }).then(responseJSON => {
-                    showToastErro(responseJSON.message);
+                    showErrorToast(responseJSON.message);
                 });
             } else {
                 localStorage.setItem("isLogged", JSON.stringify(false));

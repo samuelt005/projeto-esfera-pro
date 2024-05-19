@@ -148,7 +148,7 @@ function validateProposalForm() {
     const cleanedString = proposalValue.replace(/[^\d,.-]/g, '');
     const stringWithoutDots = cleanedString.replace(/\./g, '');
     if (!stringWithoutDots || parseFloat(stringWithoutDots) === 0) {
-        valueInputProposal.classList.add('invalid');
+        valueInputProposal.parentElement.classList.add('invalid');
         isFormValid = false;
     } else {
         valueInputProposal.classList.remove('invalid');
@@ -174,7 +174,10 @@ function validateProposalForm() {
 
 // Salva uma nova interação ou sua edição
 async function saveProposal() {
-    if (!validateProposalForm()) return;
+    if (!validateProposalForm()) {
+        showWarningToast("Preencha todos os campos obrigatórios!");
+        return;
+    }
 
     try {
         const response = await fetch(`${URL}/proposal`, {
@@ -189,11 +192,14 @@ async function saveProposal() {
             console.error('Erro: ' + responseData.message);
             return;
         } else {
-            await getOneProposal(responseData.id, isEditingProposal);
+            await getOneProposal(responseData.id, isEditingProposal).then(() => {
+                showSuccessToast(`Proposta ${isEditingProposal ? 'editada' : 'cadastrada'} com sucesso!`);
+            });
         }
 
         switchOverlay();
     } catch (error) {
         console.error(isEditingProposal ? 'Erro ao editar interação:' : 'Erro ao criar interação:', error);
+        showErrorToast(`Erro ao ${isEditingProposal ? 'editar' : 'cadastrar'} proposta!`);
     }
 }

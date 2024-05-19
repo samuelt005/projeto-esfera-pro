@@ -11,13 +11,13 @@ let valueInputProposal;
 let descriptionInputProposal;
 let tableContainerProposal;
 
-// Lista de interações
+// Lista de propostas
 let proposalList;
 let proposalPage;
 let shouldLoadMoreProposals;
 let isLoadingMoreProposals;
 
-// Buscar todas as interações
+// Buscar todas as propostas
 async function getProposal() {
     if (!shouldLoadMoreProposals || isLoadingMoreProposals) return;
 
@@ -56,12 +56,12 @@ async function getProposal() {
         });
 }
 
-// Busca apenas uma interação pelo id
+// Busca apenas uma proposta pelo id
 async function getOneProposal(id, isEditing) {
     await fetch(`${URL}/proposal/byId/${id}`)
         .then(response => {
             if (!response.ok) {
-                throw new Error(`Erro ao recuperar interação`);
+                throw new Error(`Erro ao recuperar proposta`);
             }
             return response.json();
         })
@@ -86,6 +86,7 @@ async function getOneProposal(id, isEditing) {
         })
         .catch(error => {
             console.error(error);
+            showErrorToast("Erro ao buscar proposta!");
         });
 }
 
@@ -126,7 +127,7 @@ function setStatusSelect() {
     })
 }
 
-// Adiciona linhas a tabela de interações
+// Adiciona linhas a tabela de propostas
 function addProposalRows(proposals) {
     const tableContent = document.querySelector(".table-content");
 
@@ -161,13 +162,15 @@ function createProposalTableRow(proposal) {
     return newRow;
 }
 
-// Adiciona os eventos dos botões da linha de um interação
+// Adiciona os eventos dos botões da linha de um proposta
 function addProposalRowButtonEvents(row) {
     const deleteButton = row.querySelector('.delete');
     const editButton = row.querySelector('.edit');
 
     deleteButton.addEventListener('click', () => {
-        deleteProposal(row).catch(error => console.error(error));
+        deleteProposal(row).catch(error => {
+            console.error(error)
+        });
     });
 
     editButton.addEventListener('click', () => {
@@ -181,7 +184,7 @@ function addProposalRowButtonEvents(row) {
     });
 }
 
-// Remove uma linha da tabela de interações
+// Remove uma linha da tabela de propostas
 async function deleteProposal(row) {
     const id = parseInt(row.getAttribute('data-row-id'));
 
@@ -209,19 +212,22 @@ async function deleteProposal(row) {
             if (index !== -1) {
                 selectedIds.splice(index, 1);
             }
+
+            showSuccessToast("Proposta excluída com sucesso!");
         }
 
     } catch (error) {
-        console.error('Erro ao excluir interação: ', error);
+        console.error('Erro ao excluir proposta: ', error);
+        showErrorToast("Erro ao excluir proposta!");
     }
 }
 
-// Adiciona o evento de salvar uma interação no botão de salvar
+// Adiciona o evento de salvar uma proposta no botão de salvar
 function addSaveProposalEvent(button) {
     button.addEventListener('click', saveProposal);
 }
 
-// Adiciona o evento de adicionar nova interação no botão de adicionar
+// Adiciona o evento de adicionar nova proposta no botão de adicionar
 function addNewProposalEvent(button) {
     button.addEventListener('click', () => {
         isEditingProposal = false;
@@ -246,7 +252,7 @@ function getProposalElements() {
     tableContainerProposal = document.querySelector('.table-container');
 }
 
-// Inicialização da página de interações
+// Inicialização da página de propostas
 function propostasStartup() {
     proposalList = [];
     proposalPage = 0;

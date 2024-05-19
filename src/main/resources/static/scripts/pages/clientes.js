@@ -62,6 +62,7 @@ async function getClients() {
         })
         .catch(() => {
             getMainFrameContent('error');
+            showErrorToast("Erro ao buscar clientes!");
         });
 }
 
@@ -95,6 +96,7 @@ async function getOneClient(id, isEditing) {
         })
         .catch(error => {
             console.error(error);
+            showErrorToast("Erro ao buscar cliente!");
         });
 }
 
@@ -123,6 +125,7 @@ async function getStates(stateSelect) {
         })
         .catch(error => {
             console.error(error);
+            showErrorToast("Erro ao buscar estados!");
         });
 }
 
@@ -159,6 +162,7 @@ async function getCitiesByState(state_id, event) {
         })
         .catch(error => {
             console.error(error);
+            showErrorToast("Erro ao buscar cidades!");
         });
 }
 
@@ -215,7 +219,9 @@ function addClientRowButtonEvents(row) {
     }
 
     deleteButton.addEventListener('click', () => {
-        deleteClient(row).catch(error => console.error(error));
+        deleteClient(row).catch(error => {
+            console.error(error)
+        });
     });
 
     editButton.addEventListener('click', () => {
@@ -257,10 +263,13 @@ async function deleteClient(row) {
             if (index !== -1) {
                 selectedIds.splice(index, 1);
             }
+
+            showSuccessToast("Cliente excluído com sucesso!");
         }
 
     } catch (error) {
         console.error('Erro ao excluir cliente: ', error);
+        showErrorToast("Erro ao excluir cliente!");
     }
 }
 

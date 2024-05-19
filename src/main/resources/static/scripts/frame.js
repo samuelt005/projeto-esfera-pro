@@ -163,8 +163,13 @@ function frameSetup() {
 }
 
 frameSetup();
-if (!showError) { // TODO temporary setup to test
+if (!showError) {
     menuButtons[2].click();
+
+    // TODO fazer a mensagem só exibir uma vez caso venha do login
+    setTimeout(() => {
+        showSuccessToast("Seja bem vindo!");
+    }, 200)
 } else {
     getMainFrameContent('error').then();
 }

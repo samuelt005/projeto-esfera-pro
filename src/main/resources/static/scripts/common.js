@@ -314,6 +314,7 @@ async function getAllClients(clientSelect) {
         })
         .catch(error => {
             console.error(error);
+            showErrorToast("Erro ao buscar clientes");
         });
 }
 

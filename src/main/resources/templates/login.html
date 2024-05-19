@@ -3,80 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
-</head>
-<body>
-<content>
-    <div class="content-container">
-        <div class="div-logo">
-            <div class="relative">
-                <div class="logo">
-                    <img class="logo-img" th:src="@{/images/logo.png}" alt="logo">
-                </div>
-                <div class="circle left-top"></div>
-                <div class="circle right-top"></div>
-                <div class="circle left-bottom"></div>
-            </div>
-        </div>
-        <div class="div-form">
-            <div class="button-toggle">
-                <button class="toggle-btn active" data-target="login-form">ENTRAR</button>
-                <button class="toggle-btn" data-target="register-form">CADASTRAR</button>
-            </div>
-            <div class="form">
-                <form id="login-register">
-                    <div class="form-content" id="login-form">
-                        <div>
-                            <h1 class="title">ENTRAR</h1>
-                        </div>
-                        <div class="div-input">
-                            <label for="email">Email</label>
-                            <input type="email" name="email" id="email" placeholder="Digite seu email">
-                            <label class="error" id="email-error">Preencha este campo com um e-mail valido</label>
-                        </div>
-                        <div class="div-input">
-                            <label for="password">Senha</label>
-                            <input type="password" name="password" id="password" placeholder="Digite sua senha">
-                            <label class="error" id="password-error">A senha deve conter mais de 8 caracteres</label>
-                        </div>
-                        <div class="div-button">
-                            <button id="logar" class="button2">ENTRAR</button>
-                        </div>
-                    </div>
-                    <div class="form-content hidden" id="register-form">
-                        <div>
-                            <h1 class="title">CADASTRAR</h1>
-                        </div>
-                        <div class="div-input">
-                            <label for="nome">Seu nome</label>
-                            <input type="text" name="nome" id="nome" placeholder="Informe seu nome">
-                            <label class="error" id="name-error">Preencha este campo com um nome valido</label>
-                        </div>
-                        <div class="div-input">
-                            <label for="telefone">Número de telefone</label>
-                            <input type="text" name="telefone" id="telefone" placeholder="00 00000-0000">
-                            <label class="error" id="phone-error">Preencha este campo com um telefone valido</label>
-                        </div>
-                        <div class="div-input">
-                            <label for="Remail">Email</label>
-                            <input type="email" name="email" id="Remail" placeholder="Informe seu email">
-                            <label class="error" id="Remail-error">Preencha este campo com um e-mail valido</label>
-                        </div>
-                        <div class="div-input">
-                            <label for="Rpassword">Senha</label>
-                            <input type="password" name="password" id="Rpassword" placeholder="Informe sua senha">
-                            <label class="error" id="Rpassword-error">A senha deve conter mais de 8 caracteres</label>
-                        </div>
-                        <div class="div-button">
-                            <button id="cadastrar" type="submit" class="button2">CADASTRAR</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</content>
-
-<styles>
     <link rel="stylesheet" th:href="@{/styles/modal.css}"/>
     <link rel="stylesheet" th:href="@{/styles/variables.css}"/>
     <link rel="stylesheet" th:href="@{/styles/reset.css}"/>
@@ -84,10 +10,82 @@
     <link rel="stylesheet" th:href="@{/styles/colors.css}"/>
     <link rel="stylesheet" th:href="@{/styles/login.css}"/>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
-</styles>
+</head>
+<body>
+<div class="content-container">
+    <div class="div-logo">
+        <div class="relative">
+            <div class="logo">
+                <img class="logo-img" th:src="@{/images/logo.png}" alt="logo">
+            </div>
+            <div class="circle left-top"></div>
+            <div class="circle right-top"></div>
+            <div class="circle left-bottom"></div>
+        </div>
+    </div>
+    <div class="div-form">
+        <div class="button-toggle">
+            <button class="toggle-btn active" data-target="login-form">ENTRAR</button>
+            <button class="toggle-btn" data-target="register-form">CADASTRAR</button>
+        </div>
+        <div class="form">
+            <form id="login-register">
+                <div class="form-content" id="login-form">
+                    <div>
+                        <h1 class="title">ENTRAR</h1>
+                    </div>
+                    <div class="div-input">
+                        <label for="email">Email</label>
+                        <input type="email" name="email" id="email" placeholder="Digite seu email">
+                        <label class="error" id="email-error">Preencha este campo com um e-mail valido</label>
+                    </div>
+                    <div class="div-input">
+                        <label for="password">Senha</label>
+                        <input type="password" name="password" id="password" placeholder="Digite sua senha">
+                        <label class="error" id="password-error">A senha deve conter mais de 8 caracteres</label>
+                    </div>
+                    <div class="div-button">
+                        <button id="logar" class="button2">ENTRAR</button>
+                    </div>
+                </div>
+                <div class="form-content hidden" id="register-form">
+                    <div>
+                        <h1 class="title">CADASTRAR</h1>
+                    </div>
+                    <div class="div-input">
+                        <label for="nome">Seu nome</label>
+                        <input type="text" name="nome" id="nome" placeholder="Informe seu nome">
+                        <label class="error" id="name-error">Preencha este campo com um nome valido</label>
+                    </div>
+                    <div class="div-input">
+                        <label for="telefone">Número de telefone</label>
+                        <input type="text" name="telefone" id="telefone" placeholder="00 00000-0000">
+                        <label class="error" id="phone-error">Preencha este campo com um telefone valido</label>
+                    </div>
+                    <div class="div-input">
+                        <label for="Remail">Email</label>
+                        <input type="email" name="email" id="Remail" placeholder="Informe seu email">
+                        <label class="error" id="Remail-error">Preencha este campo com um e-mail valido</label>
+                    </div>
+                    <div class="div-input">
+                        <label for="Rpassword">Senha</label>
+                        <input type="password" name="password" id="Rpassword" placeholder="Informe sua senha">
+                        <label class="error" id="Rpassword-error">A senha deve conter mais de 8 caracteres</label>
+                    </div>
+                    <div class="div-button">
+                        <button id="cadastrar" type="submit" class="button2">CADASTRAR</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-<script src="https://unpkg.com/imask"></script>
-<script th:src="@{/scripts/login.js}"></script>
+<div id="scripts">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script type="text/javascript" src="https://unpkg.com/imask"></script>
+    <script type="text/javascript" th:src="@{/scripts/toasts.js}"></script>
+    <script type="text/javascript" th:src="@{/scripts/login.js}"></script>
+</div>
 </body>
 </html>
