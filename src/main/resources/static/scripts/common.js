@@ -136,6 +136,18 @@ function addSwitchOverlayEvent(button) {
     button.addEventListener('click', switchOverlay);
 }
 
+// Converte um CPF no formato padrão para exibição
+function getCpfFormatted(cpfString) {
+    cpfString = cpfString.replace(/\D/g, '');
+    return cpfString.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
+}
+
+// Converte um CNPJ no formato padrão para exibição
+function getCnpjFormatted(cnpjString) {
+    cnpjString = cnpjString.replace(/\D/g, '');
+    return cnpjString.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, "$1.$2.$3/$4-$5");
+}
+
 // Converte tipo date para formato DD/MM/YYYY
 function getDateFormatted(dateISO) {
     const dateParts = dateISO.split('T')[0].split('-');
@@ -282,7 +294,7 @@ function switchSelectClass(event) {
 
 // Busca todos os clientes
 async function getAllClients(clientSelect) {
-    await fetch(`${URL}/client`)
+    await fetch(`${URL}/client/all`)
         .then(response => {
             if (!response.ok) {
                 throw new Error(`Erro ao recuperar clientes`);
@@ -293,7 +305,7 @@ async function getAllClients(clientSelect) {
             data.forEach((data) => {
                 const newOption = document.createElement('option');
                 newOption.value = data.id;
-                newOption.textContent = data.id + ' - ' + data.name;
+                newOption.textContent = data.id + ' - ' + data.company + ' - ' + getCnpjFormatted(data.cnpj);
                 newOption.classList.add('contact-option');
 
                 clientSelect.appendChild(newOption);

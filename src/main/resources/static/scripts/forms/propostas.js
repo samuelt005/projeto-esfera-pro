@@ -176,8 +176,6 @@ function validateProposalForm() {
 async function saveProposal() {
     if (!validateProposalForm()) return;
 
-    console.log(proposalForm)
-
     try {
         const response = await fetch(`${URL}/proposal`, {
             method: isEditingProposal ? 'PUT' : 'POST', headers: {

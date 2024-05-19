@@ -195,8 +195,6 @@ function validateInteractionForm() {
 async function saveInteraction() {
     if (!validateInteractionForm()) return;
 
-    console.log(interactionForm)
-
     try {
         const response = await fetch(`${URL}/interaction`, {
             method: isEditingInteraction ? 'PUT' : 'POST', headers: {

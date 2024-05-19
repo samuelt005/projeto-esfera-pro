@@ -235,8 +235,6 @@ function validateClientForm() {
 async function saveClient() {
     if (!validateClientForm()) return;
 
-    console.log(clientForm)
-
     try {
         const response = await fetch(`${URL}/client`, {
             method: isEditing ? 'PUT' : 'POST', headers: {

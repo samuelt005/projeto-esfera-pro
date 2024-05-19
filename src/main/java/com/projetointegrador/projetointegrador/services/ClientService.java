@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -46,6 +47,18 @@ public class ClientService {
         Example<Client> example = Example.of(exampleClient, matcher);
 
         return clientRepository.findAll(example, pageable);
+    }
+
+    // Lista todos os clientes ativos
+    public List<Client> listAllActiveClients() {
+        Client exampleClient = new Client();
+        exampleClient.setInactive(false);
+
+        ExampleMatcher matcher = ExampleMatcher.matching().withIgnorePaths("id");
+
+        Example<Client> example = Example.of(exampleClient, matcher);
+
+        return clientRepository.findAll(example);
     }
 
     // Cria um cliente

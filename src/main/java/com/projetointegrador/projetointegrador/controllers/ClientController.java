@@ -7,6 +7,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/client")
 public class ClientController {
@@ -35,7 +37,13 @@ public class ClientController {
         return ResponseEntity.ok().body(clients);
     }
 
-
+    // Rota para listar todos os clientes ativos sem paginação
+    @GetMapping("/all")
+    @ResponseBody
+    public ResponseEntity<?> listAllClients() {
+        List<Client> clients = clientService.listAllActiveClients();
+        return ResponseEntity.ok().body(clients);
+    }
 
     // Rota para criar um cliente
     @PostMapping
