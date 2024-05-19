@@ -1,6 +1,7 @@
 // Elementos comuns da página
 const mainContent = document.querySelector(".main-content");
 const overlay = document.querySelector(".overlay");
+const header = document.querySelector(".main")
 const allStyles = document.getElementById("styles");
 const sidebar = document.querySelector(".sidebar");
 const expandButton = document.querySelector(".expand-menu");
@@ -55,6 +56,7 @@ function loadSelectedPageScript(page) {
 
 // Busca o HTML da página selecionada no menu lateral
 async function getMainFrameContent(page) {
+    if (logado === 'true') {
     await fetch(`${URL}/page${page}`)
         .then(response => {
             if (!response.ok) {
@@ -66,31 +68,34 @@ async function getMainFrameContent(page) {
             const tempElement = document.createElement("div");
             tempElement.innerHTML = data;
 
-            const contentDiv = tempElement.querySelector('content');
-            const modalDiv = tempElement.querySelector('modal');
-            const stylesDiv = tempElement.querySelector('styles');
+                const contentDiv = tempElement.querySelector('content');
+                const modalDiv = tempElement.querySelector('modal');
+                const stylesDiv = tempElement.querySelector('styles');
 
 
-            if (modalDiv) {
-                overlay.innerHTML = modalDiv.innerHTML;
-            }
+                if (modalDiv) {
+                    overlay.innerHTML = modalDiv.innerHTML;
+                }
 
-            if (stylesDiv) {
-                allStyles.innerHTML = stylesDiv.innerHTML;
-            }
+                if (stylesDiv) {
+                    allStyles.innerHTML = stylesDiv.innerHTML;
+                }
 
-            if (contentDiv) {
-                mainContent.innerHTML = contentDiv.innerHTML;
-            }
+                if (contentDiv) {
+                    mainContent.innerHTML = contentDiv.innerHTML;
+                }
 
-            loadSelectedPageScript(page);
-        })
-        .catch(error => {
-            console.error(error);
-            loading.classList.add("hidden");
-            mainContent.classList.add("hidden");
-            canChangePage = true;
-        });
+                loadSelectedPageScript(page);
+            })
+            .catch(error => {
+                console.error(error);
+                loading.classList.add("hidden");
+                mainContent.classList.add("hidden");
+                canChangePage = true;
+            });
+    }else{
+        window.location.href = "/login";
+    }
 }
 
 // Expande o menu lateral

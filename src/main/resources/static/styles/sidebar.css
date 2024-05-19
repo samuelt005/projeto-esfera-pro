@@ -148,3 +148,7 @@
     visibility: visible;
     transition: opacity 0.7s, visibility 0.7s, width 0.7s, margin-left 0.7s;
 }
+
+.hidden {
+    display: none;
+}
