@@ -97,6 +97,11 @@
     transition: background-color 0.5s;
 }
 
+.sidebar-button.disabled:hover {
+    background-color: transparent;
+    cursor: default;
+}
+
 .sidebar-button.active {
     background-color: var(--main-purple);
 }
@@ -105,10 +110,18 @@
     fill: var(--main-orange);
 }
 
+.sidebar-button.disabled svg path {
+    fill: var(--button-disabled);
+}
+
 .sidebar.expanded .sidebar-button p {
     opacity: 1;
     visibility: visible;
     transition: opacity 0.7s, visibility 0.7s;
+}
+
+.sidebar-button.disabled p {
+    color: var(--button-disabled);
 }
 
 .sidebar.expanded .sidebar-button.active p {

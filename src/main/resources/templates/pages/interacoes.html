@@ -8,7 +8,7 @@
 <content>
     <div class="content-container">
         <div class="table-header">
-            <h2>Ligações</h2>
+            <h2>Interações</h2>
             <div th:replace="~{components/search :: search('pesquisar', 'Pesquisar', ~{icons/search/magnifying-glass :: magnifying-glass})}"></div>
             <div class="buttons">
                 <div th:replace="~{components/button1 :: button('filtrar', 'Filtrar', ~{icons/buttons/filters :: filters})}"></div>
@@ -30,7 +30,7 @@
                     <th>Cliente</th>
                     <th>Resultado</th>
                     <th>Meio de Contato</th>
-                    <th class="description">Descrição</th>
+                    <th>Descrição</th>
                     <th>Data - Hora</th>
                     <th>Duração</th>
                     <th>Ações</th>
@@ -61,7 +61,13 @@
                         <h4>Cliente</h4>
                         <div th:replace="~{components/input-select :: input('client', 'Escolha o cliente', 'false')}"></div>
                     </div>
-                    <div class="input-wrapper">
+                </div>
+                <div class="inputs-row">
+                    <div class="input-wrapper half-space">
+                        <h4>Proposta</h4>
+                        <div th:replace="~{components/input-select :: input('proposal', 'Escolha a proposta relacionada', 'false')}"></div>
+                    </div>
+                    <div class="input-wrapper half-space">
                         <h4>Meio de Contato</h4>
                         <div th:replace="~{components/input-select :: input('contact', 'Escolha o meio', 'false')}"></div>
                     </div>
@@ -71,24 +77,24 @@
                         <h4>Data</h4>
                         <div th:replace="~{components/input1 :: input('date', 'Digite a data da interação', 'string')}"></div>
                     </div>
-                    <div class="input-wrapper">
+                    <div class="input-wrapper half-space">
                         <h4>Resultado</h4>
                         <div th:replace="~{components/input-select :: input('result', 'Escolha o resultado', 'false')}"></div>
                     </div>
                 </div>
                 <div class="inputs-row">
-                    <div class="input-wrapper">
-                        <h4>Horário de ligação</h4>
+                    <div class="input-wrapper half-space">
+                        <h4>Horário de interação</h4>
                         <div th:replace="~{components/input1 :: input('time', '99:99', 'text')}"></div>
                     </div>
-                    <div class="input-wrapper">
+                    <div class="input-wrapper half-space">
                         <h4>Duração</h4>
                         <div th:replace="~{components/input1 :: input('duration', '99:99', 'text')}"></div>
                     </div>
                 </div>
                 <div class="inputs-row">
                     <div class="input-wrapper">
-                        <h4>Descrição da ligação</h4>
+                        <h4>Descrição da interação</h4>
                         <div th:replace="~{components/textarea1 :: input('description', 'Descreva o contato que teve')}"></div>
                     </div>
                 </div>

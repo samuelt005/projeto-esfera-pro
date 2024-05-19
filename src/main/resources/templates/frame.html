@@ -13,6 +13,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
+    <link rel="icon" th:href="@{/images/favicon.ico}" type="image/x-icon">
+    <link rel="shortcut icon" th:href="@{/images/favicon.ico}" type="image/x-icon">
 </head>
 <body>
 <section class="sidebar">
@@ -21,11 +25,11 @@
             <div th:replace="~{icons/sidebar/expand :: expand}"></div>
         </div>
         <div class="buttons">
-            <div th:replace="~{components/sidebar-button :: button('dashboard', 'Dashboard', ~{icons/sidebar/dashboard :: dashboard})}"></div>
-            <div th:replace="~{components/sidebar-button :: button('calendario', 'Calendário', ~{icons/sidebar/calendario :: calendario})}"></div>
-            <div th:replace="~{components/sidebar-button :: button('clientes', 'Clientes', ~{icons/sidebar/clientes :: clientes})}"></div>
-            <div th:replace="~{components/sidebar-button :: button('propostas', 'Propostas', ~{icons/sidebar/propostas :: propostas})}"></div>
-            <div th:replace="~{components/sidebar-button :: button('interacoes', 'Interações', ~{icons/sidebar/interacoes :: interacoes})}"></div>
+            <div th:replace="~{components/sidebar-button :: button('dashboard', 'Dashboard', ~{icons/sidebar/dashboard :: dashboard}, false)}"></div>
+            <div th:replace="~{components/sidebar-button :: button('calendario', 'Calendário', ~{icons/sidebar/calendario :: calendario}, false)}"></div>
+            <div th:replace="~{components/sidebar-button :: button('clientes', 'Clientes', ~{icons/sidebar/clientes :: clientes}, true)}"></div>
+            <div th:replace="~{components/sidebar-button :: button('propostas', 'Propostas', ~{icons/sidebar/propostas :: propostas}, true)}"></div>
+            <div th:replace="~{components/sidebar-button :: button('interacoes', 'Interações', ~{icons/sidebar/interacoes :: interacoes}, true)}"></div>
         </div>
     </div>
 
@@ -78,10 +82,12 @@
         let showError = /*[[${showError}]]*/ '';
         /*]]>*/
     </script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script src="https://unpkg.com/imask"></script>
 
     <script type="text/javascript" th:src="@{/scripts/table-buttons/cliente.js}"></script>
     <script type="text/javascript" th:src="@{/scripts/table-buttons/interacoes.js}"></script>
+    <script type="text/javascript" th:src="@{/scripts/table-buttons/propostas.js}"></script>
 
     <script type="text/javascript" th:src="@{/scripts/pages/calendario.js}"></script>
     <script type="text/javascript" th:src="@{/scripts/pages/clientes.js}"></script>
@@ -98,13 +104,15 @@
 
     <script type="text/javascript" th:src="@{/scripts/forms/clientes.js}"></script>
     <script type="text/javascript" th:src="@{/scripts/forms/interacoes.js}"></script>
+    <script type="text/javascript" th:src="@{/scripts/forms/propostas.js}"></script>
     <script type="text/javascript" th:src="@{/scripts/forms/validadeCpf.js}"></script>
     <script type="text/javascript" th:src="@{/scripts/forms/validadeCnpj.js}"></script>
 
+
+    <script type="text/javascript" th:src="@{/scripts/toasts.js}"></script>
     <script type="text/javascript" th:src="@{/scripts/frame.js}"></script>
     <script type="text/javascript" th:src="@{/scripts/header.js}"></script>
     <script type="text/javascript" th:src="@{/scripts/common.js}"></script>
-
 </div>
 </body>
 </html>

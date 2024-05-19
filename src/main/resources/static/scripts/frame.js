@@ -1,7 +1,6 @@
 // Elementos comuns da página
 const mainContent = document.querySelector(".main-content");
 const overlay = document.querySelector(".overlay");
-const header = document.querySelector(".main")
 const allStyles = document.getElementById("styles");
 const sidebar = document.querySelector(".sidebar");
 const expandButton = document.querySelector(".expand-menu");
@@ -10,9 +9,12 @@ const helpSidebarButton = document.querySelector(".need-help");
 const loading = document.querySelector(".loading");
 let isConfigPageOpened = false;
 let currentPage = 0;
+let canChangePage = true;
 
 // Carrega o script específico de cada página ao selecionar um item do menu
 function loadSelectedPageScript(page) {
+    let timeout = 1000;
+
     switch (page) {
         case 'dashboard':
             dashboardStartup();
@@ -39,27 +41,33 @@ function loadSelectedPageScript(page) {
             break;
 
         case 'error':
+            timeout = 200;
             errorStartup();
             break;
     }
 
-    loading.classList.add("hidden");
-    mainContent.classList.remove("hidden");
+    setTimeout(() => {
+        loading.classList.add("hidden");
+        mainContent.classList.remove("hidden");
+        canChangePage = true;
+    }, timeout);
 }
 
 // Busca o HTML da página selecionada no menu lateral
 async function getMainFrameContent(page) {
-    if (logado === 'true') {
-    await fetch(`${URL}/page${page}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Erro ao recuperar tela: ${page}`);
-            }
-            return response.text();
-        })
-        .then(data => {
-            const tempElement = document.createElement("div");
-            tempElement.innerHTML = data;
+    const loggedIn = JSON.parse(localStorage.getItem('isLogged'));
+
+    if (loggedIn) {
+        await fetch(`${URL}/page${page}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Erro ao recuperar tela: ${page}`);
+                }
+                return response.text();
+            })
+            .then(data => {
+                const tempElement = document.createElement("div");
+                tempElement.innerHTML = data;
 
                 const contentDiv = tempElement.querySelector('content');
                 const modalDiv = tempElement.querySelector('modal');
@@ -84,8 +92,9 @@ async function getMainFrameContent(page) {
                 console.error(error);
                 loading.classList.add("hidden");
                 mainContent.classList.add("hidden");
+                canChangePage = true;
             });
-    }else{
+    } else {
         window.location.href = "/login";
     }
 }
@@ -101,16 +110,19 @@ function expandButtonClicked() {
 
 // Modifica os botões laterais ao clicar em um deles
 function menuButtonClicked(event) {
-    isConfigPageOpened = false;
     const button = event.currentTarget;
     const page = button.getAttribute("page");
+    const disabled = button.getAttribute('data-disabled');
+
+    if (disabled || !canChangePage) return;
+
+    canChangePage = false;
+    isConfigPageOpened = false;
     currentPage = Array.from(menuButtons).findIndex((btn) => btn.getAttribute("page") === page);
 
     showError = false;
 
-    if (button.classList.contains("active")) {
-        return;
-    }
+    if (button.classList.contains("active")) return;
 
     mainContent.classList.add("hidden");
     loading.classList.remove("hidden");
@@ -149,9 +161,15 @@ function frameSetup() {
 
     helpSidebarButtonSetup();
 }
+
 frameSetup();
-if (!showError) { // TODO temporary setup to test
-    menuButtons[0].click();
+if (!showError) {
+    menuButtons[2].click();
+
+    // TODO fazer a mensagem só exibir uma vez caso venha do login
+    setTimeout(() => {
+        showSuccessToast("Seja bem vindo!");
+    }, 200)
 } else {
     getMainFrameContent('error').then();
 }

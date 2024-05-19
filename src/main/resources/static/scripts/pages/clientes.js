@@ -18,13 +18,21 @@ let numberInput;
 let zipCodeInput;
 let stateSelect;
 let citySelect;
+let tableContainerClient;
 
 // Lista de clientes
-let clientList = [];
+let clientList;
+let clientPage;
+let shouldLoadMoreClient;
+let isLoadingMoreClient;
 
 // Buscar todos os clientes
 async function getClients() {
-    await fetch(`${URL}/client`)
+    if (!shouldLoadMoreClient || isLoadingMoreClient) return;
+
+    isLoadingMoreClient = true;
+
+    await fetch(`${URL}/client/${clientPage}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error(`Erro ao recuperar clientes`);
@@ -32,11 +40,29 @@ async function getClients() {
             return response.json();
         })
         .then(data => {
-            clientList.push(...data);
-            addClientRows(data);
+            if (clientPage + 1 === data.totalPages) {
+                shouldLoadMoreClient = false;
+            }
+
+            const itemsToAdd = [];
+            data.content.forEach((item) => {
+                const isDuplicate = clientList.some((existingItem) => {
+                    return existingItem.id === item.id;
+                });
+
+                if (!isDuplicate) {
+                    itemsToAdd.push(item);
+                }
+            });
+
+            clientPage++;
+            isLoadingMoreClient = false;
+            clientList.push(...itemsToAdd);
+            addClientRows(itemsToAdd);
         })
         .catch(() => {
             getMainFrameContent('error');
+            showErrorToast("Erro ao buscar clientes!");
         });
 }
 
@@ -70,6 +96,7 @@ async function getOneClient(id, isEditing) {
         })
         .catch(error => {
             console.error(error);
+            showErrorToast("Erro ao buscar cliente!");
         });
 }
 
@@ -98,6 +125,7 @@ async function getStates(stateSelect) {
         })
         .catch(error => {
             console.error(error);
+            showErrorToast("Erro ao buscar estados!");
         });
 }
 
@@ -134,6 +162,7 @@ async function getCitiesByState(state_id, event) {
         })
         .catch(error => {
             console.error(error);
+            showErrorToast("Erro ao buscar cidades!");
         });
 }
 
@@ -158,7 +187,7 @@ function createClientTableRow(client) {
             ${rowCheckboxIcon}
         </th>
         <td>${client.name}</td>
-        <td>${client.cnpj ? client.cnpj : client.cpf}</td>
+        <td>${client.cnpj ? getCnpjFormatted(client.cnpj) : getCpfFormatted(client.cpf)}</td>
         <td>${client.company}</td>
         <td>${client.telephone === "" || client.telephone === null ? '-' : client.telephone}</td>
         <td>${client.email === "" || client.email === null ? '-' : client.email}</td>
@@ -190,7 +219,9 @@ function addClientRowButtonEvents(row) {
     }
 
     deleteButton.addEventListener('click', () => {
-        deleteClient(row).catch(error => console.error(error));
+        deleteClient(row).catch(error => {
+            console.error(error)
+        });
     });
 
     editButton.addEventListener('click', () => {
@@ -232,10 +263,13 @@ async function deleteClient(row) {
             if (index !== -1) {
                 selectedIds.splice(index, 1);
             }
+
+            showSuccessToast("Cliente excluído com sucesso!");
         }
 
     } catch (error) {
         console.error('Erro ao excluir cliente: ', error);
+        showErrorToast("Erro ao excluir cliente!");
     }
 }
 
@@ -281,10 +315,16 @@ function getClientElements() {
     zipCodeInput = document.querySelector('input[name="zip_code"]');
     stateSelect = document.querySelector('select[name="state"]');
     citySelect = document.querySelector('select[name="city"]');
+    tableContainerClient = document.querySelector('.table-container');
 }
 
 // Inicialização da página de clientes
 function clientesStartup() {
+    clientList = [];
+    clientPage = 0;
+    shouldLoadMoreClient = true;
+    isLoadingMoreClient = false;
+
     getClients().then(() => {
         getClientElements();
         addNewClientEvent(buttonAddNew);
@@ -298,6 +338,8 @@ function clientesStartup() {
             addSelectedDataEvent(citySelect);
             setInputMasks();
         });
+
+        setInfiniteScroll(tableContainerClient);
     });
 }
 

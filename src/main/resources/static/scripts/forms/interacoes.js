@@ -193,9 +193,10 @@ function validateInteractionForm() {
 
 // Salva uma nova interação ou sua edição
 async function saveInteraction() {
-    if (!validateInteractionForm()) return;
-
-    console.log(interactionForm)
+    if (!validateInteractionForm()) {
+        showWarningToast("Preencha todos os campos obrigatórios!");
+        return;
+    }
 
     try {
         const response = await fetch(`${URL}/interaction`, {
@@ -210,11 +211,14 @@ async function saveInteraction() {
             console.error('Erro: ' + responseData.message);
             return;
         } else {
-            await getOneInteraction(responseData.id, isEditingInteraction);
+            await getOneInteraction(responseData.id, isEditingInteraction).then(() => {
+                showSuccessToast(`Interação ${isEditingInteraction ? 'editada' : 'cadastrada'} com sucesso!`);
+            });
         }
 
         switchOverlay();
     } catch (error) {
         console.error(isEditingInteraction ? 'Erro ao editar interação:' : 'Erro ao criar interação:', error);
+        showErrorToast(`Erro ao ${isEditingInteraction ? 'editar' : 'cadastrar'} interação!`);
     }
 }

@@ -7,6 +7,8 @@ import com.projetointegrador.projetointegrador.validators.CnpjValidator;
 import com.projetointegrador.projetointegrador.validators.CpfValidator;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -36,7 +38,7 @@ public class ClientService {
     }
 
     // Lista todos os clientes ativos
-    public ResponseEntity<?> listActiveClients() {
+    public Page<Client> listActiveClients(Pageable pageable) {
         Client exampleClient = new Client();
         exampleClient.setInactive(false);
 
@@ -44,8 +46,19 @@ public class ClientService {
 
         Example<Client> example = Example.of(exampleClient, matcher);
 
-        List<Client> clients = clientRepository.findAll(example);
-        return ResponseEntity.ok().body(clients);
+        return clientRepository.findAll(example, pageable);
+    }
+
+    // Lista todos os clientes ativos
+    public List<Client> listAllActiveClients() {
+        Client exampleClient = new Client();
+        exampleClient.setInactive(false);
+
+        ExampleMatcher matcher = ExampleMatcher.matching().withIgnorePaths("id");
+
+        Example<Client> example = Example.of(exampleClient, matcher);
+
+        return clientRepository.findAll(example);
     }
 
     // Cria um cliente
