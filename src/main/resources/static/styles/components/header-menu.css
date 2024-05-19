@@ -64,4 +64,9 @@
     border-radius: 0 0 10px 10px;
 }
 
-
+.menu-item-container .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+}
