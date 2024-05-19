@@ -151,10 +151,13 @@ function getDateISO(date) {
 // Recebe um double e converte para o formato de reais
 function formatCurrency(value) {
     const valueParts = String(value).split('.');
+    let formattedValue = valueParts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 
-    let formattedValue = valueParts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     if (valueParts.length > 1) {
-        formattedValue += ',' + valueParts[1];
+        let decimalPart = valueParts[1].padEnd(2, '0').slice(0, 2);
+        formattedValue += ',' + decimalPart;
+    } else {
+        formattedValue += ',00';
     }
 
     formattedValue = 'R$ ' + formattedValue;

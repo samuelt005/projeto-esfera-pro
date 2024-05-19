@@ -127,7 +127,7 @@ function createInteractionTableRow(interaction) {
         <td>${interaction.client.company ? interaction.client.company : interaction.name}</td>
         <td>${getResultDiv(interaction.result)}</td>
         <td>${getContactText(interaction.contact)}</td>
-        <td class="description">${interaction.description === "" ? '-' : interaction.description}</td>
+        <td>${interaction.description === "" ? '-' : interaction.description}</td>
         <td>${getDateFormatted(interaction.date) + ' - ' + interaction.time}</td>
         <td>${interaction.duration}</td>
         ${interactionButtons}

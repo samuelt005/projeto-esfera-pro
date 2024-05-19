@@ -127,7 +127,7 @@ function createProposalTableRow(proposal) {
         <td>${proposal.client.company ? proposal.client.company : proposal.name}</td>
         <td>${getServiceTypeText(proposal.serviceType)}</td>
         <td>${getStatusDiv(proposal.status)}</td>
-        <td class="description">${proposal.description === "" ? '-' : proposal.description}</td>
+        <td>${proposal.description === "" ? '-' : proposal.description}</td>
         <td>${getDateFormatted(proposal.offerDate)}</td>
         <td>${formatCurrency(proposal.value)}</td>
         ${proposalButtons}

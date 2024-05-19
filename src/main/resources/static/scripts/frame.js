@@ -9,6 +9,7 @@ const helpSidebarButton = document.querySelector(".need-help");
 const loading = document.querySelector(".loading");
 let isConfigPageOpened = false;
 let currentPage = 0;
+let canChangePage = true;
 
 // Carrega o script específico de cada página ao selecionar um item do menu
 function loadSelectedPageScript(page) {
@@ -42,8 +43,11 @@ function loadSelectedPageScript(page) {
             break;
     }
 
-    loading.classList.add("hidden");
-    mainContent.classList.remove("hidden");
+    setTimeout(() => {
+        loading.classList.add("hidden");
+        mainContent.classList.remove("hidden");
+        canChangePage = true;
+    }, 1000);
 }
 
 // Busca o HTML da página selecionada no menu lateral
@@ -82,6 +86,7 @@ async function getMainFrameContent(page) {
             console.error(error);
             loading.classList.add("hidden");
             mainContent.classList.add("hidden");
+            canChangePage = true;
         });
 }
 
@@ -96,6 +101,11 @@ function expandButtonClicked() {
 
 // Modifica os botões laterais ao clicar em um deles
 function menuButtonClicked(event) {
+    if (!canChangePage) {
+        return;
+    }
+
+    canChangePage = false;
     isConfigPageOpened = false;
     const button = event.currentTarget;
     const page = button.getAttribute("page");

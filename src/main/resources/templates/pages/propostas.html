@@ -30,7 +30,7 @@
                     <th>Cliente</th>
                     <th>Serviço</th>
                     <th>Status</th>
-                    <th class="description">Descrição</th>
+                    <th>Descrição</th>
                     <th>Data da oferta</th>
                     <th>Valor</th>
                     <th>Ações</th>
@@ -65,11 +65,11 @@
                 <div class="inputs-row">
                     <div class="input-wrapper half-space">
                         <h4>Data da Oferta</h4>
-                        <div th:replace="~{components/input1 :: input('offerDate', 'Digite a data da interação', 'string')}"></div>
+                        <div th:replace="~{components/input1 :: input('offerDate', 'Digite a data da proposta', 'string')}"></div>
                     </div>
                     <div class="input-wrapper half-space">
                         <h4>Serviço</h4>
-                        <div th:replace="~{components/input-select :: input('serviceType', 'Escolha o meio', 'false')}"></div>
+                        <div th:replace="~{components/input-select :: input('serviceType', 'Escolha o tipo de serviço', 'false')}"></div>
                     </div>
                 </div>
                 <div class="inputs-row">
@@ -79,7 +79,7 @@
                     </div>
                     <div class="input-wrapper half-space">
                         <h4>Status</h4>
-                        <div th:replace="~{components/input-select :: input('status', 'Escolha o resultado', 'false')}"></div>
+                        <div th:replace="~{components/input-select :: input('status', 'Defina o status da proposta', 'false')}"></div>
                     </div>
                 </div>
                 <div class="inputs-row">

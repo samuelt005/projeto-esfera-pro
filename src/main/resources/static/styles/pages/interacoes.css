@@ -130,9 +130,10 @@
 
 .table tr th:nth-child(6),
 .table tr td:nth-child(6) {
-    max-width: 600px;
+    width: 200px;
     padding-right: 10px;
     box-sizing: border-box;
+    flex-grow: 1;
 }
 
 .table tr th:nth-child(7),
