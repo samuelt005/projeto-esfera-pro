@@ -38,7 +38,7 @@ public class ClientServiceTests {
         assert optionalClient != null;
         Client actualClient = optionalClient.orElse(null);
 
-        // Asserting the response
+        // Verificando se encontrou o cliente
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(client, actualClient);
         System.out.println("Expected client: " + client);

@@ -36,7 +36,7 @@ public class InteractionServiceTests {
         assert optionalInteraction != null;
         Interaction actualInteraction = optionalInteraction.orElse(null);
 
-        // Asserting the response
+        // Verificando se encontrou a interação
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(interaction, actualInteraction);
         System.out.println("Expected interaction: " + interaction);
@@ -78,7 +78,7 @@ public class InteractionServiceTests {
 
         ResponseEntity<?> responseEntity = interactionService.createInteraction(mockInteraction);
 
-        // Verifica se a interaction foi criado com sucesso e compara o status da request
+        // Verifica se a interação foi criada com sucesso e compara o status da request
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertNotNull(responseEntity.getBody());
         assertEquals(mockInteraction, responseEntity.getBody());
@@ -96,7 +96,7 @@ public class InteractionServiceTests {
 
         ResponseEntity<?> responseEntity = interactionService.updateInteraction(mockInteraction);
 
-        // Verifica se a interaction foi atualizado com sucesso e compara o status da request
+        // Verifica se a interação foi atualizada com sucesso e compara o status da request
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertNotNull(responseEntity.getBody());
 
@@ -113,7 +113,7 @@ public class InteractionServiceTests {
 
         ResponseEntity<?> responseEntity = interactionService.deleteInteraction(interactionId);
 
-        // Verifica se a interaction foi desativado com sucesso e compara o status da request
+        // Verifica se a interação foi desativada com sucesso e compara o status da request
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         Response responseBody = (Response) responseEntity.getBody();
         assertNotNull(responseBody);
