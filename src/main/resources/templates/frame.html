@@ -25,7 +25,7 @@
             <div th:replace="~{icons/sidebar/expand :: expand}"></div>
         </div>
         <div class="buttons">
-            <div th:replace="~{components/sidebar-button :: button('dashboard', 'Dashboard', ~{icons/sidebar/dashboard :: dashboard}, false)}"></div>
+            <div th:replace="~{components/sidebar-button :: button('dashboard', 'Dashboard', ~{icons/sidebar/dashboard :: dashboard}, true)}"></div>
             <div th:replace="~{components/sidebar-button :: button('calendario', 'Calendário', ~{icons/sidebar/calendario :: calendario}, false)}"></div>
             <div th:replace="~{components/sidebar-button :: button('clientes', 'Clientes', ~{icons/sidebar/clientes :: clientes}, true)}"></div>
             <div th:replace="~{components/sidebar-button :: button('propostas', 'Propostas', ~{icons/sidebar/propostas :: propostas}, true)}"></div>
@@ -83,6 +83,7 @@
         /*]]>*/
     </script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://unpkg.com/imask"></script>
 
     <script type="text/javascript" th:src="@{/scripts/table-buttons/cliente.js}"></script>

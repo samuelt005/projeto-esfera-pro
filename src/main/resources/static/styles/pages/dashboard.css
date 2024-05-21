@@ -1,7 +1,117 @@
 .content-container {
     display: flex;
     align-items: center;
+    justify-content: flex-start;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    height: 100%;
+    background-color: var(--dashboard-background);
+    padding: 15px;
+    border-radius: 35px;
+    box-sizing: border-box;
+}
+
+.first-line {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    height: 200px;
+}
+
+.second-line,
+.third-line {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+}
+
+.small-graph-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: column;
+    border-radius: 20px;
+    height: 100%;
+    background-color: var(--white);
+    padding: 24px;
+    box-sizing: border-box;
+}
+
+.medium-graph-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 20px;
+    gap: 14px;
+    height: 100%;
+    flex-grow: 1;
+    background-color: var(--white);
+    padding: 24px;
+    box-sizing: border-box;
+}
+
+.large-graph-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px;
+    height: 100px;
+    flex-grow: 1;
+    background-color: var(--white);
+    max-width: calc(50% - 5px);
+    padding: 24px;
+    box-sizing: border-box;
+}
+
+.data-wrapper {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-direction: column;
+    height: 100%;
+    min-width: 160px;
+}
+
+.small-graph-title,
+.medium-graph-title {
+    font-size: 20px;
+    font-weight: bold;
+    width: 100%;
+    max-width: 100px;
+    line-height: 24px;
+    color: var(--text-primary);
+}
+
+.data-text-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.small-graph-total,
+.medium-graph-total {
+    font-size: 60px;
+    font-weight: bold;
+    width: 100%;
+    color: var(--text-primary);
+}
+
+.increase-wrapper {
+    display: flex;
+    gap: 4px;
+}
+
+
+.graph-wrapper {
+    display: flex;
+    align-items: center;
     justify-content: center;
     width: 100%;
     height: 100%;
+    background-color: #cbcbcb;
 }
