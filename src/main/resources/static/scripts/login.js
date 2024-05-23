@@ -14,6 +14,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const RinputEmail = document.querySelector('#Remail');
     const RinputSenha = document.querySelector('#Rpassword');
 
+    let isRegistering = false;
+
     let data = {
         name: '', email: '', password: '', phone: ''
     };
@@ -139,6 +141,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function cadastrar() {
         buttonCadastrar.addEventListener('click', (event) => {
+            console.log(isRegistering);
+            if (isRegistering) return;
+            isRegistering = true;
+
             event.preventDefault();
             if (validateFormRegister()) {
                 fetch('/user/register', {
@@ -150,12 +156,14 @@ document.addEventListener('DOMContentLoaded', () => {
                         showSuccessToast("Usuário cadastrado com sucesso! Você será redirecionado para a página de login.");
                         setTimeout(() => {
                             window.location.href = '/login';
-                        }, 3000);
+                            isRegistering = false;
+                        }, 2000);
                     } else {
                         return response.json();
                     }
                 }).then(responseJSON => {
                     showErrorToast(responseJSON.message);
+                    isRegistering = false;
                 });
             } else {
                 localStorage.setItem("isLogged", JSON.stringify(false));

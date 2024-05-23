@@ -318,6 +318,32 @@ async function getAllClients(clientSelect) {
         });
 }
 
+// Busca todos os clientes
+async function getAllProposals(proposalSelect) {
+    await fetch(`${URL}/proposal/all`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Erro ao recuperar propostas`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            data.forEach((data) => {
+                const newOption = document.createElement('option');
+                newOption.value = data.id;
+                newOption.textContent = getDateFormatted(data.offerDate) + ' - ' + formatCurrency(data.value);
+                newOption.classList.add('proposal-option');
+
+                proposalSelect.appendChild(newOption);
+            })
+            proposalSelect.disabled = false;
+        })
+        .catch(error => {
+            console.error(error);
+            showErrorToast("Erro ao buscar propostas");
+        });
+}
+
 // Função para definir o evento do scroll infinito na tabela
 function setInfiniteScroll(tableContainer) {
     tableContainer.addEventListener('scroll', function () {

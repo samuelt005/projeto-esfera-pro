@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -43,6 +44,18 @@ public class ProposalService {
         Example<Proposal> example = Example.of(exampleProposal, matcher);
 
         return proposalRepository.findAll(example, pageable);
+    }
+
+    // Lista todas as propostas ativas
+    public List<Proposal> listAllActiveProposals() {
+        Proposal exampleProposal = new Proposal();
+        exampleProposal.setInactive(false);
+
+        ExampleMatcher matcher = ExampleMatcher.matching().withIgnorePaths("id");
+
+        Example<Proposal> example = Example.of(exampleProposal, matcher);
+
+        return proposalRepository.findAll(example);
     }
 
     // Cria uma proposta

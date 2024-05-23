@@ -27,8 +27,13 @@ public class Interaction {
     @Column(nullable = false)
     private Boolean inactive;
     @ManyToOne
-    @JoinColumn(name = "client_id", referencedColumnName = "id")
+    @JoinColumn(name = "client_id", referencedColumnName = "id", nullable = false)
+    @JsonIgnoreProperties({"address", "cpf", "cnpj", "email", "whatsapp", "cellphone", "telephone", "inactive"})
     private Client client;
+    @ManyToOne
+    @JoinColumn(name = "proposal_id", referencedColumnName = "id", nullable = false)
+    @JsonIgnoreProperties({"client", "offerDate", "value", "serviceType", "status", "description", "inactive"})
+    private Proposal proposal;
 
     public Long getId() {
         return id;
@@ -102,16 +107,24 @@ public class Interaction {
         this.client = client;
     }
 
+    public Proposal getProposal() {
+        return proposal;
+    }
+
+    public void setProposal(Proposal proposal) {
+        this.proposal = proposal;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Interaction that = (Interaction) o;
-        return Objects.equals(id, that.id) && Objects.equals(date, that.date) && Objects.equals(time, that.time) && Objects.equals(duration, that.duration) && Objects.equals(result, that.result) && Objects.equals(contact, that.contact) && Objects.equals(description, that.description) && Objects.equals(inactive, that.inactive) && Objects.equals(client, that.client);
+        return Objects.equals(id, that.id) && Objects.equals(date, that.date) && Objects.equals(time, that.time) && Objects.equals(duration, that.duration) && Objects.equals(result, that.result) && Objects.equals(contact, that.contact) && Objects.equals(description, that.description) && Objects.equals(inactive, that.inactive) && Objects.equals(client, that.client) && Objects.equals(proposal, that.proposal);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, date, time, duration, result, contact, description, inactive, client);
+        return Objects.hash(id, date, time, duration, result, contact, description, inactive, client, proposal);
     }
 }

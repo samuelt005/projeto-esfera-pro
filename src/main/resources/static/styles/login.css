@@ -1,7 +1,3 @@
-:root {
-    --purple-contrast: #3D0053;
-}
-
 body {
     overflow: hidden;
     font-family: "Roboto", sans-serif;
@@ -10,14 +6,17 @@ body {
 }
 
 .error {
-    display: none;
+    height: 10px;
+    text-overflow: ellipsis;
+    opacity: 0;
 }
 
 .error.invalid {
     display: block;
     font-size: x-small;
     font-weight: bold;
-    color: red;
+    color: var(--red);
+    opacity: 1;
 }
 
 .content-container {
@@ -34,7 +33,7 @@ body {
     text-align: center;
     width: 50vw;
     height: 100vh;
-    background: var(--purple-contrast);
+    background: var(--main-purple);
 }
 
 .logo {
@@ -91,7 +90,7 @@ body {
     justify-content: center;
     align-items: center;
     width: 50%;
-    background-color: #EEEEEE;
+    background-color: var(--form-background);
     z-index: 10;
 }
 
@@ -100,14 +99,14 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: #FFFFFF;
+    background-color: var(--white);
     width: 75%;
     height: 75%;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
     font-weight: bold;
-    color: var(--purple-contrast);
+    color: var(--main-purple);
 }
 
 form {
@@ -122,7 +121,7 @@ form {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: white;
+    background-color: var(--white);
     color: darkgrey;
     width: 73%;
     padding: 1%;
@@ -136,6 +135,8 @@ form {
     background-color: transparent;
     border: none;
     cursor: pointer;
+    font-weight: bold;
+    color: var(--text-primary);
     border-radius: 10px;
     width: 100%;
     transition: background-color 0.3s ease-in-out;
@@ -165,6 +166,7 @@ form {
 
 .form h1 {
     font-size: 2rem;
+    padding-bottom: 20px;
 }
 
 .div-input label {
@@ -238,5 +240,15 @@ form {
     100% {
         opacity: 1;
         transform: translateY(0%);
+    }
+}
+
+@media (max-width: 900px) {
+    .div-logo {
+        display: none;
+    }
+
+    .div-form {
+        width: 100%;
     }
 }
