@@ -1,3 +1,5 @@
+let isSavingClient = false;
+
 let clientForm = {
     id: null, name: "", cpf: "", cnpj: "", company: "", inactive: false, address: {
         id: null, street: "", zip_code: "", number: null, city: {
@@ -238,6 +240,9 @@ async function saveClient() {
         return;
     }
 
+    if (isSavingClient) return;
+    isSavingClient = true;
+
     try {
         const response = await fetch(`${URL}/client`, {
             method: isEditing ? 'PUT' : 'POST', headers: {
@@ -253,6 +258,9 @@ async function saveClient() {
         } else {
             await getOneClient(responseData.id, isEditing).then(() => {
                 showSuccessToast(`Cliente ${isEditing ? 'editado' : 'cadastrado'} com sucesso!`);
+                setTimeout(() => {
+                    isSavingClient = false;
+                }, 1000);
             });
         }
 
@@ -260,5 +268,6 @@ async function saveClient() {
     } catch (error) {
         console.error(isEditing ? 'Erro ao editar cliente:' : 'Erro ao criar cliente:', error);
         showErrorToast(`Erro ao ${isEditing ? 'editar' : 'cadastrar'} cliente!`);
+        isSavingClient = false;
     }
 }

@@ -4,6 +4,7 @@ let buttonCloseModalInteraction;
 let cancelCloseModalInteraction;
 let saveCloseModalInteraction;
 let clientSelectInteraction;
+let proposalSelectInteraction;
 let contactSelectInteraction;
 let dateInputInteraction;
 let resultSelectInteraction;
@@ -245,6 +246,7 @@ function getInteractionElements() {
     cancelCloseModalInteraction = document.querySelector('.cancel-modal-button');
     saveCloseModalInteraction = document.querySelector('.save-modal-button');
     clientSelectInteraction = document.querySelector('select[name="client"]');
+    proposalSelectInteraction = document.querySelector('select[name="proposal"]');
     contactSelectInteraction = document.querySelector('select[name="contact"]');
     dateInputInteraction = document.querySelector('input[name="date"]');
     resultSelectInteraction = document.querySelector('select[name="result"]');
@@ -269,11 +271,16 @@ function interactionStartup() {
         addSwitchOverlayEvent(buttonCloseModalInteraction);
         addSaveInteractionEvent(saveCloseModalInteraction);
 
+        addSelectedDataEvent(resultSelectInteraction);
+        addSelectedDataEvent(contactSelectInteraction);
+
         getAllClients(clientSelectInteraction).then(() => {
             addSelectedDataEvent(clientSelectInteraction);
-            addSelectedDataEvent(resultSelectInteraction);
-            addSelectedDataEvent(contactSelectInteraction);
         });
+
+        getAllProposals(proposalSelectInteraction).then(() => {
+            addSelectedDataEvent(proposalSelectInteraction);
+        })
 
         setContactSelect();
         setResultSelect();

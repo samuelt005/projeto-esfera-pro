@@ -7,6 +7,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/proposal")
 public class ProposalController {
@@ -33,6 +35,14 @@ public class ProposalController {
         PageRequest pageRequest = PageRequest.of(page, size);
         Page<Proposal> proposals = proposalService.listActiveProposal(pageRequest);
         return ResponseEntity.ok().body(proposals);
+    }
+
+    // Rota para listar todas as propostas ativos sem paginação
+    @GetMapping("/all")
+    @ResponseBody
+    public ResponseEntity<?> listAllProposals() {
+        List<Proposal> proposal = proposalService.listAllActiveProposals();
+        return ResponseEntity.ok().body(proposal);
     }
 
     // Rota para criar uma proposta
