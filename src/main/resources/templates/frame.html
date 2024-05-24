@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Esfera</title>
+    <link rel="stylesheet" th:href="@{/styles/reset.css}">
+    <link rel="stylesheet" th:href="@{/styles/colors.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/frame.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/sidebar.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/header.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/loading.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/components/header-menu.css}"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
+    <link rel="icon" th:href="@{/images/favicon.ico}" type="image/x-icon">
+    <link rel="shortcut icon" th:href="@{/images/favicon.ico}" type="image/x-icon">
+</head>
+<body>
+<section class="sidebar">
+    <div class="top-content">
+        <div class="expand-menu">
+            <div th:replace="~{icons/sidebar/expand :: expand}"></div>
+        </div>
+        <div class="buttons">
+            <div th:replace="~{components/sidebar-button :: button('dashboard', 'Dashboard', ~{icons/sidebar/dashboard :: dashboard}, false)}"></div>
+            <div th:replace="~{components/sidebar-button :: button('calendario', 'Calendário', ~{icons/sidebar/calendario :: calendario}, false)}"></div>
+            <div th:replace="~{components/sidebar-button :: button('clientes', 'Clientes', ~{icons/sidebar/clientes :: clientes}, true)}"></div>
+            <div th:replace="~{components/sidebar-button :: button('propostas', 'Propostas', ~{icons/sidebar/propostas :: propostas}, true)}"></div>
+            <div th:replace="~{components/sidebar-button :: button('interacoes', 'Interações', ~{icons/sidebar/interacoes :: interacoes}, true)}"></div>
+        </div>
+    </div>
+
+    <div class="bottom-content">
+        <div class="need-help">
+            <div th:replace="~{icons/sidebar/help :: help}"></div>
+            <p>Ajuda</p>
+        </div>
+    </div>
+</section>
+
+<section class="main">
+    <header>
+        <div th:replace="~{icons/header/notifications :: notifications}"></div>
+        <div th:replace="~{icons/header/settings :: settings}"></div>
+        <div class="user-profile">
+            <div class="user-text">
+                <p class="user-name">Usuário Teste</p>
+                <p class="user-team">Time Teste</p>
+            </div>
+            <div th:replace="~{icons/header/user :: user}"></div>
+        </div>
+    </header>
+
+    <div th:replace="~{components/header-menu :: header-menu}"></div>
+
+    <div class="frame" id="mainFrame">
+        <div class="main-content hidden">
+        </div>
+        <div class="loading hidden">
+            <span class="loader-dot loader-dot-one"></span>
+            <span class="loader-dot loader-dot-two"></span>
+            <span class="loader-dot loader-dot-three"></span>
+        </div>
+    </div>
+
+    <div class="overlay hidden fade-out">
+    </div>
+</section>
+
+<div id="styles">
+</div>
+
+<div id="scripts">
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        const IP = /*[[${IP}]]*/ '';
+        const PORT = /*[[${PORT}]]*/ '';
+        const URL = 'http://' + IP + ':' + PORT;
+        let showError = /*[[${showError}]]*/ '';
+        /*]]>*/
+    </script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="https://unpkg.com/imask"></script>
+
+    <script type="text/javascript" th:src="@{/scripts/table-buttons/cliente.js}"></script>
+    <script type="text/javascript" th:src="@{/scripts/table-buttons/interacoes.js}"></script>
+    <script type="text/javascript" th:src="@{/scripts/table-buttons/propostas.js}"></script>
+
+    <script type="text/javascript" th:src="@{/scripts/pages/calendario.js}"></script>
+    <script type="text/javascript" th:src="@{/scripts/pages/clientes.js}"></script>
+    <script type="text/javascript" th:src="@{/scripts/pages/dashboard.js}"></script>
+    <script type="text/javascript" th:src="@{/scripts/pages/interacoes.js}"></script>
+    <script type="text/javascript" th:src="@{/scripts/pages/propostas.js}"></script>
+    <script type="text/javascript" th:src="@{/scripts/pages/configs.js}"></script>
+    <script type="text/javascript" th:src="@{/scripts/pages/error.js}"></script>
+
+    <script type="text/javascript" th:src="@{/scripts/pages/configs/goals.js}"></script>
+    <script type="text/javascript" th:src="@{/scripts/pages/configs/help.js}"></script>
+    <script type="text/javascript" th:src="@{/scripts/pages/configs/profile.js}"></script>
+    <script type="text/javascript" th:src="@{/scripts/pages/configs/team.js}"></script>
+
+    <script type="text/javascript" th:src="@{/scripts/forms/clientes.js}"></script>
+    <script type="text/javascript" th:src="@{/scripts/forms/interacoes.js}"></script>
+    <script type="text/javascript" th:src="@{/scripts/forms/propostas.js}"></script>
+    <script type="text/javascript" th:src="@{/scripts/forms/validadeCpf.js}"></script>
+    <script type="text/javascript" th:src="@{/scripts/forms/validadeCnpj.js}"></script>
+
+
+    <script type="text/javascript" th:src="@{/scripts/toasts.js}"></script>
+    <script type="text/javascript" th:src="@{/scripts/frame.js}"></script>
+    <script type="text/javascript" th:src="@{/scripts/header.js}"></script>
+    <script type="text/javascript" th:src="@{/scripts/common.js}"></script>
+</div>
+</body>
+</html>

@@ -1,0 +1,3 @@
+<div th:fragment="button(name, text, filled)" class="button2" th:classappend="${filled} ? 'filled ' + ${name} : ${name}">
+    <p th:text="${text}"></p>
+</div>

@@ -1,0 +1,27 @@
+:root {
+    --main-purple: #3D0053;
+    --ligth-purple: #620086;
+    --main-orange: #F7BD2E;
+    --violet: #9E6396;
+
+    --white: #fff;
+    --gray: #d9d9d9;
+    --red: #FD4B47;
+
+    --field: #F0F0F7;
+    --field-focus: #dcdce3;
+    --field-placeholder: #9393C2;
+    --overlay-background: rgba(0, 0, 0, 0.5);
+
+    --button: #EFF1F3;
+    --button-hover: #F0F0F7;
+    --button-disabled: #e3e3e3;
+
+    --table-primary: #E5E5E5;
+    --table-secondary: #F9FAFB;
+
+    --text-primary: #101828;
+    --text-secondary: #475467;
+
+    --form-background: #EEEEEE;
+}

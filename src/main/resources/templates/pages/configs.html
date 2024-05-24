@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Configurações</title>
+</head>
+<body>
+<content>
+    <div class="content-container">
+        <div class="menu-header">
+            <h2>Configurações</h2>
+            <div class="header-options">
+                <div class="header-option" data-page="profile">
+                    <p>Perfil</p>
+                </div>
+                <div class="header-option" data-page="team">
+                    <p>Equipe</p>
+                </div>
+                <div class="header-option" data-page="goals">
+                    <p>Metas</p>
+                </div>
+                <div class="header-option" data-page="help">
+                    <p>Ajuda</p>
+                </div>
+            </div>
+        </div>
+
+        <div th:replace="~{pages/configs/help :: help()}"></div>
+        <div th:replace="~{pages/configs/profile :: profile()}"></div>
+        <div th:replace="~{pages/configs/team :: team()}"></div>
+        <div th:replace="~{pages/configs/goals :: goals()}"></div>
+    </div>
+</content>
+
+
+<styles>
+    <link rel="stylesheet" th:href="@{/styles/pages/configs.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/components/help-dropdown.css}"/>
+</styles>
+</body>
+</html>

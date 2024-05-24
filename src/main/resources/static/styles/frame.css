@@ -1,0 +1,81 @@
+body {
+    display: flex;
+    flex-direction: row;
+    width: 100vw;
+    max-width: calc(100vw - 20px);
+    height: 100vh;
+    max-height: calc(100vh - 20px);
+    font-family: "Roboto", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.main {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: calc(100vw - 20px);
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.main header {
+    width: 100%;
+    height: 80px;
+}
+
+.frame {
+    width: 100%;
+    height: calc(100% - 40px);
+}
+
+.main-content {
+    width: 100%;
+    height: 100%;
+}
+
+.main-content.hidden {
+    display: none;
+}
+
+.overlay {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: calc(100vh - 40px);
+    padding: 20px 0;
+    background-color: var(--overlay-background);
+    z-index: 10;
+    opacity: 0;
+    animation: fadeIn 0.5s forwards;
+}
+
+.overlay.hidden {
+    display: none;
+}
+
+.overlay.fade-out {
+    animation: fadeOut 0.5s forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}

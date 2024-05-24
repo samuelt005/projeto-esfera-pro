@@ -1,0 +1,57 @@
+.button-table .icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 24px;
+}
+
+.button-table .icon:hover {
+    cursor: pointer;
+}
+
+.button-table {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+    gap: 10px;
+    padding: 10px 16px;
+    border-radius: 5px;
+    height: 40px;
+    box-sizing: border-box;
+    font-size: 16px;
+    line-height: 20px;
+    white-space: nowrap;
+    color: var(--text-primary);
+    font-weight: 600;
+    background-color: var(--table-primary);
+    transition: background-color 0.5s;
+    user-select: none;
+}
+
+.button-table.disabled {
+    opacity: 0.5;
+}
+
+.button-table:hover {
+    cursor: pointer;
+    background-color: var(--button-hover);
+    transition: background-color 0.5s;
+}
+
+.button-table.disabled:hover {
+    cursor: default;
+    background-color: var(--table-primary);
+    transition: none;
+}
+
+.button-table.disabled:hover .icon {
+    cursor: default;
+}
+
+.button-table.rounded {
+    justify-content: center;
+    width: 40px;
+    padding: 0;
+    border-radius: 50px;
+}

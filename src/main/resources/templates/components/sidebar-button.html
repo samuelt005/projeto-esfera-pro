@@ -1,0 +1,10 @@
+<div th:fragment="button(page, title, icon, disabled)" class="sidebar-button inactive"
+     th:classappend="${disabled} ? '' : 'disabled'"
+     th:attr="data-disabled=${disabled} ? null : 'true'"
+     th:page="${page}"
+>
+    <div>
+        <div th:replace="${icon}"></div>
+        <p th:text="${title}"></p>
+    </div>
+</div>

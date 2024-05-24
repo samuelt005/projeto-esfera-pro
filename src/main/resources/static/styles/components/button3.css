@@ -1,0 +1,19 @@
+.button-add-new {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    width: 60px;
+    height: 60px;
+    border-radius: 20px;
+    background-color: var(--main-purple);
+    transition: background-color 0.5s;
+}
+
+.button-add-new:hover {
+    cursor: pointer;
+    background-color: var(--ligth-purple);
+    transition: background-color 0.5s;
+}

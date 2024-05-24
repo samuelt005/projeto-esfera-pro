@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Interações</title>
+</head>
+<body>
+<content>
+    <div class="content-container">
+        <div class="table-header">
+            <h2>Interações</h2>
+            <div th:replace="~{components/search :: search('pesquisar', 'Pesquisar', ~{icons/search/magnifying-glass :: magnifying-glass})}"></div>
+            <div class="buttons">
+                <div th:replace="~{components/button1 :: button('filtrar', 'Filtrar', ~{icons/buttons/filters :: filters})}"></div>
+                <div th:replace="~{components/button1 :: button('exportar', 'Exportar', ~{icons/buttons/export :: export})}"></div>
+            </div>
+        </div>
+        <div class="table-container">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th class="select-all-checkbox">
+                        <div>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                <path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/>
+                            </svg>
+                        </div>
+                    </th>
+                    <th>ID</th>
+                    <th>Cliente</th>
+                    <th>Resultado</th>
+                    <th>Meio de Contato</th>
+                    <th>Descrição</th>
+                    <th>Data - Hora</th>
+                    <th>Duração</th>
+                    <th>Ações</th>
+                </tr>
+                </thead>
+                <tbody class="table-content">
+                </tbody>
+            </table>
+            <div th:replace="~{components/button-add-new :: button}"></div>
+        </div>
+    </div>
+</content>
+
+<modal>
+    <div class="modal-container">
+        <header>
+            <h2>
+                Cadastrar interação
+            </h2>
+            <div class="close-modal-button">
+                <div th:replace="~{icons/buttons/close :: close}"></div>
+            </div>
+        </header>
+        <main>
+            <section>
+                <div class="inputs-row">
+                    <div class="input-wrapper">
+                        <h4>Cliente</h4>
+                        <div th:replace="~{components/input-select :: input('client', 'Escolha o cliente', 'false')}"></div>
+                    </div>
+                </div>
+                <div class="inputs-row">
+                    <div class="input-wrapper half-space">
+                        <h4>Proposta</h4>
+                        <div th:replace="~{components/input-select :: input('proposal', 'Escolha a proposta relacionada', 'false')}"></div>
+                    </div>
+                    <div class="input-wrapper half-space">
+                        <h4>Meio de Contato</h4>
+                        <div th:replace="~{components/input-select :: input('contact', 'Escolha o meio', 'false')}"></div>
+                    </div>
+                </div>
+                <div class="inputs-row">
+                    <div class="input-wrapper half-space">
+                        <h4>Data</h4>
+                        <div th:replace="~{components/input1 :: input('date', 'Digite a data da interação', 'string')}"></div>
+                    </div>
+                    <div class="input-wrapper half-space">
+                        <h4>Resultado</h4>
+                        <div th:replace="~{components/input-select :: input('result', 'Escolha o resultado', 'false')}"></div>
+                    </div>
+                </div>
+                <div class="inputs-row">
+                    <div class="input-wrapper half-space">
+                        <h4>Horário de interação</h4>
+                        <div th:replace="~{components/input1 :: input('time', '99:99', 'text')}"></div>
+                    </div>
+                    <div class="input-wrapper half-space">
+                        <h4>Duração</h4>
+                        <div th:replace="~{components/input1 :: input('duration', '99:99', 'text')}"></div>
+                    </div>
+                </div>
+                <div class="inputs-row">
+                    <div class="input-wrapper">
+                        <h4>Descrição da interação</h4>
+                        <div th:replace="~{components/textarea1 :: input('description', 'Descreva o contato que teve')}"></div>
+                    </div>
+                </div>
+            </section>
+        </main>
+        <footer>
+            <div th:replace="~{components/button2 :: button('cancel-modal-button', 'Cancelar', false)}"></div>
+            <div th:replace="~{components/button2 :: button('save-modal-button', 'Salvar', true)}"></div>
+        </footer>
+    </div>
+</modal>
+
+<styles>
+    <link rel="stylesheet" th:href="@{/styles/pages/interacoes.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/modal.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/components/search.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/components/button1.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/components/button2.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/components/button3.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/components/input1.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/components/textarea1.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/components/input-select.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/components/button-table.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/components/checkbox-table.css}"/>
+</styles>
+</body>
+</html>
