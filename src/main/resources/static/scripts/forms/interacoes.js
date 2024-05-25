@@ -1,3 +1,5 @@
+let isSavingInteraction = false;
+
 let interactionForm = {
     id: null,
     date: "",
@@ -8,6 +10,9 @@ let interactionForm = {
     description: "",
     inactive: false,
     client: {
+        id: null
+    },
+    proposal: {
         id: null
     }
 }
@@ -26,6 +31,9 @@ function resetFormInteraction() {
         inactive: false,
         client: {
             id: null
+        },
+        proposal: {
+            id: null
         }
     }
 }
@@ -36,6 +44,7 @@ function fillFieldsInteraction(interaction) {
 
     interactionForm.id = interaction.id;
     clientSelectInteraction.value = interaction.client.id;
+    proposalSelectInteraction.value = interaction.proposal.id;
     contactSelectInteraction.value = interaction.contact;
     resultSelectInteraction.value = interaction.result;
     dateInputInteraction.value = getDateFormatted(interaction.date);
@@ -44,6 +53,7 @@ function fillFieldsInteraction(interaction) {
     descriptionInputInteraction.value = interaction.description;
 
     clientSelectInteraction.classList.remove('unselected');
+    proposalSelectInteraction.classList.remove('unselected');
     contactSelectInteraction.classList.remove('unselected');
     resultSelectInteraction.classList.remove('unselected');
 
@@ -55,6 +65,7 @@ function fillFieldsInteraction(interaction) {
 // Limpa os avisos de erro dos campos do modal
 function cleanInvalidClassesInteraction() {
     clientSelectInteraction.classList.remove('invalid');
+    proposalSelectInteraction.classList.remove('invalid');
     contactSelectInteraction.classList.remove('invalid');
     resultSelectInteraction.classList.remove('invalid');
     dateInputInteraction.parentElement.classList.remove('invalid');
@@ -66,6 +77,7 @@ function cleanInvalidClassesInteraction() {
 // Reinicia os campos do modal
 function resetInteractionFields() {
     clientSelectInteraction.value = 0;
+    proposalSelectInteraction.value = 0;
     contactSelectInteraction.value = 0;
     resultSelectInteraction.value = 0;
     dateInputInteraction.value = "";
@@ -74,6 +86,7 @@ function resetInteractionFields() {
     descriptionInputInteraction.value = "";
 
     clientSelectInteraction.classList.add('unselected')
+    proposalSelectInteraction.classList.add('unselected')
     contactSelectInteraction.classList.add('unselected')
     resultSelectInteraction.classList.add('unselected')
 }
@@ -142,6 +155,14 @@ function validateInteractionForm() {
         interactionForm.client.id = clientIdValue;
     }
 
+    const proposalIdValue = parseInt(proposalSelectInteraction.value.trim());
+    if (proposalIdValue === null || proposalIdValue === 0) {
+        proposalSelectInteraction.classList.add('invalid');
+        isFormValid = false;
+    } else {
+        interactionForm.proposal.id = proposalIdValue;
+    }
+
     const contactIdValue = parseInt(contactSelectInteraction.value.trim());
     if (contactIdValue === null || contactIdValue === 0) {
         contactSelectInteraction.classList.add('invalid');
@@ -150,8 +171,10 @@ function validateInteractionForm() {
         interactionForm.contact = contactIdValue;
     }
 
-    if (dateInputInteraction.value.trim() !== "") {
-        interactionForm.date = getDateISO(dateInputInteraction.value);
+    const unmaskedDate = dateInputInteraction.value.replace(/_/g, '');
+    const dateISO = getDateISO(unmaskedDate);
+    if (dateISO.length === 10) {
+        interactionForm.date = dateISO;
     } else {
         interactionForm.date = "";
         dateInputInteraction.parentElement.classList.add('invalid');
@@ -166,7 +189,8 @@ function validateInteractionForm() {
         interactionForm.result = resultIdValue;
     }
 
-    if (timeInputInteraction.value.trim() !== "") {
+    const unmaskedTime = timeInputInteraction.value.replace(/_/g, '');
+    if (unmaskedTime.length === 5) {
         interactionForm.time = timeInputInteraction.value;
     } else {
         interactionForm.time = "";
@@ -174,7 +198,8 @@ function validateInteractionForm() {
         isFormValid = false;
     }
 
-    if (durationInputInteraction.value.trim() !== "") {
+    const unmaskedDuration = timeInputInteraction.value.replace(/_/g, '');
+    if (unmaskedDuration.length === 5) {
         interactionForm.duration = durationInputInteraction.value;
     } else {
         interactionForm.duration = "";
@@ -193,9 +218,13 @@ function validateInteractionForm() {
 
 // Salva uma nova interação ou sua edição
 async function saveInteraction() {
-    if (!validateInteractionForm()) return;
+    if (!validateInteractionForm()) {
+        showWarningToast("Preencha todos os campos obrigatórios!");
+        return;
+    }
 
-    console.log(interactionForm)
+    if (isSavingInteraction) return;
+    isSavingInteraction = true;
 
     try {
         const response = await fetch(`${URL}/interaction`, {
@@ -210,11 +239,18 @@ async function saveInteraction() {
             console.error('Erro: ' + responseData.message);
             return;
         } else {
-            await getOneInteraction(responseData.id, isEditingInteraction);
+            await getOneInteraction(responseData.id, isEditingInteraction).then(() => {
+                showSuccessToast(`Interação ${isEditingInteraction ? 'editada' : 'cadastrada'} com sucesso!`);
+                setTimeout(() => {
+                    isSavingInteraction = false;
+                }, 1000);
+            });
         }
 
         switchOverlay();
     } catch (error) {
         console.error(isEditingInteraction ? 'Erro ao editar interação:' : 'Erro ao criar interação:', error);
+        showErrorToast(`Erro ao ${isEditingInteraction ? 'editar' : 'cadastrar'} interação!`);
+        isSavingInteraction = false;
     }
 }

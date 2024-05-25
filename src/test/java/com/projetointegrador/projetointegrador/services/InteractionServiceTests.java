@@ -6,16 +6,16 @@ import com.projetointegrador.projetointegrador.repositories.InteractionRepositor
 import com.projetointegrador.projetointegrador.responses.Response;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 public class InteractionServiceTests {
@@ -36,7 +36,7 @@ public class InteractionServiceTests {
         assert optionalInteraction != null;
         Interaction actualInteraction = optionalInteraction.orElse(null);
 
-        // Asserting the response
+        // Verificando se encontrou a interação
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(interaction, actualInteraction);
         System.out.println("Expected interaction: " + interaction);
@@ -44,13 +44,28 @@ public class InteractionServiceTests {
     }
 
     @Test
-    void testlistActiveInteractions() {
-        ResponseEntity<?> responseEntity = interactionService.listActiveInteraction();
+    void testListActiveInteraction() {
+        Interaction interaction1 = new Interaction();
+        interaction1.setId(1L);
+        interaction1.setInactive(false);
 
-        assertEquals(HttpStatusCode.valueOf(200), responseEntity.getStatusCode());
+        Interaction interaction2 = new Interaction();
+        interaction2.setId(2L);
+        interaction2.setInactive(false);
 
-        Object body = responseEntity.getBody();
-        assertTrue(body instanceof List);
+        List<Interaction> interactions = Arrays.asList(interaction1, interaction2);
+
+        Page<Interaction> page = new PageImpl<>(interactions);
+
+        when(interactionRepository.findAll(any(Example.class), any(Pageable.class))).thenReturn(page);
+
+        Page<Interaction> resultPage = interactionService.listActiveInteraction(null, null, null, PageRequest.of(0, 20));
+
+        // Verificando se o método retornou uma página não nula
+        assertNotNull(resultPage);
+
+        // Verificando se a página contém as interações simuladas
+        assertEquals(interactions, resultPage.getContent());
     }
 
     @Test
@@ -63,7 +78,7 @@ public class InteractionServiceTests {
 
         ResponseEntity<?> responseEntity = interactionService.createInteraction(mockInteraction);
 
-        // Verifica se a interaction foi criado com sucesso e compara o status da request
+        // Verifica se a interação foi criada com sucesso e compara o status da request
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertNotNull(responseEntity.getBody());
         assertEquals(mockInteraction, responseEntity.getBody());
@@ -81,7 +96,7 @@ public class InteractionServiceTests {
 
         ResponseEntity<?> responseEntity = interactionService.updateInteraction(mockInteraction);
 
-        // Verifica se a interaction foi atualizado com sucesso e compara o status da request
+        // Verifica se a interação foi atualizada com sucesso e compara o status da request
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertNotNull(responseEntity.getBody());
 
@@ -98,7 +113,7 @@ public class InteractionServiceTests {
 
         ResponseEntity<?> responseEntity = interactionService.deleteInteraction(interactionId);
 
-        // Verifica se a interaction foi desativado com sucesso e compara o status da request
+        // Verifica se a interação foi desativada com sucesso e compara o status da request
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         Response responseBody = (Response) responseEntity.getBody();
         assertNotNull(responseBody);

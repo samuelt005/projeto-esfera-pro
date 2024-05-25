@@ -5,16 +5,13 @@
     height: 24px;
 }
 
-.search-wrapper .icon:hover {
-    cursor: pointer;
-}
-
 .search-wrapper {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 20px;
     height: 44px;
+    min-width: 200px;
     width: 100%;
     border-radius: 50px;
     padding: 10px 20px;
@@ -35,4 +32,22 @@
 .search-wrapper input::placeholder {
     color: var(--text-secondary);
     font-size: 20px;
+}
+
+.search-input-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.clean-button-wrapper,
+.search-button-wrapper {
+    width: 30px;
+    height: 100%;
+    cursor: pointer;
+}
+
+.clean-button-wrapper.hidden {
+    display: none;
 }

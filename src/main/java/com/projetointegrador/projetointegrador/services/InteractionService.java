@@ -1,15 +1,17 @@
 package com.projetointegrador.projetointegrador.services;
 
+import com.projetointegrador.projetointegrador.models.Client;
 import com.projetointegrador.projetointegrador.models.Interaction;
 import com.projetointegrador.projetointegrador.repositories.InteractionRepository;
 import com.projetointegrador.projetointegrador.responses.Response;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -33,16 +35,32 @@ public class InteractionService {
     }
 
     // Lista todas as interações ativas
-    public ResponseEntity<?> listActiveInteraction() {
+    public Page<Interaction> listActiveInteraction(String searchTerm, Integer resultId, Integer contactId, Pageable pageable) {
         Interaction exampleInteraction = new Interaction();
         exampleInteraction.setInactive(false);
 
-        ExampleMatcher matcher = ExampleMatcher.matching().withIgnorePaths("id");
+        ExampleMatcher matcher = ExampleMatcher.matching()
+                .withIgnorePaths("id")
+                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)
+                .withIgnoreCase();
+
+        if (searchTerm != null && !searchTerm.isEmpty()) {
+            Client client = new Client();
+            exampleInteraction.setClient(client);
+            exampleInteraction.getClient().setName(searchTerm);
+        }
+
+        if (resultId != null) {
+            exampleInteraction.setResult(resultId);
+        }
+
+        if (contactId != null) {
+            exampleInteraction.setContact(contactId);
+        }
 
         Example<Interaction> example = Example.of(exampleInteraction, matcher);
 
-        List<Interaction> clients = interactionRepository.findAll(example);
-        return ResponseEntity.ok().body(clients);
+        return interactionRepository.findAll(example, pageable);
     }
 
     // Cria uma interação

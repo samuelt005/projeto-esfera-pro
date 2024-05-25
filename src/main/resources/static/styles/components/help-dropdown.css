@@ -63,6 +63,7 @@
 
 .dropdown-content p {
     height: 0;
+    opacity: 0;
     font-size: 16px;
     line-height: 20px;
     max-height: 300px;
@@ -71,5 +72,7 @@
 }
 
 .expanded .dropdown-content p {
-    height: auto;
+    height: 100%;
+    opacity: 1;
+    transition: opacity 0.7s;
 }

@@ -19,13 +19,58 @@ let numberInput;
 let zipCodeInput;
 let stateSelect;
 let citySelect;
+let tableContainerClient;
+let searchInputClient;
+let searchButtonClient;
+let searchCleanButtonClient;
 
-// Lista de clientes
-let clientList = [];
+// Variáveis de filtros
+let openFiltersButtonClient;
+let cleanFiltersButtonClient;
+let applyFiltersButtonClient;
+let filtersMenuClient;
+let stateFilterSelect;
+let currentStateIdFilter = 0;
+
+// Variáveis de clientes
+let clientList;
+let clientPage;
+let shouldLoadMoreClient;
+let isLoadingMoreClient;
+let currentSearchTermClient = null;
+
+// Limpa a listagem de clientes
+function cleanAllClients() {
+    document.querySelector('.table-content').innerHTML = "";
+    clientList = [];
+    clientPage = 0;
+    shouldLoadMoreClient = true;
+    currentSearchTermClient = null;
+}
 
 // Buscar todos os clientes
-async function getClients() {
-    await fetch(`${URL}/client`)
+async function getClients(searchTerm = "") {
+    if (!shouldLoadMoreClient || isLoadingMoreClient) return;
+
+    isLoadingMoreClient = true;
+
+    let fetchUrl = `${URL}/client/${clientPage}`;
+    if (currentSearchTermClient !== null) {
+        fetchUrl += `?searchTerm=${encodeURIComponent(currentSearchTermClient)}`;
+    } else if (searchTerm !== "" || searchTerm !== null) {
+        currentSearchTermClient = searchTerm;
+        fetchUrl += `?searchTerm=${encodeURIComponent(searchTerm)}`;
+    }
+
+    if (currentStateIdFilter !== 0) {
+        if (fetchUrl.includes('?')) {
+            fetchUrl += `&stateId=${encodeURIComponent(currentStateIdFilter)}`;
+        } else {
+            fetchUrl += `?stateId=${encodeURIComponent(currentStateIdFilter)}`;
+        }
+    }
+
+    await fetch(fetchUrl)
         .then(response => {
             if (!response.ok) {
                 throw new Error(`Erro ao recuperar clientes`);
@@ -33,11 +78,29 @@ async function getClients() {
             return response.json();
         })
         .then(data => {
-            clientList.push(...data);
-            addClientRows(data);
+            if (clientPage + 1 === data.totalPages) {
+                shouldLoadMoreClient = false;
+            }
+
+            const itemsToAdd = [];
+            data.content.forEach((item) => {
+                const isDuplicate = clientList.some((existingItem) => {
+                    return existingItem.id === item.id;
+                });
+
+                if (!isDuplicate) {
+                    itemsToAdd.push(item);
+                }
+            });
+
+            clientPage++;
+            isLoadingMoreClient = false;
+            clientList.push(...itemsToAdd);
+            addClientRows(itemsToAdd);
         })
         .catch(() => {
             getMainFrameContent('error');
+            showErrorToast("Erro ao buscar clientes!");
         });
 }
 
@@ -71,11 +134,12 @@ async function getOneClient(id, isEditing) {
         })
         .catch(error => {
             console.error(error);
+            showErrorToast("Erro ao buscar cliente!");
         });
 }
 
 // Busca todos os estados
-async function getStates(stateSelect) {
+async function getStates(stateSelect, stateFilterSelect) {
     await fetch(`${URL}/state`)
         .then(response => {
             if (!response.ok) {
@@ -88,17 +152,24 @@ async function getStates(stateSelect) {
             stateSelect.selectedIndex = 0;
 
             data.forEach((data) => {
-                const newOption = document.createElement('option');
-                newOption.value = data.id;
-                newOption.textContent = data.name;
-                newOption.classList.add('state-option');
+                const newOptionModal = document.createElement('option');
+                newOptionModal.value = data.id;
+                newOptionModal.textContent = data.name;
+                newOptionModal.classList.add('state-option');
 
-                stateSelect.appendChild(newOption);
+                stateSelect.appendChild(newOptionModal);
+
+                const newOptionFilter = document.createElement('option');
+                newOptionFilter.value = data.id;
+                newOptionFilter.textContent = data.name;
+                newOptionFilter.classList.add('state-option');
+                stateFilterSelect.appendChild(newOptionFilter);
             })
             stateSelect.disabled = false;
         })
         .catch(error => {
             console.error(error);
+            showErrorToast("Erro ao buscar estados!");
         });
 }
 
@@ -135,6 +206,7 @@ async function getCitiesByState(state_id, event) {
         })
         .catch(error => {
             console.error(error);
+            showErrorToast("Erro ao buscar cidades!");
         });
 }
 
@@ -161,7 +233,7 @@ function createClientTableRow(client) {
         <td>${client.name}</td>
         <td>${client.cnpj ? getCnpjFormatted(client.cnpj) : getCpfFormatted(client.cpf)}</td>
         <td>${client.company}</td>
-        <td>${client.telephone === "" || client.telephone === null ? '-' : getTelephoneFormated(client.telephone)}</td>
+        <td>${client.telephone === "" || client.telephone === null ? '-' : getPhoneFormatted(client.telephone)}</td>
         <td>${client.email === "" || client.email === null ? '-' : client.email}</td>
         <td>${client.address.city.name} - ${client.address.city.state.uf}</td>
         ${clienteButtons}
@@ -191,7 +263,9 @@ function addClientRowButtonEvents(row) {
     }
 
     deleteButton.addEventListener('click', () => {
-        deleteClient(row).catch(error => console.error(error));
+        deleteClient(row).catch(error => {
+            console.error(error)
+        });
     });
 
     editButton.addEventListener('click', () => {
@@ -233,10 +307,13 @@ async function deleteClient(row) {
             if (index !== -1) {
                 selectedIds.splice(index, 1);
             }
+
+            showSuccessToast("Cliente excluído com sucesso!");
         }
 
     } catch (error) {
         console.error('Erro ao excluir cliente: ', error);
+        showErrorToast("Erro ao excluir cliente!");
     }
 }
 
@@ -263,6 +340,35 @@ function addNewClientEvent(button) {
     });
 }
 
+// Adiciona o evento de limpar os filtros de cliente
+function cleanAllClientFilters(button) {
+    button.addEventListener('click', () => {
+        if (parseInt(stateFilterSelect.value) !== 0) {
+            stateFilterSelect.value = 0;
+            currentStateIdFilter = 0;
+            openFiltersButtonClient.classList.remove('active');
+            if (!stateFilterSelect.classList.contains('unselected')) {
+                stateFilterSelect.classList.add('unselected');
+            }
+            cleanAllClients();
+            getClients().then();
+        }
+    });
+}
+
+// Adiciona o evento para aplicar os filtros de cliente
+function applyClientFilters(button) {
+    button.addEventListener('click', () => {
+        if (parseInt(stateFilterSelect.value) !== 0) {
+            currentStateIdFilter = parseInt(stateFilterSelect.value);
+            filtersMenuClient.classList.toggle('hidden');
+            openFiltersButtonClient.classList.add('active');
+            cleanAllClients();
+            getClients().then();
+        }
+    });
+}
+
 // Busca os elementos da página e atribui eles as variáveis globais
 function getClientElements() {
     buttonAddNew = document.querySelector('.button-add-new');
@@ -283,24 +389,47 @@ function getClientElements() {
     zipCodeInput = document.querySelector('input[name="zip_code"]');
     stateSelect = document.querySelector('select[name="state"]');
     citySelect = document.querySelector('select[name="city"]');
+    tableContainerClient = document.querySelector('.table-container');
+    searchInputClient = document.querySelector('#search');
+    searchButtonClient = document.querySelector('#searchButton');
+    searchCleanButtonClient = document.querySelector('#searchCleanButton');
+    openFiltersButtonClient = document.querySelector('#filter');
+    cleanFiltersButtonClient = document.querySelector('.clean-filters-button');
+    applyFiltersButtonClient = document.querySelector('.apply-filters-button');
+    filtersMenuClient = document.querySelector('.filter-menu');
+    stateFilterSelect = document.querySelector('select[name="state-filter"]');
 }
 
 // Inicialização da página de clientes
 function clientesStartup() {
+    clientList = [];
+    clientPage = 0;
+    shouldLoadMoreClient = true;
+    isLoadingMoreClient = false;
+    currentSearchTermClient = null;
+    currentStateIdFilter = 0;
+
     getClients().then(() => {
         getClientElements();
         addNewClientEvent(buttonAddNew);
         addSwitchOverlayEvent(buttonCloseModal);
         addSwitchOverlayEvent(cancelCloseModal);
         addSwitchOverlayEvent(buttonCloseModal);
-        addSaveClientEvent(saveCloseModal);
         addSwitchOverlayImportEvent(importOpenModal);
+        addSwitchFilterMenuEvent(openFiltersButtonClient, filtersMenuClient);
+        cleanAllClientFilters(cleanFiltersButtonClient);
+        applyClientFilters(applyFiltersButtonClient);
+        addSaveClientEvent(saveCloseModal);
 
-        getStates(stateSelect).then(() => {
+        getStates(stateSelect, stateFilterSelect).then(() => {
             addSelectedStateEvent(stateSelect);
             addSelectedDataEvent(citySelect);
+            addSelectedDataEvent(stateFilterSelect);
             setInputMasks();
         });
+
+        setInfiniteScroll(tableContainerClient, getClients);
+        setSearchInputEvent(searchInputClient, searchButtonClient, searchCleanButtonClient, cleanAllClients, getClients);
     });
 }
 

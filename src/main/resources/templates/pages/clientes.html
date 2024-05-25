@@ -9,10 +9,23 @@
     <div class="content-container">
         <div class="table-header">
             <h2>Clientes</h2>
-            <div th:replace="~{components/search :: search('pesquisar', 'Pesquisar', ~{icons/search/magnifying-glass :: magnifying-glass})}"></div>
+            <div th:replace="~{components/search :: search('search', 'Pesquisar por cliente')}"></div>
             <div class="buttons">
-                <div th:replace="~{components/button1 :: button('filter', 'Filtrar', false, ~{icons/buttons/filters :: filters})}"></div>
-                <div th:replace="~{components/button1 :: button('export', 'Exportar', false, ~{icons/buttons/export :: export})}"></div>
+                <div class="filter-container">
+                    <div th:replace="~{components/button1 :: button('filter', 'Filtros', ~{icons/buttons/filters :: filters})}"></div>
+
+                    <div class="filter-menu hidden">
+                        <div class="top-filter-section">
+                            <h4>Estado</h4>
+                            <div th:replace="~{components/input-select :: input('state-filter', 'Selecione', false)}"></div>
+                        </div>
+                        <div class="bottom-filter-section">
+                            <div th:replace="~{components/button2 :: button('clean-filters-button', 'Limpar', false)}"></div>
+                            <div th:replace="~{components/button2 :: button('apply-filters-button', 'Aplicar', true)}"></div>
+                        </div>
+                    </div>
+                </div>
+                <div th:replace="~{components/button1 :: button('export', 'Exportar', ~{icons/buttons/export :: export})}"></div
                 <div th:replace="~{components/button1 :: button('import', 'Importar', true, ~{icons/buttons/import :: import})}"></div>
             </div>
         </div>
@@ -58,21 +71,21 @@
             <section>
                 <h3>Dados básicos</h3>
                 <div class="inputs-row">
-                    <div class="input-wrapper">
+                    <div class="input-wrapper half-space">
                         <h4>Nome</h4>
                         <div th:replace="~{components/input1 :: input('name', 'Digite o nome do cliente', 'text')}"></div>
                     </div>
-                    <div class="input-wrapper">
+                    <div class="input-wrapper half-space">
                         <h4>CPF</h4>
                         <div th:replace="~{components/input1 :: input('cpf', '999.999.999-99', 'text')}"></div>
                     </div>
                 </div>
                 <div class="inputs-row">
-                    <div class="input-wrapper">
+                    <div class="input-wrapper half-space">
                         <h4>Empresa</h4>
                         <div th:replace="~{components/input1 :: input('company', 'Digite o nome da empresa', 'text')}"></div>
                     </div>
-                    <div class="input-wrapper">
+                    <div class="input-wrapper half-space">
                         <h4>CNPJ</h4>
                         <div th:replace="~{components/input1 :: input('cnpj', '99.999.999/9999-99', 'text')}"></div>
                     </div>
@@ -81,21 +94,21 @@
             <section>
                 <h3>Informações para contato</h3>
                 <div class="inputs-row">
-                    <div class="input-wrapper">
+                    <div class="input-wrapper half-space">
                         <h4>E-mail</h4>
                         <div th:replace="~{components/input1 :: input('email', 'Digite o e-mail do cliente', 'email')}"></div>
                     </div>
-                    <div class="input-wrapper">
+                    <div class="input-wrapper half-space">
                         <h4>Whatsapp</h4>
                         <div th:replace="~{components/input1 :: input('whatsapp', '(99) 99999-9999', 'text')}"></div>
                     </div>
                 </div>
                 <div class="inputs-row">
-                    <div class="input-wrapper">
+                    <div class="input-wrapper half-space">
                         <h4>Celular</h4>
                         <div th:replace="~{components/input1 :: input('cellphone', '(99) 99999-9999', 'text')}"></div>
                     </div>
-                    <div class="input-wrapper">
+                    <div class="input-wrapper half-space">
                         <h4>Telefone</h4>
                         <div th:replace="~{components/input1 :: input('telephone', '(99) 99999-9999', 'text')}"></div>
                     </div>
@@ -145,6 +158,7 @@
     <link rel="stylesheet" th:href="@{/styles/components/input-select.css}"/>
     <link rel="stylesheet" th:href="@{/styles/components/button-table.css}"/>
     <link rel="stylesheet" th:href="@{/styles/components/checkbox-table.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/components/filter-menu.css}"/>
 </styles>
 </body>
 </html>

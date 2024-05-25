@@ -1,14 +1,8 @@
 package com.projetointegrador.projetointegrador.controllers;
 
-import com.projetointegrador.projetointegrador.models.Address;
-import com.projetointegrador.projetointegrador.repositories.AddressRepository;
-import com.projetointegrador.projetointegrador.repositories.CityRepository;
-import com.projetointegrador.projetointegrador.repositories.ClientRepository;
 import com.projetointegrador.projetointegrador.services.AddressService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/address")

@@ -1,3 +1,5 @@
+let isSavingClient = false;
+
 let clientForm = {
     id: null, name: "", cpf: "", cnpj: "", company: "", inactive: false, address: {
         id: null, street: "", zip_code: "", number: null, city: {
@@ -7,7 +9,7 @@ let clientForm = {
 }
 let isEditing = false;
 
-// Restaura o formulário para o padrão
+// Restaura o formulÃ¡rio para o padrÃ£o
 function resetForm() {
     clientForm = {
         id: null,
@@ -99,7 +101,7 @@ function resetFields() {
     citySelect.classList.add('unselected')
 }
 
-// Coloca máscaras nos inputs do modal
+// Coloca mÃ¡scaras nos inputs do modal
 function setInputMasks() {
     const cpfMask = {
         mask: '000.000.000-00'
@@ -113,7 +115,7 @@ function setInputMasks() {
     const zipCodeMask = {
         mask: '00000-000'
     }
-    // TODO adicionar mais tipos de telefones compatíveis (internacionais?)
+    // TODO adicionar mais tipos de telefones compatÃ­veis (internacionais?)
     const cellphoneMask = {
         mask: '00 00000-0000'
     }
@@ -162,7 +164,7 @@ function validateClientForm() {
         isFormValid = false;
     }
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Expressão regular para validar o e-mail
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // ExpressÃ£o regular para validar o e-mail
     if (emailInput.value.trim() !== "") {
         if (emailRegex.test(emailInput.value.trim())) {
             clientForm.email = emailInput.value.trim();
@@ -231,9 +233,15 @@ function validateClientForm() {
     return isFormValid;
 }
 
-// Salva um novo cliente ou sua edição
+// Salva um novo cliente ou sua ediÃ§Ã£o
 async function saveClient() {
-    if (!validateClientForm()) return;
+    if (!validateClientForm()) {
+        showWarningToast("Preencha todos os campos obrigatÃ³rios!");
+        return;
+    }
+
+    if (isSavingClient) return;
+    isSavingClient = true;
 
     try {
         const response = await fetch(`${URL}/client`, {
@@ -248,11 +256,18 @@ async function saveClient() {
             console.error('Erro: ' + responseData.message);
             return;
         } else {
-            await getOneClient(responseData.id, isEditing);
+            await getOneClient(responseData.id, isEditing).then(() => {
+                showSuccessToast(`Cliente ${isEditing ? 'editado' : 'cadastrado'} com sucesso!`);
+                setTimeout(() => {
+                    isSavingClient = false;
+                }, 1000);
+            });
         }
 
         switchOverlay();
     } catch (error) {
         console.error(isEditing ? 'Erro ao editar cliente:' : 'Erro ao criar cliente:', error);
+        showErrorToast(`Erro ao ${isEditing ? 'editar' : 'cadastrar'} cliente!`);
+        isSavingClient = false;
     }
 }

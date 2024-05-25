@@ -2,6 +2,8 @@ package com.projetointegrador.projetointegrador.controllers;
 
 import com.projetointegrador.projetointegrador.models.Interaction;
 import com.projetointegrador.projetointegrador.services.InteractionService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,11 +23,20 @@ public class InteractionController {
         return interactionService.findOneInteraction(id);
     }
 
-    // Rota para listar todas as interações ativos
-    @GetMapping
+    // Rota para listar todas as interações ativos com paginação
+    @GetMapping("/{page}")
     @ResponseBody
-    public ResponseEntity<?> listInteractions() {
-        return interactionService.listActiveInteraction();
+    public ResponseEntity<Page<Interaction>> listInteractions(
+            @PathVariable int page,
+            @RequestParam(required = false) String searchTerm,
+            @RequestParam(required = false) Integer resultId,
+            @RequestParam(required = false) Integer contactId
+    ) {
+        int size = 20;
+        PageRequest pageRequest = PageRequest.of(page, size);
+        Page<Interaction> interactions = interactionService.listActiveInteraction(searchTerm, resultId, contactId, pageRequest);
+
+        return ResponseEntity.ok().body(interactions);
     }
 
     // Rota para criar uma interação

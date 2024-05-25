@@ -1,0 +1,47 @@
+.filter-container {
+    position: relative;
+}
+
+.filter-menu {
+    position: absolute;
+    right: 0;
+    top: 60px;
+    z-index: 10;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: var(--white);
+    user-select: none;
+    padding: 10px;
+}
+
+.filter-menu.hidden {
+    display: none;
+}
+
+.top-filter-section {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    flex-direction: column;
+    gap: 10px;
+    width: 300px;
+    padding-bottom: 20px;
+    border-radius: 10px 10px 0 0;
+    border-bottom: 1px solid var(--gray);
+}
+
+.top-filter-section h4 {
+    font-size: 20px;
+    color: var(--text-primary);
+    padding-left: 4px;
+}
+
+.bottom-filter-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    width: 300px;
+    padding-top: 20px;
+    border-radius: 0 0 10px 10px;
+}
