@@ -379,19 +379,29 @@ function setInfiniteScroll(tableContainer, callFunction) {
     });
 }
 
-// Função para definir o comportamento de pesquisa
-function setSearchInputEvent(searchInput, searchButton, cleanFunction, callFunction) {
-    searchInput.addEventListener('keypress', (event) => {
-        if (event.key === 'Enter') {
-            const searchTerm = searchInput.value.trim();
-            cleanFunction();
-            callFunction(searchTerm);
-        }
-    });
-
-    searchButton.addEventListener('click', () => {
+// Função para definir o comportamento do campo de pesquisa
+function setSearchInputEvent(searchInput, searchButton, cleanButton, cleanFunction, callFunction) {
+    const handleSearch = () => {
         const searchTerm = searchInput.value.trim();
         cleanFunction();
         callFunction(searchTerm);
+        cleanButton.classList.toggle('hidden', searchTerm === null || searchTerm === "");
+    };
+
+    searchInput.addEventListener('keypress', (event) => {
+        if (event.key === 'Enter') {
+            handleSearch();
+        }
+    });
+
+    searchButton.addEventListener('click', handleSearch);
+
+    cleanButton.addEventListener('click', () => {
+        if (searchInput.value.trim() !== "") {
+            searchInput.value = "";
+            cleanFunction();
+            callFunction("");
+            cleanButton.classList.add('hidden');
+        }
     });
 }

@@ -9,12 +9,12 @@
     <div class="content-container">
         <div class="table-header">
             <h2>Interações</h2>
-            <div th:replace="~{components/search :: search('search', 'Pesquisar por cliente', ~{icons/search/magnifying-glass :: magnifying-glass})}"></div>
+            <div th:replace="~{components/search :: search('search', 'Pesquisar por cliente')}"></div>
             <div class="buttons">
                 <div class="filter-container">
                     <div th:replace="~{components/button1 :: button('filter', 'Filtros', ~{icons/buttons/filters :: filters})}"></div>
 
-                    <div class="filter-menu">
+                    <div class="filter-menu hidden">
                         <div class="top-filter-section">
                             <h4>Resultado</h4>
                             <div th:replace="~{components/input-select :: input('result-filter', 'Selecione', false)}"></div>

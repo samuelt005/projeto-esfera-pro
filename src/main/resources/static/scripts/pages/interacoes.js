@@ -14,6 +14,7 @@ let descriptionInputInteraction;
 let tableContainerInteraction;
 let searchInputInteraction;
 let searchButtonInteraction;
+let searchCleanButtonInteraction;
 
 // Variáveis de filtros
 let openFiltersButtonInteraction;
@@ -341,6 +342,7 @@ function getInteractionElements() {
     tableContainerInteraction = document.querySelector('.table-container');
     searchInputInteraction = document.querySelector('#search');
     searchButtonInteraction = document.querySelector('#searchButton');
+    searchCleanButtonInteraction = document.querySelector('#searchCleanButton');
     openFiltersButtonInteraction = document.querySelector('#filter');
     cleanFiltersButtonInteraction = document.querySelector('.clean-filters-button');
     applyFiltersButtonInteraction = document.querySelector('.apply-filters-button');
@@ -387,7 +389,7 @@ function interactionStartup() {
         setResultSelect();
         setInputMasksForInteractions();
         setInfiniteScroll(tableContainerInteraction, getInteractions);
-        setSearchInputEvent(searchInputInteraction, searchButtonInteraction, cleanAllInteractions, getInteractions);
+        setSearchInputEvent(searchInputInteraction, searchButtonInteraction, searchCleanButtonInteraction, cleanAllInteractions, getInteractions);
     })
 }
 

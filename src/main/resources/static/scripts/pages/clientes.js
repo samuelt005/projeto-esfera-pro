@@ -21,6 +21,7 @@ let citySelect;
 let tableContainerClient;
 let searchInputClient;
 let searchButtonClient;
+let searchCleanButtonClient;
 
 // Variáveis de filtros
 let openFiltersButtonClient;
@@ -389,6 +390,7 @@ function getClientElements() {
     tableContainerClient = document.querySelector('.table-container');
     searchInputClient = document.querySelector('#search');
     searchButtonClient = document.querySelector('#searchButton');
+    searchCleanButtonClient = document.querySelector('#searchCleanButton');
     openFiltersButtonClient = document.querySelector('#filter');
     cleanFiltersButtonClient = document.querySelector('.clean-filters-button');
     applyFiltersButtonClient = document.querySelector('.apply-filters-button');
@@ -424,7 +426,7 @@ function clientesStartup() {
         });
 
         setInfiniteScroll(tableContainerClient, getClients);
-        setSearchInputEvent(searchInputClient, searchButtonClient, cleanAllClients, getClients);
+        setSearchInputEvent(searchInputClient, searchButtonClient, searchCleanButtonClient, cleanAllClients, getClients);
     });
 }
 

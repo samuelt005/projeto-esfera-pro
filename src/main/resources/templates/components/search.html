@@ -1,6 +1,11 @@
-<div th:fragment="search(id, placeholder, icon)" class="search-wrapper">
+<div th:fragment="search(id, placeholder)" class="search-wrapper">
     <input th:placeholder="${placeholder}" title="pesquisa" type="text" th:id="${id}">
-    <div class="search-button-wrapper" th:id="${id + 'Button'}">
-        <div th:replace="${icon}"></div>
+    <div class="search-input-buttons">
+        <div class="clean-button-wrapper hidden" th:id="${id + 'CleanButton'}">
+            <div th:replace="~{icons/search/clean :: clean}"></div>
+        </div>
+        <div class="search-button-wrapper" th:id="${id + 'Button'}">
+            <div th:replace="~{icons/search/magnifying-glass :: magnifying-glass}"></div>
+        </div>
     </div>
 </div>

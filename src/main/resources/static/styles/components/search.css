@@ -34,8 +34,20 @@
     font-size: 20px;
 }
 
+.search-input-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.clean-button-wrapper,
 .search-button-wrapper {
     width: 30px;
     height: 100%;
     cursor: pointer;
+}
+
+.clean-button-wrapper.hidden {
+    display: none;
 }

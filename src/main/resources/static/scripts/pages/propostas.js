@@ -12,6 +12,7 @@ let descriptionInputProposal;
 let tableContainerProposal;
 let searchInputProposal;
 let searchButtonProposal;
+let searchCleanButtonProposal;
 
 // Variáveis de filtros
 let openFiltersButtonProposal;
@@ -337,6 +338,7 @@ function getProposalElements() {
     tableContainerProposal = document.querySelector('.table-container');
     searchInputProposal = document.querySelector('#search');
     searchButtonProposal = document.querySelector('#searchButton');
+    searchCleanButtonProposal = document.querySelector('#searchCleanButton');
     openFiltersButtonProposal = document.querySelector('#filter');
     cleanFiltersButtonProposal = document.querySelector('.clean-filters-button');
     applyFiltersButtonProposal = document.querySelector('.apply-filters-button');
@@ -378,7 +380,7 @@ function propostasStartup() {
         setStatusSelect();
         setInputMasksForProposals();
         setInfiniteScroll(tableContainerProposal, getProposals);
-        setSearchInputEvent(searchInputProposal, searchButtonProposal, cleanAllProposals, getProposals);
+        setSearchInputEvent(searchInputProposal, searchButtonProposal, searchCleanButtonProposal, cleanAllProposals, getProposals);
     })
 }
 
