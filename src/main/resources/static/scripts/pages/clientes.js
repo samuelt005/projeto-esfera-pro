@@ -209,7 +209,7 @@ function createClientTableRow(client) {
         <td>${client.name}</td>
         <td>${client.cnpj ? getCnpjFormatted(client.cnpj) : getCpfFormatted(client.cpf)}</td>
         <td>${client.company}</td>
-        <td>${client.telephone === "" || client.telephone === null ? '-' : client.telephone}</td>
+        <td>${client.telephone === "" || client.telephone === null ? '-' : getPhoneFormatted(client.telephone)}</td>
         <td>${client.email === "" || client.email === null ? '-' : client.email}</td>
         <td>${client.address.city.name} - ${client.address.city.state.uf}</td>
         ${clienteButtons}

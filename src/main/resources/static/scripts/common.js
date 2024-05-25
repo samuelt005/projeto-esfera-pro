@@ -154,6 +154,15 @@ function getDateFormatted(dateISO) {
     return dateParts[2] + '/' + dateParts[1] + '/' + dateParts[0];
 }
 
+// Converte tipo date para formato DD/MM/YYYY
+function getPhoneFormatted(phoneISO) {
+    const DDD = phoneISO.slice(0, 2);
+    const part1 = phoneISO.slice(2, 7);
+    const part2 = phoneISO.slice(7);
+
+    return DDD + ' ' + part1 + '-' + part2;
+}
+
 // Converte formato DD/MM/YYYY para tipo date
 function getDateISO(date) {
     const dateParts = date.split('/');
