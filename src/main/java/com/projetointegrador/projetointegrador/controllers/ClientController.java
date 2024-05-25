@@ -29,11 +29,19 @@ public class ClientController {
     @GetMapping("/{page}")
     @ResponseBody
     public ResponseEntity<?> listClients(
-            @PathVariable int page
+            @PathVariable int page,
+            @RequestParam(required = false) String searchTerm
     ) {
         int size = 20;
         PageRequest pageRequest = PageRequest.of(page, size);
-        Page<Client> clients = clientService.listActiveClients(pageRequest);
+        Page<Client> clients;
+
+        if (searchTerm != null && !searchTerm.isEmpty()) {
+            clients = clientService.listActiveClients(searchTerm, pageRequest);
+        } else {
+            clients = clientService.listActiveClients(null, pageRequest);
+        }
+
         return ResponseEntity.ok().body(clients);
     }
 

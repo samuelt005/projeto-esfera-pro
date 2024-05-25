@@ -1,5 +1,6 @@
 package com.projetointegrador.projetointegrador.services;
 
+import com.projetointegrador.projetointegrador.models.Client;
 import com.projetointegrador.projetointegrador.models.Proposal;
 import com.projetointegrador.projetointegrador.repositories.ProposalRepository;
 import com.projetointegrador.projetointegrador.responses.Response;
@@ -35,11 +36,20 @@ public class ProposalService {
     }
 
     // Lista todas as propostas ativas
-    public Page<Proposal> listActiveProposal(Pageable pageable) {
+    public Page<Proposal> listActiveProposal(String searchTerm, Pageable pageable) {
         Proposal exampleProposal = new Proposal();
         exampleProposal.setInactive(false);
 
-        ExampleMatcher matcher = ExampleMatcher.matching().withIgnorePaths("id");
+        ExampleMatcher matcher = ExampleMatcher.matching()
+                .withIgnorePaths("id")
+                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)
+                .withIgnoreCase();
+
+        if (searchTerm != null && !searchTerm.isEmpty()) {
+            Client client = new Client();
+            exampleProposal.setClient(client);
+            exampleProposal.getClient().setName(searchTerm);
+        }
 
         Example<Proposal> example = Example.of(exampleProposal, matcher);
 

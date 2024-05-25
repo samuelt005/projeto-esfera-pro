@@ -345,20 +345,27 @@ async function getAllProposals(proposalSelect) {
 }
 
 // Função para definir o evento do scroll infinito na tabela
-function setInfiniteScroll(tableContainer) {
+function setInfiniteScroll(tableContainer, callFunction) {
     tableContainer.addEventListener('scroll', function () {
         if (tableContainer.scrollTop + tableContainer.offsetHeight >= tableContainer.scrollHeight) {
-            switch (currentPage) {
-                case 2:
-                    getClients().then();
-                    break;
-                case 3:
-                    getProposal().then();
-                    break;
-                case 4:
-                    getInteractions().then();
-                    break;
-            }
+            callFunction();
         }
+    });
+}
+
+// Função para definir o comportamento de pesquisa
+function setSearchInputEvent(searchInput, searchButton, cleanFunction, callFunction) {
+    searchInput.addEventListener('keypress', (event) => {
+        if (event.key === 'Enter') {
+            const searchTerm = searchInput.value.trim();
+            cleanFunction();
+            callFunction(searchTerm);
+        }
+    });
+
+    searchButton.addEventListener('click', () => {
+        const searchTerm = searchInput.value.trim();
+        cleanFunction();
+        callFunction(searchTerm);
     });
 }

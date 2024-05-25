@@ -38,11 +38,18 @@ public class ClientService {
     }
 
     // Lista todos os clientes ativos
-    public Page<Client> listActiveClients(Pageable pageable) {
+    public Page<Client> listActiveClients(String searchTerm, Pageable pageable) {
         Client exampleClient = new Client();
         exampleClient.setInactive(false);
 
-        ExampleMatcher matcher = ExampleMatcher.matching().withIgnorePaths("id");
+        ExampleMatcher matcher = ExampleMatcher.matching()
+                .withIgnorePaths("id")
+                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)
+                .withIgnoreCase();
+
+        if (searchTerm != null && !searchTerm.isEmpty()) {
+            exampleClient.setName(searchTerm);
+        }
 
         Example<Client> example = Example.of(exampleClient, matcher);
 

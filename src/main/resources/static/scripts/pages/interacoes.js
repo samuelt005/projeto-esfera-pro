@@ -12,20 +12,40 @@ let timeInputInteraction;
 let durationInputInteraction;
 let descriptionInputInteraction;
 let tableContainerInteraction;
+let searchInputInteraction;
+let searchButtonInteraction;
 
 // Variáveis de interações
 let interactionList;
 let interactionPage;
 let shouldLoadMoreInteractions;
 let isLoadingMoreInteractions;
+let currentSearchTermInteraction = null;
+
+// Limpa a listagem de interações
+function cleanAllInteractions() {
+    document.querySelector('.table-content').innerHTML = "";
+    interactionList = [];
+    interactionPage = 0;
+    shouldLoadMoreInteractions = true;
+    currentSearchTermInteraction = null;
+}
 
 // Buscar todas as interações
-async function getInteractions() {
+async function getInteractions(searchTerm = "") {
     if (!shouldLoadMoreInteractions || isLoadingMoreInteractions) return;
 
     isLoadingMoreInteractions = true;
 
-    await fetch(`${URL}/interaction/${interactionPage}`)
+    let fetchUrl = `${URL}/interaction/${interactionPage}`;
+    if (currentSearchTermInteraction !== null) {
+        fetchUrl += `?searchTerm=${encodeURIComponent(searchTerm)}`;
+    } else if (searchTerm !== "" || searchTerm !== null) {
+        currentSearchTermInteraction = searchTerm;
+        fetchUrl += `?searchTerm=${encodeURIComponent(searchTerm)}`;
+    }
+
+    await fetch(fetchUrl)
         .then(response => {
             if (!response.ok) {
                 throw new Error(`Erro ao recuperar interações`);
@@ -254,6 +274,8 @@ function getInteractionElements() {
     durationInputInteraction = document.querySelector('input[name="duration"]');
     descriptionInputInteraction = document.querySelector('textarea[name="description"]');
     tableContainerInteraction = document.querySelector('.table-container');
+    searchInputInteraction = document.querySelector('#search');
+    searchButtonInteraction = document.querySelector('#searchButton');
 }
 
 // Inicialização da página de interações
@@ -285,7 +307,8 @@ function interactionStartup() {
         setContactSelect();
         setResultSelect();
         setInputMasksForInteractions();
-        setInfiniteScroll(tableContainerInteraction);
+        setInfiniteScroll(tableContainerInteraction, getInteractions);
+        setSearchInputEvent(searchInputInteraction, searchButtonInteraction, cleanAllInteractions, getInteractions);
     })
 }
 

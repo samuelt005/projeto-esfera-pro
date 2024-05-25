@@ -10,20 +10,40 @@ let statusSelectProposal;
 let valueInputProposal;
 let descriptionInputProposal;
 let tableContainerProposal;
+let searchInputProposal;
+let searchButtonProposal;
 
-// Lista de propostas
+// Variáveis de propostas
 let proposalList;
 let proposalPage;
 let shouldLoadMoreProposals;
 let isLoadingMoreProposals;
+let currentSearchTermProposal = null;
+
+// Limpa a listagem de clientes
+function cleanAllProposals() {
+    document.querySelector('.table-content').innerHTML = "";
+    proposalList = [];
+    proposalPage = 0;
+    shouldLoadMoreProposals = true;
+    currentSearchTermProposal = null;
+}
 
 // Buscar todas as propostas
-async function getProposal() {
+async function getProposals(searchTerm = "") {
     if (!shouldLoadMoreProposals || isLoadingMoreProposals) return;
 
     isLoadingMoreProposals = true;
 
-    await fetch(`${URL}/proposal/${proposalPage}`)
+    let fetchUrl = `${URL}/proposal/${proposalPage}`;
+    if (currentSearchTermProposal !== null) {
+        fetchUrl += `?searchTerm=${encodeURIComponent(searchTerm)}`;
+    } else if (searchTerm !== "" || searchTerm !== null) {
+        currentSearchTermProposal = searchTerm;
+        fetchUrl += `?searchTerm=${encodeURIComponent(searchTerm)}`;
+    }
+
+    await fetch(fetchUrl)
         .then(response => {
             if (!response.ok) {
                 throw new Error(`Erro ao recuperar propostas`);
@@ -250,6 +270,8 @@ function getProposalElements() {
     valueInputProposal = document.querySelector('input[name="value"]');
     descriptionInputProposal = document.querySelector('textarea[name="description"]');
     tableContainerProposal = document.querySelector('.table-container');
+    searchInputProposal = document.querySelector('#search');
+    searchButtonProposal = document.querySelector('#searchButton');
 }
 
 // Inicialização da página de propostas
@@ -259,7 +281,7 @@ function propostasStartup() {
     shouldLoadMoreProposals = true;
     isLoadingMoreProposals = false;
 
-    getProposal().then(() => {
+    getProposals().then(() => {
         getProposalElements();
         addNewProposalEvent(buttonAddNewProposal);
         addSwitchOverlayEvent(buttonCloseModalProposal);
@@ -276,7 +298,8 @@ function propostasStartup() {
         setServiceTypeSelect();
         setStatusSelect();
         setInputMasksForProposals();
-        setInfiniteScroll(tableContainerProposal);
+        setInfiniteScroll(tableContainerProposal, getProposals);
+        setSearchInputEvent(searchInputProposal, searchButtonProposal, cleanAllProposals, getProposals);
     })
 }
 

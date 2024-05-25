@@ -59,7 +59,7 @@ public class InteractionServiceTests {
 
         when(interactionRepository.findAll(any(Example.class), any(Pageable.class))).thenReturn(page);
 
-        Page<Interaction> resultPage = interactionService.listActiveInteraction(PageRequest.of(0, 20));
+        Page<Interaction> resultPage = interactionService.listActiveInteraction(null, PageRequest.of(0, 20));
 
         // Verificando se o método retornou uma página não nula
         assertNotNull(resultPage);

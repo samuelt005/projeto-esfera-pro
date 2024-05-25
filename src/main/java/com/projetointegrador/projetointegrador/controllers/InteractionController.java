@@ -27,11 +27,19 @@ public class InteractionController {
     @GetMapping("/{page}")
     @ResponseBody
     public ResponseEntity<Page<Interaction>> listInteractions(
-            @PathVariable int page
+            @PathVariable int page,
+            @RequestParam(required = false) String searchTerm
     ) {
         int size = 20;
         PageRequest pageRequest = PageRequest.of(page, size);
-        Page<Interaction> interactions = interactionService.listActiveInteraction(pageRequest);
+        Page<Interaction> interactions;
+
+        if (searchTerm != null && !searchTerm.isEmpty()) {
+            interactions = interactionService.listActiveInteraction(searchTerm, pageRequest);
+        } else {
+            interactions = interactionService.listActiveInteraction(null, pageRequest);
+        }
+
         return ResponseEntity.ok().body(interactions);
     }
 

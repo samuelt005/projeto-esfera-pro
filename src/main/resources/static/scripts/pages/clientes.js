@@ -19,20 +19,40 @@ let zipCodeInput;
 let stateSelect;
 let citySelect;
 let tableContainerClient;
+let searchInputClient;
+let searchButtonClient;
 
-// Lista de clientes
+// Variáveis de clientes
 let clientList;
 let clientPage;
 let shouldLoadMoreClient;
 let isLoadingMoreClient;
+let currentSearchTermClient = null;
+
+// Limpa a listagem de clientes
+function cleanAllClients() {
+    document.querySelector('.table-content').innerHTML = "";
+    clientList = [];
+    clientPage = 0;
+    shouldLoadMoreClient = true;
+    currentSearchTermClient = null;
+}
 
 // Buscar todos os clientes
-async function getClients() {
+async function getClients(searchTerm = "") {
     if (!shouldLoadMoreClient || isLoadingMoreClient) return;
 
     isLoadingMoreClient = true;
 
-    await fetch(`${URL}/client/${clientPage}`)
+    let fetchUrl = `${URL}/client/${clientPage}`;
+    if (currentSearchTermClient !== null) {
+        fetchUrl += `?searchTerm=${encodeURIComponent(searchTerm)}`;
+    } else if (searchTerm !== "" || searchTerm !== null) {
+        currentSearchTermClient = searchTerm;
+        fetchUrl += `?searchTerm=${encodeURIComponent(searchTerm)}`;
+    }
+
+    await fetch(fetchUrl)
         .then(response => {
             if (!response.ok) {
                 throw new Error(`Erro ao recuperar clientes`);
@@ -316,6 +336,8 @@ function getClientElements() {
     stateSelect = document.querySelector('select[name="state"]');
     citySelect = document.querySelector('select[name="city"]');
     tableContainerClient = document.querySelector('.table-container');
+    searchInputClient = document.querySelector('#search');
+    searchButtonClient = document.querySelector('#searchButton');
 }
 
 // Inicialização da página de clientes
@@ -339,7 +361,8 @@ function clientesStartup() {
             setInputMasks();
         });
 
-        setInfiniteScroll(tableContainerClient);
+        setInfiniteScroll(tableContainerClient, getClients);
+        setSearchInputEvent(searchInputClient, searchButtonClient, cleanAllClients, getClients);
     });
 }
 

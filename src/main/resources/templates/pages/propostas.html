@@ -9,9 +9,9 @@
     <div class="content-container">
         <div class="table-header">
             <h2>Propostas</h2>
-            <div th:replace="~{components/search :: search('pesquisar', 'Pesquisar', ~{icons/search/magnifying-glass :: magnifying-glass})}"></div>
+            <div th:replace="~{components/search :: search('search', 'Pesquisar por cliente', ~{icons/search/magnifying-glass :: magnifying-glass})}"></div>
             <div class="buttons">
-                <div th:replace="~{components/button1 :: button('filtrar', 'Filtrar', ~{icons/buttons/filters :: filters})}"></div>
+                <div th:replace="~{components/button1 :: button('filter', 'Filtrar', ~{icons/buttons/filters :: filters})}"></div>
                 <div th:replace="~{components/button1 :: button('exportar', 'Exportar', ~{icons/buttons/export :: export})}"></div>
             </div>
         </div>
