@@ -11,7 +11,22 @@
             <h2>Propostas</h2>
             <div th:replace="~{components/search :: search('search', 'Pesquisar por cliente', ~{icons/search/magnifying-glass :: magnifying-glass})}"></div>
             <div class="buttons">
-                <div th:replace="~{components/button1 :: button('filter', 'Filtrar', ~{icons/buttons/filters :: filters})}"></div>
+                <div class="filter-container">
+                    <div th:replace="~{components/button1 :: button('filter', 'Filtros', ~{icons/buttons/filters :: filters})}"></div>
+
+                    <div class="filter-menu hidden">
+                        <div class="top-filter-section">
+                            <h4>Filtrar por status</h4>
+                            <div th:replace="~{components/input-select :: input('status-filter', 'Selecione', false)}"></div>
+                            <h4>Filtrar por tipo de serviço</h4>
+                            <div th:replace="~{components/input-select :: input('service-type-filter', 'Selecione', false)}"></div>
+                        </div>
+                        <div class="bottom-filter-section">
+                            <div th:replace="~{components/button2 :: button('clean-filters-button', 'Limpar', false)}"></div>
+                            <div th:replace="~{components/button2 :: button('apply-filters-button', 'Filtrar', true)}"></div>
+                        </div>
+                    </div>
+                </div>
                 <div th:replace="~{components/button1 :: button('exportar', 'Exportar', ~{icons/buttons/export :: export})}"></div>
             </div>
         </div>
@@ -109,6 +124,7 @@
     <link rel="stylesheet" th:href="@{/styles/components/input-select.css}"/>
     <link rel="stylesheet" th:href="@{/styles/components/button-table.css}"/>
     <link rel="stylesheet" th:href="@{/styles/components/checkbox-table.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/components/filter-menu.css}"/>
 </styles>
 </body>
 </html>

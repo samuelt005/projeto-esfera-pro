@@ -61,7 +61,7 @@ public class ClientServiceTests {
 
         when(clientRepository.findAll(any(Example.class), any(Pageable.class))).thenReturn(page);
 
-        Page<Client> resultPage = clientService.listActiveClients(null, PageRequest.of(0, 20));
+        Page<Client> resultPage = clientService.listActiveClients(null, null, PageRequest.of(0, 20));
 
         // Verificando se o método retornou uma página não nula
         assertNotNull(resultPage);

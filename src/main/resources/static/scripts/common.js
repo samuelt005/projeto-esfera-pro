@@ -136,6 +136,24 @@ function addSwitchOverlayEvent(button) {
     button.addEventListener('click', switchOverlay);
 }
 
+// Adiciona o evento de alterar a visibilidade do menu de filtros
+function addSwitchFilterMenuEvent(button, filtersWrapper) {
+    button.addEventListener("click", (event) => {
+        filtersWrapper.classList.toggle('hidden');
+        event.stopPropagation();
+    });
+
+    document.addEventListener("click", function (event) {
+        const isClickedInsideMenu =
+            button.contains(event.target) ||
+            filtersWrapper.contains(event.target);
+
+        if (!isClickedInsideMenu) {
+            filtersWrapper.classList.add('hidden');
+        }
+    });
+}
+
 // Converte um CPF no formato padrão para exibição
 function getCpfFormatted(cpfString) {
     cpfString = cpfString.replace(/\D/g, '');
@@ -232,7 +250,6 @@ function getContactText(contactId) {
             return 'E-mail'
     }
 }
-
 
 // Recebe um id de result e retorna um fragmento de HTML
 function getStatusDiv(resultId) {

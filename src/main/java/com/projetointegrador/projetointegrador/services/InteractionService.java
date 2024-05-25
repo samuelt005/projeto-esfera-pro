@@ -35,7 +35,7 @@ public class InteractionService {
     }
 
     // Lista todas as interações ativas
-    public Page<Interaction> listActiveInteraction(String searchTerm, Pageable pageable) {
+    public Page<Interaction> listActiveInteraction(String searchTerm, Integer resultId, Integer contactId, Pageable pageable) {
         Interaction exampleInteraction = new Interaction();
         exampleInteraction.setInactive(false);
 
@@ -48,6 +48,14 @@ public class InteractionService {
             Client client = new Client();
             exampleInteraction.setClient(client);
             exampleInteraction.getClient().setName(searchTerm);
+        }
+
+        if (resultId != null) {
+            exampleInteraction.setResult(resultId);
+        }
+
+        if (contactId != null) {
+            exampleInteraction.setContact(contactId);
         }
 
         Example<Interaction> example = Example.of(exampleInteraction, matcher);

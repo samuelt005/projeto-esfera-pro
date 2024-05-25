@@ -22,6 +22,14 @@ let tableContainerClient;
 let searchInputClient;
 let searchButtonClient;
 
+// Variáveis de filtros
+let openFiltersButtonClient;
+let cleanFiltersButtonClient;
+let applyFiltersButtonClient;
+let filtersMenuClient;
+let stateFilterSelect;
+let currentStateIdFilter = 0;
+
 // Variáveis de clientes
 let clientList;
 let clientPage;
@@ -46,10 +54,18 @@ async function getClients(searchTerm = "") {
 
     let fetchUrl = `${URL}/client/${clientPage}`;
     if (currentSearchTermClient !== null) {
-        fetchUrl += `?searchTerm=${encodeURIComponent(searchTerm)}`;
+        fetchUrl += `?searchTerm=${encodeURIComponent(currentSearchTermClient)}`;
     } else if (searchTerm !== "" || searchTerm !== null) {
         currentSearchTermClient = searchTerm;
         fetchUrl += `?searchTerm=${encodeURIComponent(searchTerm)}`;
+    }
+
+    if (currentStateIdFilter !== 0) {
+        if (fetchUrl.includes('?')) {
+            fetchUrl += `&stateId=${encodeURIComponent(currentStateIdFilter)}`;
+        } else {
+            fetchUrl += `?stateId=${encodeURIComponent(currentStateIdFilter)}`;
+        }
     }
 
     await fetch(fetchUrl)
@@ -121,7 +137,7 @@ async function getOneClient(id, isEditing) {
 }
 
 // Busca todos os estados
-async function getStates(stateSelect) {
+async function getStates(stateSelect, stateFilterSelect) {
     await fetch(`${URL}/state`)
         .then(response => {
             if (!response.ok) {
@@ -134,12 +150,18 @@ async function getStates(stateSelect) {
             stateSelect.selectedIndex = 0;
 
             data.forEach((data) => {
-                const newOption = document.createElement('option');
-                newOption.value = data.id;
-                newOption.textContent = data.name;
-                newOption.classList.add('state-option');
+                const newOptionModal = document.createElement('option');
+                newOptionModal.value = data.id;
+                newOptionModal.textContent = data.name;
+                newOptionModal.classList.add('state-option');
 
-                stateSelect.appendChild(newOption);
+                stateSelect.appendChild(newOptionModal);
+
+                const newOptionFilter = document.createElement('option');
+                newOptionFilter.value = data.id;
+                newOptionFilter.textContent = data.name;
+                newOptionFilter.classList.add('state-option');
+                stateFilterSelect.appendChild(newOptionFilter);
             })
             stateSelect.disabled = false;
         })
@@ -316,6 +338,35 @@ function addNewClientEvent(button) {
     });
 }
 
+// Adiciona o evento de limpar os filtros de cliente
+function cleanAllClientFilters(button) {
+    button.addEventListener('click', () => {
+        if (parseInt(stateFilterSelect.value) !== 0) {
+            stateFilterSelect.value = 0;
+            currentStateIdFilter = 0;
+            openFiltersButtonClient.classList.remove('active');
+            if (!stateFilterSelect.classList.contains('unselected')) {
+                stateFilterSelect.classList.add('unselected');
+            }
+            cleanAllClients();
+            getClients().then();
+        }
+    });
+}
+
+// Adiciona o evento para aplicar os filtros de cliente
+function applyClientFilters(button) {
+    button.addEventListener('click', () => {
+        if (parseInt(stateFilterSelect.value) !== 0) {
+            currentStateIdFilter = parseInt(stateFilterSelect.value);
+            filtersMenuClient.classList.toggle('hidden');
+            openFiltersButtonClient.classList.add('active');
+            cleanAllClients();
+            getClients().then();
+        }
+    });
+}
+
 // Busca os elementos da página e atribui eles as variáveis globais
 function getClientElements() {
     buttonAddNew = document.querySelector('.button-add-new');
@@ -338,6 +389,11 @@ function getClientElements() {
     tableContainerClient = document.querySelector('.table-container');
     searchInputClient = document.querySelector('#search');
     searchButtonClient = document.querySelector('#searchButton');
+    openFiltersButtonClient = document.querySelector('#filter');
+    cleanFiltersButtonClient = document.querySelector('.clean-filters-button');
+    applyFiltersButtonClient = document.querySelector('.apply-filters-button');
+    filtersMenuClient = document.querySelector('.filter-menu');
+    stateFilterSelect = document.querySelector('select[name="state-filter"]');
 }
 
 // Inicialização da página de clientes
@@ -346,6 +402,8 @@ function clientesStartup() {
     clientPage = 0;
     shouldLoadMoreClient = true;
     isLoadingMoreClient = false;
+    currentSearchTermClient = null;
+    currentStateIdFilter = 0;
 
     getClients().then(() => {
         getClientElements();
@@ -353,11 +411,15 @@ function clientesStartup() {
         addSwitchOverlayEvent(buttonCloseModal);
         addSwitchOverlayEvent(cancelCloseModal);
         addSwitchOverlayEvent(buttonCloseModal);
+        addSwitchFilterMenuEvent(openFiltersButtonClient, filtersMenuClient);
+        cleanAllClientFilters(cleanFiltersButtonClient);
+        applyClientFilters(applyFiltersButtonClient);
         addSaveClientEvent(saveCloseModal);
 
-        getStates(stateSelect).then(() => {
+        getStates(stateSelect, stateFilterSelect).then(() => {
             addSelectedStateEvent(stateSelect);
             addSelectedDataEvent(citySelect);
+            addSelectedDataEvent(stateFilterSelect);
             setInputMasks();
         });
 

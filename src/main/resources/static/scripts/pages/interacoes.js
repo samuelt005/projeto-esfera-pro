@@ -15,6 +15,16 @@ let tableContainerInteraction;
 let searchInputInteraction;
 let searchButtonInteraction;
 
+// Variáveis de filtros
+let openFiltersButtonInteraction;
+let cleanFiltersButtonInteraction;
+let applyFiltersButtonInteraction;
+let filtersMenuInteraction;
+let resultFilterSelect;
+let contactFilterSelect;
+let currentResultIdFilter = 0;
+let currentContactIdFilter = 0;
+
 // Variáveis de interações
 let interactionList;
 let interactionPage;
@@ -39,10 +49,26 @@ async function getInteractions(searchTerm = "") {
 
     let fetchUrl = `${URL}/interaction/${interactionPage}`;
     if (currentSearchTermInteraction !== null) {
-        fetchUrl += `?searchTerm=${encodeURIComponent(searchTerm)}`;
+        fetchUrl += `?searchTerm=${encodeURIComponent(currentSearchTermInteraction)}`;
     } else if (searchTerm !== "" || searchTerm !== null) {
         currentSearchTermInteraction = searchTerm;
         fetchUrl += `?searchTerm=${encodeURIComponent(searchTerm)}`;
+    }
+
+    if (currentResultIdFilter !== 0) {
+        if (fetchUrl.includes('?')) {
+            fetchUrl += `&resultId=${encodeURIComponent(currentResultIdFilter)}`;
+        } else {
+            fetchUrl += `?resultId=${encodeURIComponent(currentResultIdFilter)}`;
+        }
+    }
+
+    if (currentContactIdFilter !== 0) {
+        if (fetchUrl.includes('?')) {
+            fetchUrl += `&contactId=${encodeURIComponent(currentContactIdFilter)}`;
+        } else {
+            fetchUrl += `?contactId=${encodeURIComponent(currentContactIdFilter)}`;
+        }
     }
 
     await fetch(fetchUrl)
@@ -114,6 +140,7 @@ async function getOneInteraction(id, isEditing) {
 
 // Criar opções do select do tipo de contato
 function setContactSelect() {
+    const selectElements = [contactSelectInteraction, contactFilterSelect];
     const options = [
         {name: 'Ligação', value: 1},
         {name: 'Whatsapp', value: 2},
@@ -121,17 +148,19 @@ function setContactSelect() {
     ]
 
     options.forEach((option) => {
-        const newOption = document.createElement('option');
-        newOption.value = option.value;
-        newOption.textContent = option.name;
-        newOption.classList.add('contact-option');
-
-        contactSelectInteraction.appendChild(newOption);
+        selectElements.forEach(select => {
+            const newOption = document.createElement('option');
+            newOption.value = option.value;
+            newOption.textContent = option.name;
+            newOption.classList.add('contact-option');
+            select.appendChild(newOption);
+        });
     })
 }
 
 // Criar opções do select do tipo de resultado
 function setResultSelect() {
+    const selectElements = [resultSelectInteraction, resultFilterSelect];
     const options = [
         {name: 'Desligado', value: 1},
         {name: 'Ocupado', value: 2},
@@ -140,12 +169,13 @@ function setResultSelect() {
     ]
 
     options.forEach((option) => {
-        const newOption = document.createElement('option');
-        newOption.value = option.value;
-        newOption.textContent = option.name;
-        newOption.classList.add('result-option');
-
-        resultSelectInteraction.appendChild(newOption);
+        selectElements.forEach(select => {
+            const newOption = document.createElement('option');
+            newOption.value = option.value;
+            newOption.textContent = option.name;
+            newOption.classList.add('result-option');
+            select.appendChild(newOption);
+        });
     })
 }
 
@@ -259,6 +289,41 @@ function addNewInteractionEvent(button) {
     });
 }
 
+// Adiciona o evento de limpar os filtros de interações
+function cleanAllInteractionFilters(button) {
+    button.addEventListener('click', () => {
+        if (parseInt(resultFilterSelect.value) !== 0 || parseInt(contactFilterSelect.value) !== 0) {
+            resultFilterSelect.value = 0;
+            contactFilterSelect.value = 0;
+            currentResultIdFilter = 0;
+            currentContactIdFilter = 0;
+            openFiltersButtonInteraction.classList.remove('active');
+            if (!resultFilterSelect.classList.contains('unselected')) {
+                resultFilterSelect.classList.add('unselected');
+            }
+            if (!contactFilterSelect.classList.contains('unselected')) {
+                contactFilterSelect.classList.add('unselected');
+            }
+            cleanAllInteractions();
+            getInteractions().then();
+        }
+    });
+}
+
+// Adiciona o evento para aplicar os filtros de cliente
+function applyInteractionFilters(button) {
+    button.addEventListener('click', () => {
+        if (parseInt(resultFilterSelect.value) !== 0 || parseInt(contactFilterSelect.value) !== 0) {
+            currentResultIdFilter = parseInt(resultFilterSelect.value);
+            currentContactIdFilter = parseInt(contactFilterSelect.value);
+            filtersMenuInteraction.classList.toggle('hidden');
+            openFiltersButtonInteraction.classList.add('active');
+            cleanAllInteractions();
+            getInteractions().then();
+        }
+    });
+}
+
 // Busca os elementos da página e atribui eles as variáveis globais
 function getInteractionElements() {
     buttonAddNewInteraction = document.querySelector('.button-add-new');
@@ -276,6 +341,12 @@ function getInteractionElements() {
     tableContainerInteraction = document.querySelector('.table-container');
     searchInputInteraction = document.querySelector('#search');
     searchButtonInteraction = document.querySelector('#searchButton');
+    openFiltersButtonInteraction = document.querySelector('#filter');
+    cleanFiltersButtonInteraction = document.querySelector('.clean-filters-button');
+    applyFiltersButtonInteraction = document.querySelector('.apply-filters-button');
+    filtersMenuInteraction = document.querySelector('.filter-menu');
+    resultFilterSelect = document.querySelector('select[name="result-filter"]');
+    contactFilterSelect = document.querySelector('select[name="contact-filter"]');
 }
 
 // Inicialização da página de interações
@@ -284,6 +355,9 @@ function interactionStartup() {
     interactionPage = 0;
     shouldLoadMoreInteractions = true;
     isLoadingMoreInteractions = false;
+    currentSearchTermProposal = null;
+    currentResultIdFilter = 0;
+    currentContactIdFilter = 0;
 
     getInteractions().then(() => {
         getInteractionElements();
@@ -292,9 +366,14 @@ function interactionStartup() {
         addSwitchOverlayEvent(cancelCloseModalInteraction);
         addSwitchOverlayEvent(buttonCloseModalInteraction);
         addSaveInteractionEvent(saveCloseModalInteraction);
+        addSwitchFilterMenuEvent(openFiltersButtonInteraction, filtersMenuInteraction);
+        cleanAllInteractionFilters(cleanFiltersButtonInteraction);
+        applyInteractionFilters(applyFiltersButtonInteraction);
 
         addSelectedDataEvent(resultSelectInteraction);
         addSelectedDataEvent(contactSelectInteraction);
+        addSelectedDataEvent(resultFilterSelect);
+        addSelectedDataEvent(contactFilterSelect);
 
         getAllClients(clientSelectInteraction).then(() => {
             addSelectedDataEvent(clientSelectInteraction);

@@ -1,7 +1,6 @@
 package com.projetointegrador.projetointegrador.services;
 
-import com.projetointegrador.projetointegrador.models.Client;
-import com.projetointegrador.projetointegrador.models.Proposal;
+import com.projetointegrador.projetointegrador.models.*;
 import com.projetointegrador.projetointegrador.repositories.ProposalRepository;
 import com.projetointegrador.projetointegrador.responses.Response;
 import org.springframework.data.domain.Example;
@@ -36,7 +35,7 @@ public class ProposalService {
     }
 
     // Lista todas as propostas ativas
-    public Page<Proposal> listActiveProposal(String searchTerm, Pageable pageable) {
+    public Page<Proposal> listActiveProposal(String searchTerm, Integer statusId, Integer serviceTypeId, Pageable pageable) {
         Proposal exampleProposal = new Proposal();
         exampleProposal.setInactive(false);
 
@@ -49,6 +48,14 @@ public class ProposalService {
             Client client = new Client();
             exampleProposal.setClient(client);
             exampleProposal.getClient().setName(searchTerm);
+        }
+
+        if (statusId != null) {
+            exampleProposal.setStatus(statusId);
+        }
+
+        if (serviceTypeId != null) {
+            exampleProposal.setServiceType(serviceTypeId);
         }
 
         Example<Proposal> example = Example.of(exampleProposal, matcher);

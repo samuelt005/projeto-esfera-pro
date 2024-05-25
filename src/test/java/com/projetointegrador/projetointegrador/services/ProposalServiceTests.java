@@ -60,7 +60,7 @@ public class ProposalServiceTests {
 
         when(proposalRepository.findAll(any(Example.class), any(Pageable.class))).thenReturn(page);
 
-        Page<Proposal> resultPage = proposalService.listActiveProposal(null, PageRequest.of(0, 20));
+        Page<Proposal> resultPage = proposalService.listActiveProposal(null, null, null, PageRequest.of(0, 20));
 
         // Verificando se o método retornou uma página não nula
         assertNotNull(resultPage);

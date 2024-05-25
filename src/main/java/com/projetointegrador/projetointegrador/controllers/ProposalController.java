@@ -31,17 +31,13 @@ public class ProposalController {
     @ResponseBody
     public ResponseEntity<?> listProposals(
             @PathVariable int page,
-            @RequestParam(required = false) String searchTerm
+            @RequestParam(required = false) String searchTerm,
+            @RequestParam(required = false) Integer statusId,
+            @RequestParam(required = false) Integer serviceTypeId
     ) {
         int size = 20;
         PageRequest pageRequest = PageRequest.of(page, size);
-        Page<Proposal> proposals;
-
-        if (searchTerm != null && !searchTerm.isEmpty()) {
-            proposals = proposalService.listActiveProposal(searchTerm, pageRequest);
-        } else {
-            proposals = proposalService.listActiveProposal(null, pageRequest);
-        }
+        Page<Proposal> proposals = proposalService.listActiveProposal(searchTerm, statusId, serviceTypeId, pageRequest);
 
         return ResponseEntity.ok().body(proposals);
     }
