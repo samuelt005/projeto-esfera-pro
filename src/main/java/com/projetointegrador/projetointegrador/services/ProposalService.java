@@ -84,6 +84,21 @@ public class ProposalService {
         return ResponseEntity.ok().body(createdProposal);
     }
 
+    // Cria várias interações
+    public ResponseEntity<?> createProposals(List<Proposal> proposals) {
+        int successfulCreations = 0;
+
+        for (Proposal proposal : proposals) {
+            proposal.setInactive(false);
+            proposal.setId(null);
+
+            proposalRepository.save(proposal);
+            successfulCreations++;
+        }
+
+        return ResponseEntity.ok().body("Total de propostas cadastradas com sucesso: " + successfulCreations);
+    }
+
     // Atualiza uma proposta
     public ResponseEntity<?> updateProposal(Proposal proposal) {
         if (proposal.getId() == null || proposal.getClient().getId() == null) {

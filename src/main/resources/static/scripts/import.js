@@ -11,6 +11,11 @@ const selectedFileTotalLines = document.querySelector(".text-total-lines");
 const modelFileButton = document.querySelector(".model-file-container");
 const successMessage = document.querySelector(".success-message");
 
+let modalToGet;
+let fileName;
+let tableToInsert;
+let lineLength;
+
 let importingObjects = [];
 
 // Define o título do modal baseado na página atual
@@ -62,6 +67,31 @@ function switchOverlayImport() {
             resetImportingScreen();
         }, {once: true});
     }
+
+    checkPageVariables();
+}
+
+function checkPageVariables() {
+    switch (currentPage) {
+        case 2:
+            modalToGet = 'getClientsModel';
+            fileName = 'modelo_importacao_clientes.xlsm';
+            tableToInsert = 'client';
+            lineLength = 11;
+            break;
+        case 3:
+            modalToGet = 'getProposalsModel';
+            fileName = 'modelo_importacao_propostas.xlsm';
+            tableToInsert = 'proposal';
+            lineLength = 6;
+            break;
+        case 4:
+            modalToGet = 'getInteractionsModel';
+            fileName = 'modelo_importacao_interacoes.xlsm';
+            tableToInsert = 'interaction';
+            lineLength = 6;
+            break;
+    }
 }
 
 // Adiciona o evento de input a div de no-file-wrapper
@@ -102,11 +132,7 @@ function readCSVFile(file) {
             const line = lines[i];
             const columns = line.split(';');
 
-            console.log(columns.length)
-
-            if (columns.length === 11) {
-                const obj = {};
-
+            if (columns.length === lineLength) {
                 importingObjects.push(createImportingObject(columns));
             }
         }
@@ -124,7 +150,9 @@ function readCSVFile(file) {
     reader.readAsText(file);
 }
 
+// Cria os objetos de importação
 function createImportingObject(columns) {
+    console.log(columns)
     switch (currentPage) {
         case 2:
             return {
@@ -149,7 +177,47 @@ function createImportingObject(columns) {
                 }
             }
         case 3:
-            return {}
+            let serviceType;
+            let status;
+
+            switch (columns[2].trim()) {
+                case "Consultoria":
+                    serviceType = 1;
+                    break;
+                case "Acompanhamento":
+                    serviceType = 2;
+                    break;
+                case "Treinamento":
+                    serviceType = 3;
+                    break;
+            }
+
+            switch (columns[3].trim()) {
+                case "Parado":
+                    status = 1;
+                    break;
+                case "Negociacao":
+                    status = 2;
+                    break;
+                case "Acompanhar":
+                    status = 3;
+                    break;
+                case "Fechado":
+                    status = 4;
+                    break;
+            }
+
+            return {
+                offerDate: new Date(getDateISO(columns[1].trim())),
+                value: parseFloat(columns[4].trim().replace(",", ".")),
+                serviceType: serviceType,
+                status: status,
+                description: columns[5].trim(),
+                inactive: false,
+                client: {
+                    id: parseInt(columns[0].trim())
+                }
+            }
         case 4:
             return {}
     }
@@ -160,23 +228,29 @@ function addSwitchOverlayImportEvent(button) {
     button.addEventListener('click', switchOverlayImport);
 }
 
+// Adiciona o evento de input de arquivo a div
 function addGetModelFileEvent(button) {
     button.addEventListener('click', getImportingFile);
 }
 
+// Buscar o arquivo modelo xlsx no backend
 async function getImportingFile() {
     try {
-        const response = await fetch(`${URL}/getClientsModel`);
+
+        if (modalToGet === "") throw new Error('Erro ao obter o arquivo modelo.');
+
+        const response = await fetch(`${URL}/${modalToGet}`);
         if (!response.ok) {
             throw new Error('Erro ao obter o arquivo modelo.');
         }
+
         const blob = await response.blob();
         const arrayBuffer = await new Response(blob).arrayBuffer();
         const fileBlob = new Blob([arrayBuffer], {type: 'application/octet-stream'});
         const blobUrl = window.URL.createObjectURL(fileBlob);
         const downloadLink = document.createElement('a');
         downloadLink.href = blobUrl;
-        downloadLink.download = 'modelo_importacao_clientes.xlsm';
+        downloadLink.download = fileName;
         downloadLink.click();
 
         window.URL.revokeObjectURL(blobUrl);
@@ -186,11 +260,12 @@ async function getImportingFile() {
     }
 }
 
-async function importData() {
+// Salva os dados no banco
+async function saveData() {
     if (importingObjects.length > 0) {
         console.log("Dados a serem importados:", importingObjects);
         try {
-            const response = await fetch(`${URL}/client/bulk`, {
+            const response = await fetch(`${URL}/${tableToInsert}/bulk`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -218,18 +293,19 @@ async function importData() {
     }
 }
 
-
+// Adiciona os comportamentos aos botões do modal
 function setupImportButtons() {
     resetImportingScreen();
     addSwitchOverlayImportEvent(buttonCloseModalImport);
     addSwitchOverlayImportEvent(cancelCloseModalImport);
     addSwitchOverlayImportEvent(FinishModalImport);
-    buttonImportModal.addEventListener('click', importData);
+    buttonImportModal.addEventListener('click', saveData);
     addGetModelFileEvent(modelFileButton);
     addFileInputEvent();
     addFileInputChangeEvent();
 }
 
+// Inicia o componente de importação
 function importSetup() {
     setModalImportTitle();
 }

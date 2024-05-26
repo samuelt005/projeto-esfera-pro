@@ -3,6 +3,7 @@ let buttonAddNewProposal;
 let buttonCloseModalProposal;
 let cancelCloseModalProposal;
 let saveCloseModalProposal;
+let importOpenModalProposal;
 let clientSelectProposal;
 let serviceTypeSelectProposal;
 let offerDateInputProposal;
@@ -329,6 +330,7 @@ function getProposalElements() {
     buttonCloseModalProposal = document.querySelector('.close-modal-button');
     cancelCloseModalProposal = document.querySelector('.cancel-modal-button');
     saveCloseModalProposal = document.querySelector('.save-modal-button');
+    importOpenModalProposal = document.querySelector('#import');
     clientSelectProposal = document.querySelector('select[name="client"]');
     serviceTypeSelectProposal = document.querySelector('select[name="serviceType"]');
     offerDateInputProposal = document.querySelector('input[name="offerDate"]');
@@ -363,6 +365,7 @@ function propostasStartup() {
         addSwitchOverlayEvent(buttonCloseModalProposal);
         addSwitchOverlayEvent(cancelCloseModalProposal);
         addSwitchOverlayEvent(buttonCloseModalProposal);
+        addSwitchOverlayImportEvent(importOpenModalProposal);
         addSaveProposalEvent(saveCloseModalProposal);
         addSwitchFilterMenuEvent(openFiltersButtonProposal, filtersMenuProposal);
         cleanAllProposalFilters(cleanFiltersButtonProposal);
