@@ -89,7 +89,7 @@ function checkPageVariables() {
             modalToGet = 'getInteractionsModel';
             fileName = 'modelo_importacao_interacoes.xlsm';
             tableToInsert = 'interaction';
-            lineLength = 6;
+            lineLength = 7;
             break;
     }
 }
@@ -147,7 +147,7 @@ function readCSVFile(file) {
         console.log(importingObjects);
     };
 
-    reader.readAsText(file);
+    reader.readAsText(file, 'ISO-8859-1');
 }
 
 // Cria os objetos de importação
@@ -190,6 +190,9 @@ function createImportingObject(columns) {
                 case "Treinamento":
                     serviceType = 3;
                     break;
+                default:
+                    serviceType = 1;
+                    break;
             }
 
             switch (columns[3].trim()) {
@@ -205,6 +208,9 @@ function createImportingObject(columns) {
                 case "Fechado":
                     status = 4;
                     break;
+                default:
+                    status = 1;
+                    break;
             }
 
             return {
@@ -219,7 +225,57 @@ function createImportingObject(columns) {
                 }
             }
         case 4:
-            return {}
+            let contact;
+            let result;
+
+            switch (columns[2].trim()) {
+                case "Ligacao":
+                    contact = 1;
+                    break;
+                case "Whatsapp":
+                    contact = 2;
+                    break;
+                case "Email":
+                    contact = 3;
+                    break;
+                default:
+                    contact = 1;
+                    break;
+            }
+
+            switch (columns[3].trim()) {
+                case "Desligado":
+                    result = 1;
+                    break;
+                case "Ocupado":
+                    result = 2;
+                    break;
+                case "Cx. Postal":
+                    result = 3;
+                    break;
+                case "Atendido":
+                    result = 4;
+                    break;
+                default:
+                    result = 1;
+                    break;
+            }
+
+            return {
+                date: new Date(getDateISO(columns[1].trim())),
+                time: convertNumberToHours(columns[4].trim()),
+                duration: convertNumberToHours(columns[5].trim()),
+                result: result,
+                contact: contact,
+                description: columns[6].trim(),
+                inactive: false,
+                proposal: {
+                    id: parseInt(columns[0].trim())
+                },
+                client: {
+                    id: 22
+                }
+            }
     }
 }
 

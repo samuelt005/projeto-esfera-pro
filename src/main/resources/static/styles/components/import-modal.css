@@ -18,7 +18,7 @@
     padding: 10px;
     gap: 10px;
     height: 100px;
-    width: 460px;
+    width: 480px;
     cursor: pointer;
 }
 
@@ -53,7 +53,7 @@
     padding: 10px;
     gap: 16px;
     height: 100px;
-    width: 460px;
+    width: 480px;
 }
 
 .import-success {
@@ -64,7 +64,7 @@
     padding: 10px;
     gap: 16px;
     height: 300px;
-    width: 460px;
+    width: 480px;
     overflow-y: auto;
 }
 
