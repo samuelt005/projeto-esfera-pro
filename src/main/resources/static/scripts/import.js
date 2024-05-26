@@ -115,8 +115,6 @@ function addFileInputChangeEvent() {
             selectedFileDiv.classList.remove("hidden");
 
             selectedFileName.textContent = selectedFile.name;
-
-            console.log('Arquivo selecionado:', selectedFile);
         }
     });
 }
@@ -146,7 +144,6 @@ function readCSVFile(file) {
 
         selectedFileTotalLines.textContent = importingObjects.length.toString();
         buttonImportModal.classList.remove('disabled');
-        console.log(importingObjects);
     };
 
     reader.readAsText(file, 'ISO-8859-1');
@@ -154,7 +151,6 @@ function readCSVFile(file) {
 
 // Cria os objetos de importação
 function createImportingObject(columns) {
-    console.log(columns)
     switch (currentPage) {
         case 2:
             return {
@@ -345,7 +341,6 @@ async function getImportingFile() {
 // Salva os dados no banco
 async function saveData() {
     if (importingObjects.length > 0) {
-        console.log("Dados a serem importados:", importingObjects);
         try {
             const response = await fetch(`${URL}/${tableToInsert}/bulk`, {
                 method: 'POST',
@@ -372,8 +367,6 @@ async function saveData() {
             console.error('Erro ao importar os dados:', error);
             showErrorToast("Erro ao importar dados!");
         }
-    } else {
-        console.log("Não há dados para importar.");
     }
 }
 
