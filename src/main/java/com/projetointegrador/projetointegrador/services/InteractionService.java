@@ -1,5 +1,6 @@
 package com.projetointegrador.projetointegrador.services;
 
+import com.projetointegrador.projetointegrador.models.Client;
 import com.projetointegrador.projetointegrador.models.Interaction;
 import com.projetointegrador.projetointegrador.repositories.InteractionRepository;
 import com.projetointegrador.projetointegrador.responses.Response;
@@ -34,11 +35,28 @@ public class InteractionService {
     }
 
     // Lista todas as interações ativas
-    public Page<Interaction> listActiveInteraction(Pageable pageable) {
+    public Page<Interaction> listActiveInteraction(String searchTerm, Integer resultId, Integer contactId, Pageable pageable) {
         Interaction exampleInteraction = new Interaction();
         exampleInteraction.setInactive(false);
 
-        ExampleMatcher matcher = ExampleMatcher.matching().withIgnorePaths("id");
+        ExampleMatcher matcher = ExampleMatcher.matching()
+                .withIgnorePaths("id")
+                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)
+                .withIgnoreCase();
+
+        if (searchTerm != null && !searchTerm.isEmpty()) {
+            Client client = new Client();
+            exampleInteraction.setClient(client);
+            exampleInteraction.getClient().setName(searchTerm);
+        }
+
+        if (resultId != null) {
+            exampleInteraction.setResult(resultId);
+        }
+
+        if (contactId != null) {
+            exampleInteraction.setContact(contactId);
+        }
 
         Example<Interaction> example = Example.of(exampleInteraction, matcher);
 

@@ -1,6 +1,9 @@
 package com.projetointegrador.projetointegrador.services;
 
+import com.projetointegrador.projetointegrador.models.Address;
+import com.projetointegrador.projetointegrador.models.City;
 import com.projetointegrador.projetointegrador.models.Client;
+import com.projetointegrador.projetointegrador.models.State;
 import com.projetointegrador.projetointegrador.repositories.ClientRepository;
 import com.projetointegrador.projetointegrador.responses.Response;
 import com.projetointegrador.projetointegrador.validators.CnpjValidator;
@@ -38,11 +41,28 @@ public class ClientService {
     }
 
     // Lista todos os clientes ativos
-    public Page<Client> listActiveClients(Pageable pageable) {
+    public Page<Client> listActiveClients(String searchTerm, Long stateId, Pageable pageable) {
         Client exampleClient = new Client();
         exampleClient.setInactive(false);
 
-        ExampleMatcher matcher = ExampleMatcher.matching().withIgnorePaths("id");
+        ExampleMatcher matcher = ExampleMatcher.matching()
+                .withIgnorePaths("id")
+                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)
+                .withIgnoreCase();
+
+        if (searchTerm != null && !searchTerm.isEmpty()) {
+            exampleClient.setName(searchTerm);
+        }
+
+        if (stateId != null) {
+            Address address = new Address();
+            City city = new City();
+            State state = new State();
+            state.setId(stateId);
+            exampleClient.setAddress(address);
+            exampleClient.getAddress().setCity(city);
+            exampleClient.getAddress().getCity().setState(state);
+        }
 
         Example<Client> example = Example.of(exampleClient, matcher);
 

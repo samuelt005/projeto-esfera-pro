@@ -136,6 +136,24 @@ function addSwitchOverlayEvent(button) {
     button.addEventListener('click', switchOverlay);
 }
 
+// Adiciona o evento de alterar a visibilidade do menu de filtros
+function addSwitchFilterMenuEvent(button, filtersWrapper) {
+    button.addEventListener("click", (event) => {
+        filtersWrapper.classList.toggle('hidden');
+        event.stopPropagation();
+    });
+
+    document.addEventListener("click", function (event) {
+        const isClickedInsideMenu =
+            button.contains(event.target) ||
+            filtersWrapper.contains(event.target);
+
+        if (!isClickedInsideMenu) {
+            filtersWrapper.classList.add('hidden');
+        }
+    });
+}
+
 // Converte um CPF no formato padrão para exibição
 function getCpfFormatted(cpfString) {
     cpfString = cpfString.replace(/\D/g, '');
@@ -152,6 +170,15 @@ function getCnpjFormatted(cnpjString) {
 function getDateFormatted(dateISO) {
     const dateParts = dateISO.split('T')[0].split('-');
     return dateParts[2] + '/' + dateParts[1] + '/' + dateParts[0];
+}
+
+// Converte tipo date para formato DD/MM/YYYY
+function getPhoneFormatted(phoneISO) {
+    const DDD = phoneISO.slice(0, 2);
+    const part1 = phoneISO.slice(2, 7);
+    const part2 = phoneISO.slice(7);
+
+    return DDD + ' ' + part1 + '-' + part2;
 }
 
 // Converte formato DD/MM/YYYY para tipo date
@@ -223,7 +250,6 @@ function getContactText(contactId) {
             return 'E-mail'
     }
 }
-
 
 // Recebe um id de result e retorna um fragmento de HTML
 function getStatusDiv(resultId) {
@@ -345,20 +371,37 @@ async function getAllProposals(proposalSelect) {
 }
 
 // Função para definir o evento do scroll infinito na tabela
-function setInfiniteScroll(tableContainer) {
+function setInfiniteScroll(tableContainer, callFunction) {
     tableContainer.addEventListener('scroll', function () {
         if (tableContainer.scrollTop + tableContainer.offsetHeight >= tableContainer.scrollHeight) {
-            switch (currentPage) {
-                case 2:
-                    getClients().then();
-                    break;
-                case 3:
-                    getProposal().then();
-                    break;
-                case 4:
-                    getInteractions().then();
-                    break;
-            }
+            callFunction();
+        }
+    });
+}
+
+// Função para definir o comportamento do campo de pesquisa
+function setSearchInputEvent(searchInput, searchButton, cleanButton, cleanFunction, callFunction) {
+    const handleSearch = () => {
+        const searchTerm = searchInput.value.trim();
+        cleanFunction();
+        callFunction(searchTerm);
+        cleanButton.classList.toggle('hidden', searchTerm === null || searchTerm === "");
+    };
+
+    searchInput.addEventListener('keypress', (event) => {
+        if (event.key === 'Enter') {
+            handleSearch();
+        }
+    });
+
+    searchButton.addEventListener('click', handleSearch);
+
+    cleanButton.addEventListener('click', () => {
+        if (searchInput.value.trim() !== "") {
+            searchInput.value = "";
+            cleanFunction();
+            callFunction("");
+            cleanButton.classList.add('hidden');
         }
     });
 }

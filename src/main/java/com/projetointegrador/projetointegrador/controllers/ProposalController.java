@@ -1,5 +1,6 @@
 package com.projetointegrador.projetointegrador.controllers;
 
+import com.projetointegrador.projetointegrador.models.Client;
 import com.projetointegrador.projetointegrador.models.Proposal;
 import com.projetointegrador.projetointegrador.services.ProposalService;
 import org.springframework.data.domain.Page;
@@ -29,11 +30,15 @@ public class ProposalController {
     @GetMapping("/{page}")
     @ResponseBody
     public ResponseEntity<?> listProposals(
-            @PathVariable int page
+            @PathVariable int page,
+            @RequestParam(required = false) String searchTerm,
+            @RequestParam(required = false) Integer statusId,
+            @RequestParam(required = false) Integer serviceTypeId
     ) {
         int size = 20;
         PageRequest pageRequest = PageRequest.of(page, size);
-        Page<Proposal> proposals = proposalService.listActiveProposal(pageRequest);
+        Page<Proposal> proposals = proposalService.listActiveProposal(searchTerm, statusId, serviceTypeId, pageRequest);
+
         return ResponseEntity.ok().body(proposals);
     }
 

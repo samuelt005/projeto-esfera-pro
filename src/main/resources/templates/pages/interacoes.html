@@ -9,9 +9,24 @@
     <div class="content-container">
         <div class="table-header">
             <h2>Interações</h2>
-            <div th:replace="~{components/search :: search('pesquisar', 'Pesquisar', ~{icons/search/magnifying-glass :: magnifying-glass})}"></div>
+            <div th:replace="~{components/search :: search('search', 'Pesquisar por cliente')}"></div>
             <div class="buttons">
-                <div th:replace="~{components/button1 :: button('filtrar', 'Filtrar', ~{icons/buttons/filters :: filters})}"></div>
+                <div class="filter-container">
+                    <div th:replace="~{components/button1 :: button('filter', 'Filtros', ~{icons/buttons/filters :: filters})}"></div>
+
+                    <div class="filter-menu hidden">
+                        <div class="top-filter-section">
+                            <h4>Resultado</h4>
+                            <div th:replace="~{components/input-select :: input('result-filter', 'Selecione', false)}"></div>
+                            <h4>Meio de contato</h4>
+                            <div th:replace="~{components/input-select :: input('contact-filter', 'Selecione', false)}"></div>
+                        </div>
+                        <div class="bottom-filter-section">
+                            <div th:replace="~{components/button2 :: button('clean-filters-button', 'Limpar', false)}"></div>
+                            <div th:replace="~{components/button2 :: button('apply-filters-button', 'Aplicar', true)}"></div>
+                        </div>
+                    </div>
+                </div>
                 <div th:replace="~{components/button1 :: button('exportar', 'Exportar', ~{icons/buttons/export :: export})}"></div>
             </div>
         </div>
@@ -119,6 +134,7 @@
     <link rel="stylesheet" th:href="@{/styles/components/input-select.css}"/>
     <link rel="stylesheet" th:href="@{/styles/components/button-table.css}"/>
     <link rel="stylesheet" th:href="@{/styles/components/checkbox-table.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/components/filter-menu.css}"/>
 </styles>
 </body>
 </html>

@@ -19,20 +19,57 @@ let zipCodeInput;
 let stateSelect;
 let citySelect;
 let tableContainerClient;
+let searchInputClient;
+let searchButtonClient;
+let searchCleanButtonClient;
 
-// Lista de clientes
+// Variáveis de filtros
+let openFiltersButtonClient;
+let cleanFiltersButtonClient;
+let applyFiltersButtonClient;
+let filtersMenuClient;
+let stateFilterSelect;
+let currentStateIdFilter = 0;
+
+// Variáveis de clientes
 let clientList;
 let clientPage;
 let shouldLoadMoreClient;
 let isLoadingMoreClient;
+let currentSearchTermClient = null;
+
+// Limpa a listagem de clientes
+function cleanAllClients() {
+    document.querySelector('.table-content').innerHTML = "";
+    clientList = [];
+    clientPage = 0;
+    shouldLoadMoreClient = true;
+    currentSearchTermClient = null;
+}
 
 // Buscar todos os clientes
-async function getClients() {
+async function getClients(searchTerm = "") {
     if (!shouldLoadMoreClient || isLoadingMoreClient) return;
 
     isLoadingMoreClient = true;
 
-    await fetch(`${URL}/client/${clientPage}`)
+    let fetchUrl = `${URL}/client/${clientPage}`;
+    if (currentSearchTermClient !== null) {
+        fetchUrl += `?searchTerm=${encodeURIComponent(currentSearchTermClient)}`;
+    } else if (searchTerm !== "" || searchTerm !== null) {
+        currentSearchTermClient = searchTerm;
+        fetchUrl += `?searchTerm=${encodeURIComponent(searchTerm)}`;
+    }
+
+    if (currentStateIdFilter !== 0) {
+        if (fetchUrl.includes('?')) {
+            fetchUrl += `&stateId=${encodeURIComponent(currentStateIdFilter)}`;
+        } else {
+            fetchUrl += `?stateId=${encodeURIComponent(currentStateIdFilter)}`;
+        }
+    }
+
+    await fetch(fetchUrl)
         .then(response => {
             if (!response.ok) {
                 throw new Error(`Erro ao recuperar clientes`);
@@ -101,7 +138,7 @@ async function getOneClient(id, isEditing) {
 }
 
 // Busca todos os estados
-async function getStates(stateSelect) {
+async function getStates(stateSelect, stateFilterSelect) {
     await fetch(`${URL}/state`)
         .then(response => {
             if (!response.ok) {
@@ -114,12 +151,18 @@ async function getStates(stateSelect) {
             stateSelect.selectedIndex = 0;
 
             data.forEach((data) => {
-                const newOption = document.createElement('option');
-                newOption.value = data.id;
-                newOption.textContent = data.name;
-                newOption.classList.add('state-option');
+                const newOptionModal = document.createElement('option');
+                newOptionModal.value = data.id;
+                newOptionModal.textContent = data.name;
+                newOptionModal.classList.add('state-option');
 
-                stateSelect.appendChild(newOption);
+                stateSelect.appendChild(newOptionModal);
+
+                const newOptionFilter = document.createElement('option');
+                newOptionFilter.value = data.id;
+                newOptionFilter.textContent = data.name;
+                newOptionFilter.classList.add('state-option');
+                stateFilterSelect.appendChild(newOptionFilter);
             })
             stateSelect.disabled = false;
         })
@@ -189,7 +232,7 @@ function createClientTableRow(client) {
         <td>${client.name}</td>
         <td>${client.cnpj ? getCnpjFormatted(client.cnpj) : getCpfFormatted(client.cpf)}</td>
         <td>${client.company}</td>
-        <td>${client.telephone === "" || client.telephone === null ? '-' : client.telephone}</td>
+        <td>${client.telephone === "" || client.telephone === null ? '-' : getPhoneFormatted(client.telephone)}</td>
         <td>${client.email === "" || client.email === null ? '-' : client.email}</td>
         <td>${client.address.city.name} - ${client.address.city.state.uf}</td>
         ${clienteButtons}
@@ -296,6 +339,35 @@ function addNewClientEvent(button) {
     });
 }
 
+// Adiciona o evento de limpar os filtros de cliente
+function cleanAllClientFilters(button) {
+    button.addEventListener('click', () => {
+        if (parseInt(stateFilterSelect.value) !== 0) {
+            stateFilterSelect.value = 0;
+            currentStateIdFilter = 0;
+            openFiltersButtonClient.classList.remove('active');
+            if (!stateFilterSelect.classList.contains('unselected')) {
+                stateFilterSelect.classList.add('unselected');
+            }
+            cleanAllClients();
+            getClients().then();
+        }
+    });
+}
+
+// Adiciona o evento para aplicar os filtros de cliente
+function applyClientFilters(button) {
+    button.addEventListener('click', () => {
+        if (parseInt(stateFilterSelect.value) !== 0) {
+            currentStateIdFilter = parseInt(stateFilterSelect.value);
+            filtersMenuClient.classList.toggle('hidden');
+            openFiltersButtonClient.classList.add('active');
+            cleanAllClients();
+            getClients().then();
+        }
+    });
+}
+
 // Busca os elementos da página e atribui eles as variáveis globais
 function getClientElements() {
     buttonAddNew = document.querySelector('.button-add-new');
@@ -316,6 +388,14 @@ function getClientElements() {
     stateSelect = document.querySelector('select[name="state"]');
     citySelect = document.querySelector('select[name="city"]');
     tableContainerClient = document.querySelector('.table-container');
+    searchInputClient = document.querySelector('#search');
+    searchButtonClient = document.querySelector('#searchButton');
+    searchCleanButtonClient = document.querySelector('#searchCleanButton');
+    openFiltersButtonClient = document.querySelector('#filter');
+    cleanFiltersButtonClient = document.querySelector('.clean-filters-button');
+    applyFiltersButtonClient = document.querySelector('.apply-filters-button');
+    filtersMenuClient = document.querySelector('.filter-menu');
+    stateFilterSelect = document.querySelector('select[name="state-filter"]');
 }
 
 // Inicialização da página de clientes
@@ -324,6 +404,8 @@ function clientesStartup() {
     clientPage = 0;
     shouldLoadMoreClient = true;
     isLoadingMoreClient = false;
+    currentSearchTermClient = null;
+    currentStateIdFilter = 0;
 
     getClients().then(() => {
         getClientElements();
@@ -331,15 +413,20 @@ function clientesStartup() {
         addSwitchOverlayEvent(buttonCloseModal);
         addSwitchOverlayEvent(cancelCloseModal);
         addSwitchOverlayEvent(buttonCloseModal);
+        addSwitchFilterMenuEvent(openFiltersButtonClient, filtersMenuClient);
+        cleanAllClientFilters(cleanFiltersButtonClient);
+        applyClientFilters(applyFiltersButtonClient);
         addSaveClientEvent(saveCloseModal);
 
-        getStates(stateSelect).then(() => {
+        getStates(stateSelect, stateFilterSelect).then(() => {
             addSelectedStateEvent(stateSelect);
             addSelectedDataEvent(citySelect);
+            addSelectedDataEvent(stateFilterSelect);
             setInputMasks();
         });
 
-        setInfiniteScroll(tableContainerClient);
+        setInfiniteScroll(tableContainerClient, getClients);
+        setSearchInputEvent(searchInputClient, searchButtonClient, searchCleanButtonClient, cleanAllClients, getClients);
     });
 }
 
