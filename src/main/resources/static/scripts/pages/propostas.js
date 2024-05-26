@@ -97,7 +97,7 @@ async function getProposals(searchTerm = "") {
             proposalPage++;
             isLoadingMoreProposals = false;
             proposalList.push(...itemsToAdd);
-            addProposalRows(itemsToAdd);
+            addProposalRows(itemsToAdd, false);
         })
         .catch((e) => {
             getMainFrameContent('error');
@@ -129,7 +129,7 @@ async function getOneProposal(id, isEditing) {
                 addCheckboxesEvents();
             } else {
                 proposalList.push(data);
-                addProposalRows([data]);
+                addProposalRows([data], true);
             }
         })
         .catch(error => {
@@ -180,12 +180,17 @@ function setStatusSelect() {
 }
 
 // Adiciona linhas a tabela de propostas
-function addProposalRows(proposals) {
+function addProposalRows(proposals, insertAtStart) {
     const tableContent = document.querySelector(".table-content");
 
     proposals.forEach((proposal) => {
         const newRow = createProposalTableRow(proposal);
-        tableContent.appendChild(newRow);
+
+        if (insertAtStart) {
+            tableContent.insertBefore(newRow, tableContent.firstChild);
+        } else {
+            tableContent.appendChild(newRow);
+        }
     });
 
     addCheckboxesEvents();

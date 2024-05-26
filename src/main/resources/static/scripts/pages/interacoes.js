@@ -99,7 +99,7 @@ async function getInteractions(searchTerm = "") {
             interactionPage++;
             isLoadingMoreInteractions = false;
             interactionList.push(...itemsToAdd);
-            addInteractionRows(itemsToAdd);
+            addInteractionRows(itemsToAdd, false);
         })
         .catch(() => {
             getMainFrameContent('error');
@@ -131,7 +131,7 @@ async function getOneInteraction(id, isEditing) {
                 addCheckboxesEvents();
             } else {
                 interactionList.push(data);
-                addInteractionRows([data]);
+                addInteractionRows([data], true);
             }
         })
         .catch(error => {
@@ -182,12 +182,17 @@ function setResultSelect() {
 }
 
 // Adiciona linhas a tabela de interações
-function addInteractionRows(interactions) {
+function addInteractionRows(interactions, insertAtStart) {
     const tableContent = document.querySelector(".table-content");
 
     interactions.forEach((interaction) => {
         const newRow = createInteractionTableRow(interaction);
-        tableContent.appendChild(newRow);
+
+        if (insertAtStart) {
+            tableContent.insertBefore(newRow, tableContent.firstChild);
+        } else {
+            tableContent.appendChild(newRow);
+        }
     });
 
     addCheckboxesEvents();

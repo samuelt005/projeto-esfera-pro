@@ -5,10 +5,7 @@ import com.projetointegrador.projetointegrador.models.Interaction;
 import com.projetointegrador.projetointegrador.models.Proposal;
 import com.projetointegrador.projetointegrador.repositories.InteractionRepository;
 import com.projetointegrador.projetointegrador.responses.Response;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -64,6 +61,8 @@ public class InteractionService {
         }
 
         Example<Interaction> example = Example.of(exampleInteraction, matcher);
+
+        pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Direction.DESC, "id"));
 
         return interactionRepository.findAll(example, pageable);
     }

@@ -103,6 +103,10 @@
     max-width: 60px;
 }
 
+.table tr th:nth-child(2),
+.table tr td:nth-child(2) {
+    max-width: 60px;
+}
 
 .table tr th:last-child,
 .table tr td:last-child {

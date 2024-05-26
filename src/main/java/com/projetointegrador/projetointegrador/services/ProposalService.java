@@ -3,10 +3,7 @@ package com.projetointegrador.projetointegrador.services;
 import com.projetointegrador.projetointegrador.models.*;
 import com.projetointegrador.projetointegrador.repositories.ProposalRepository;
 import com.projetointegrador.projetointegrador.responses.Response;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -59,6 +56,8 @@ public class ProposalService {
         }
 
         Example<Proposal> example = Example.of(exampleProposal, matcher);
+
+        pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Direction.DESC, "id"));
 
         return proposalRepository.findAll(example, pageable);
     }

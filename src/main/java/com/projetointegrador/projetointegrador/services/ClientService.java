@@ -8,10 +8,7 @@ import com.projetointegrador.projetointegrador.repositories.ClientRepository;
 import com.projetointegrador.projetointegrador.responses.Response;
 import com.projetointegrador.projetointegrador.validators.CnpjValidator;
 import com.projetointegrador.projetointegrador.validators.CpfValidator;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -66,6 +63,8 @@ public class ClientService {
         }
 
         Example<Client> example = Example.of(exampleClient, matcher);
+
+        pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Direction.DESC, "id"));
 
         return clientRepository.findAll(example, pageable);
     }
