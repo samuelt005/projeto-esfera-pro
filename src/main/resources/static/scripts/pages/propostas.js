@@ -200,7 +200,7 @@ function createProposalTableRow(proposal) {
             ${rowCheckboxIcon}
         </th>
         <td>${proposal.id}</td>
-        <td>${proposal.client.company ? proposal.client.company : proposal.name}</td>
+        <td>${proposal.client.name ? proposal.client.name : '-'}</td>
         <td>${getServiceTypeText(proposal.serviceType)}</td>
         <td>${getStatusDiv(proposal.status)}</td>
         <td>${proposal.description === "" ? '-' : proposal.description}</td>

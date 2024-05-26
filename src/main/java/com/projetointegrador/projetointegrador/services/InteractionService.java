@@ -2,6 +2,7 @@ package com.projetointegrador.projetointegrador.services;
 
 import com.projetointegrador.projetointegrador.models.Client;
 import com.projetointegrador.projetointegrador.models.Interaction;
+import com.projetointegrador.projetointegrador.models.Proposal;
 import com.projetointegrador.projetointegrador.repositories.InteractionRepository;
 import com.projetointegrador.projetointegrador.responses.Response;
 import org.springframework.data.domain.Example;
@@ -48,8 +49,10 @@ public class InteractionService {
 
         if (searchTerm != null && !searchTerm.isEmpty()) {
             Client client = new Client();
-            exampleInteraction.setClient(client);
-            exampleInteraction.getClient().setName(searchTerm);
+            Proposal proposal = new Proposal();
+            exampleInteraction.setProposal(proposal);
+            exampleInteraction.getProposal().setClient(client);
+            exampleInteraction.getProposal().getClient().setName(searchTerm);
         }
 
         if (resultId != null) {
@@ -91,8 +94,8 @@ public class InteractionService {
 
     // Atualiza uma interação
     public ResponseEntity<?> updateInteraction(Interaction interaction) {
-        if (interaction.getId() == null || interaction.getClient().getId() == null) {
-            return ResponseEntity.badRequest().body(new Response(HttpStatus.BAD_REQUEST, "IDs da interação ou do cliente não estão presentes."));
+        if (interaction.getId() == null || interaction.getProposal().getId() == null) {
+            return ResponseEntity.badRequest().body(new Response(HttpStatus.BAD_REQUEST, "IDs da interação ou da proposta não estão presentes."));
         }
 
         Interaction updatedInteraction = interactionRepository.save(interaction);

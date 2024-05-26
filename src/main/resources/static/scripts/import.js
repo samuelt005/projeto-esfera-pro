@@ -15,6 +15,7 @@ let modalToGet;
 let fileName;
 let tableToInsert;
 let lineLength;
+let hasImportedData;
 
 let importingObjects = [];
 
@@ -38,6 +39,7 @@ function setModalImportTitle() {
 
 // Reinicia os dados da página de importação
 function resetImportingScreen() {
+    hasImportedData = false;
     buttonImportModal.classList.add('disabled');
     document.getElementById('csvFileInput').value = "";
 
@@ -271,9 +273,6 @@ function createImportingObject(columns) {
                 inactive: false,
                 proposal: {
                     id: parseInt(columns[0].trim())
-                },
-                client: {
-                    id: 22
                 }
             }
     }
@@ -282,6 +281,33 @@ function createImportingObject(columns) {
 // Adiciona o evento de alterar a visibilidade do overlay
 function addSwitchOverlayImportEvent(button) {
     button.addEventListener('click', switchOverlayImport);
+}
+
+function addFinishImportButtonEvent(button) {
+    button.addEventListener('click', () => {
+        if (hasImportedData) {
+
+            switch (currentPage) {
+                case 2:
+                    cleanAllClients();
+                    getClients().then();
+                    break;
+                case 3:
+                    cleanAllProposals();
+                    getProposals().then();
+                    break;
+                case 4:
+                    cleanAllInteractions();
+                    getInteractions().then();
+                    break;
+            }
+
+            switchOverlayImport();
+            hasImportedData = false;
+        } else {
+            switchOverlayImport();
+        }
+    })
 }
 
 // Adiciona o evento de input de arquivo a div
@@ -333,6 +359,7 @@ async function saveData() {
                 throw new Error('Erro ao importar os dados.');
             }
 
+            hasImportedData = true;
             successMessage.innerHTML = await response.text();
             cancelCloseModalImport.classList.add("hidden");
             buttonImportModal.classList.add("hidden");
@@ -340,6 +367,7 @@ async function saveData() {
             modelFileButton.classList.add("hidden");
             FinishModalImport.classList.remove("hidden");
             importSuccess.classList.remove("hidden");
+            showSuccessToast("Dados importados com sucesso!");
         } catch (error) {
             console.error('Erro ao importar os dados:', error);
             showErrorToast("Erro ao importar dados!");
@@ -352,9 +380,10 @@ async function saveData() {
 // Adiciona os comportamentos aos botões do modal
 function setupImportButtons() {
     resetImportingScreen();
-    addSwitchOverlayImportEvent(buttonCloseModalImport);
     addSwitchOverlayImportEvent(cancelCloseModalImport);
-    addSwitchOverlayImportEvent(FinishModalImport);
+    addFinishImportButtonEvent(buttonCloseModalImport);
+    addFinishImportButtonEvent(FinishModalImport);
+
     buttonImportModal.addEventListener('click', saveData);
     addGetModelFileEvent(modelFileButton);
     addFileInputEvent();

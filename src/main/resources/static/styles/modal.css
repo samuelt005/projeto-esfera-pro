@@ -45,7 +45,7 @@
     flex-direction: column;
     gap: 30px;
     padding: 20px;
-    min-height: 200px;
+    min-height: 100px;
     height: 100%;
     box-sizing: border-box;
     overflow-y: auto;

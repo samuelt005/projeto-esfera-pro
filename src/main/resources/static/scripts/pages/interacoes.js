@@ -202,7 +202,7 @@ function createInteractionTableRow(interaction) {
             ${rowCheckboxIcon}
         </th>
         <td>${interaction.id}</td>
-        <td>${interaction.client.company ? interaction.client.company : interaction.name}</td>
+        <td>${interaction.proposal.client.name ? interaction.proposal.client.name : '-'}</td>
         <td>${getResultDiv(interaction.result)}</td>
         <td>${getContactText(interaction.contact)}</td>
         <td>${interaction.description === "" ? '-' : interaction.description}</td>

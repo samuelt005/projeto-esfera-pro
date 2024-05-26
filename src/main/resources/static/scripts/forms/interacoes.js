@@ -9,9 +9,6 @@ let interactionForm = {
     contact: null,
     description: "",
     inactive: false,
-    client: {
-        id: null
-    },
     proposal: {
         id: null
     }
@@ -29,9 +26,6 @@ function resetFormInteraction() {
         contact: null,
         description: "",
         inactive: false,
-        client: {
-            id: null
-        },
         proposal: {
             id: null
         }
@@ -43,7 +37,7 @@ function fillFieldsInteraction(interaction) {
     resetFormInteraction();
 
     interactionForm.id = interaction.id;
-    clientSelectInteraction.value = interaction.client.id;
+    clientSelectInteraction.value = interaction.proposal.client.id;
     proposalSelectInteraction.value = interaction.proposal.id;
     contactSelectInteraction.value = interaction.contact;
     resultSelectInteraction.value = interaction.result;
@@ -151,8 +145,6 @@ function validateInteractionForm() {
     if (clientIdValue === null || clientIdValue === 0) {
         clientSelectInteraction.classList.add('invalid');
         isFormValid = false;
-    } else {
-        interactionForm.client.id = clientIdValue;
     }
 
     const proposalIdValue = parseInt(proposalSelectInteraction.value.trim());
