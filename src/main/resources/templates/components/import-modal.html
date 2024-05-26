@@ -1,0 +1,45 @@
+<div th:fragment="import-modal" class="import-modal">
+    <div class="modal-container">
+        <header class="modal-header">
+            <h2 class="import-modal-title">
+
+            </h2>
+            <div class="close-modal-import-button">
+                <div th:replace="~{icons/buttons/close :: close}"></div>
+            </div>
+        </header>
+        <main>
+            <div class="import-input-container">
+                <div class="no-file-wrapper">
+                    <div th:replace="~{icons/inputs/import :: import}"></div>
+                    <p>Clique aqui para anexar seu arquivo de importação</p>
+                    <input type="file" class="file-input" id="csvFileInput" accept=".csv">
+                </div>
+                <div class="selected-file hidden">
+                    <div class="file-name-wrapper">
+                        <p>Arquivo selecionado:</p>
+                        <p class="file-name"></p>
+                    </div>
+                    <div class="total-lines-wrapper">
+                        <p>Linhas a importar:</p>
+                        <p class="text-total-lines"></p>
+                    </div>
+                </div>
+                <div class="import-success">
+                    <div class="success-message-wrapper">
+                        <p class="success-message"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="model-file-container">
+                <p>Baixar arquivo modelo para importação</p>
+            </div>
+        </main>
+        <footer>
+            <div th:replace="~{components/button2 :: button('cancel-modal-import-button', 'Cancelar', false)}"></div>
+            <div th:replace="~{components/button2 :: button('import-modal-button', 'Importar', true)}"></div>
+            <div th:replace="~{components/button2 :: button('finish-button', 'Finalizar', true)}"></div>
+        </footer>
+    </div>
+</div>

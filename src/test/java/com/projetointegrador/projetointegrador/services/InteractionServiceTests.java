@@ -2,6 +2,7 @@ package com.projetointegrador.projetointegrador.services;
 
 import com.projetointegrador.projetointegrador.models.Client;
 import com.projetointegrador.projetointegrador.models.Interaction;
+import com.projetointegrador.projetointegrador.models.Proposal;
 import com.projetointegrador.projetointegrador.repositories.InteractionRepository;
 import com.projetointegrador.projetointegrador.responses.Response;
 import org.junit.jupiter.api.Test;
@@ -71,8 +72,10 @@ public class InteractionServiceTests {
     @Test
     void testCreateInteraction() {
         Client mockClient = new Client();
+        Proposal mockProposal = new Proposal();
         Interaction mockInteraction = new Interaction();
-        mockInteraction.setClient(mockClient);
+        mockInteraction.setProposal(mockProposal);
+        mockInteraction.getProposal().setClient(mockClient);
 
         when(interactionRepository.save(mockInteraction)).thenReturn(mockInteraction);
 
@@ -87,9 +90,11 @@ public class InteractionServiceTests {
     @Test
     void testUpdateInteraction() {
         Client mockClient = new Client();
-        mockClient.setId(1L);
+        Proposal mockProposal = new Proposal();
+        mockProposal.setId(1L);
         Interaction mockInteraction = new Interaction();
-        mockInteraction.setClient(mockClient);
+        mockInteraction.setProposal(mockProposal);
+        mockInteraction.getProposal().setClient(mockClient);
         mockInteraction.setId(1L);
 
         when(interactionRepository.save(mockInteraction)).thenReturn(mockInteraction);

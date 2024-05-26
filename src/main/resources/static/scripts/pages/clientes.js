@@ -5,6 +5,7 @@ let buttonAddNew;
 let buttonCloseModal;
 let cancelCloseModal;
 let saveCloseModal;
+let importOpenModal;
 let nameInput;
 let cpfInput;
 let companyInput;
@@ -95,7 +96,7 @@ async function getClients(searchTerm = "") {
             clientPage++;
             isLoadingMoreClient = false;
             clientList.push(...itemsToAdd);
-            addClientRows(itemsToAdd);
+            addClientRows(itemsToAdd, false);
         })
         .catch(() => {
             getMainFrameContent('error');
@@ -128,7 +129,7 @@ async function getOneClient(id, isEditing) {
                 addCheckboxesEvents();
             } else {
                 clientList.push(data);
-                addClientRows([data]);
+                addClientRows([data], true);
             }
         })
         .catch(error => {
@@ -210,12 +211,17 @@ async function getCitiesByState(state_id, event) {
 }
 
 // Adiciona linhas a tabela de clientes
-function addClientRows(clients) {
+function addClientRows(clients, insertAtStart) {
     const tableContent = document.querySelector(".table-content");
 
     clients.forEach((client) => {
         const newRow = createClientTableRow(client);
-        tableContent.appendChild(newRow);
+
+        if (insertAtStart) {
+            tableContent.insertBefore(newRow, tableContent.firstChild);
+        } else {
+            tableContent.appendChild(newRow);
+        }
     });
 
     addCheckboxesEvents();
@@ -229,6 +235,7 @@ function createClientTableRow(client) {
         <th class="row-checkbox" data-checkbox-id="${client.id}">
             ${rowCheckboxIcon}
         </th>
+        <td>${client.id}</td>
         <td>${client.name}</td>
         <td>${client.cnpj ? getCnpjFormatted(client.cnpj) : getCpfFormatted(client.cpf)}</td>
         <td>${client.company}</td>
@@ -374,6 +381,7 @@ function getClientElements() {
     buttonCloseModal = document.querySelector('.close-modal-button');
     cancelCloseModal = document.querySelector('.cancel-modal-button');
     saveCloseModal = document.querySelector('.save-modal-button');
+    importOpenModal = document.querySelector('#import');
     nameInput = document.querySelector('input[name="name"]');
     cpfInput = document.querySelector('input[name="cpf"]');
     companyInput = document.querySelector('input[name="company"]');
@@ -413,6 +421,7 @@ function clientesStartup() {
         addSwitchOverlayEvent(buttonCloseModal);
         addSwitchOverlayEvent(cancelCloseModal);
         addSwitchOverlayEvent(buttonCloseModal);
+        addSwitchOverlayImportEvent(importOpenModal);
         addSwitchFilterMenuEvent(openFiltersButtonClient, filtersMenuClient);
         cleanAllClientFilters(cleanFiltersButtonClient);
         applyClientFilters(applyFiltersButtonClient);

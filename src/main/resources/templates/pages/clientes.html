@@ -12,7 +12,7 @@
             <div th:replace="~{components/search :: search('search', 'Pesquisar por cliente')}"></div>
             <div class="buttons">
                 <div class="filter-container">
-                    <div th:replace="~{components/button1 :: button('filter', 'Filtros', ~{icons/buttons/filters :: filters})}"></div>
+                    <div th:replace="~{components/button1 :: button('filter', 'Filtros', false, ~{icons/buttons/filters :: filters})}"></div>
 
                     <div class="filter-menu hidden">
                         <div class="top-filter-section">
@@ -25,7 +25,8 @@
                         </div>
                     </div>
                 </div>
-                <div th:replace="~{components/button1 :: button('exportar', 'Exportar', ~{icons/buttons/export :: export})}"></div>
+                <div th:replace="~{components/button1 :: button('export', 'Exportar', false, ~{icons/buttons/export :: export})}"></div>
+                <div th:replace="~{components/button1 :: button('import', 'Importar', true, ~{icons/buttons/import :: import})}"></div>
             </div>
         </div>
         <div class="table-container">
@@ -39,6 +40,7 @@
                             </svg>
                         </div>
                     </th>
+                    <th>ID</th>
                     <th>Nome</th>
                     <th>CPF/CNPJ</th>
                     <th>Empresa</th>
@@ -58,7 +60,7 @@
 
 <modal>
     <div class="modal-container">
-        <header>
+        <header class="modal-header">
             <h2>
                 Cadastrar cliente
             </h2>
@@ -150,10 +152,8 @@
 
 <styles>
     <link rel="stylesheet" th:href="@{/styles/pages/clientes.css}"/>
-    <link rel="stylesheet" th:href="@{/styles/modal.css}"/>
     <link rel="stylesheet" th:href="@{/styles/components/search.css}"/>
     <link rel="stylesheet" th:href="@{/styles/components/button1.css}"/>
-    <link rel="stylesheet" th:href="@{/styles/components/button2.css}"/>
     <link rel="stylesheet" th:href="@{/styles/components/button3.css}"/>
     <link rel="stylesheet" th:href="@{/styles/components/input1.css}"/>
     <link rel="stylesheet" th:href="@{/styles/components/input-select.css}"/>

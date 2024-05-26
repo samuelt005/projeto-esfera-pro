@@ -8,14 +8,12 @@ import com.projetointegrador.projetointegrador.repositories.ClientRepository;
 import com.projetointegrador.projetointegrador.responses.Response;
 import com.projetointegrador.projetointegrador.validators.CnpjValidator;
 import com.projetointegrador.projetointegrador.validators.CpfValidator;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -66,6 +64,8 @@ public class ClientService {
 
         Example<Client> example = Example.of(exampleClient, matcher);
 
+        pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Direction.DESC, "id"));
+
         return clientRepository.findAll(example, pageable);
     }
 
@@ -99,6 +99,40 @@ public class ClientService {
         return ResponseEntity.ok().body(createdClient);
     }
 
+    // Cria vários clientes
+    public ResponseEntity<?> createClients(List<Client> clients) {
+        int successfulCreations = 0;
+        List<Client> clientsWithErrors = new ArrayList<>();
+
+        for (Client client : clients) {
+            if (!validateClient(client)) {
+                if (!isAlreadyRegistered(client.getCpf(), client.getCnpj(), null)) {
+                    client.setInactive(false);
+                    client.setId(null);
+                    client.getAddress().setId(null);
+
+                    clientRepository.save(client);
+                    successfulCreations++;
+                } else {
+                    clientsWithErrors.add(client);
+                }
+            } else {
+                clientsWithErrors.add(client);
+            }
+        }
+
+        StringBuilder responseMessage = new StringBuilder();
+        responseMessage.append("Total de clientes cadastrados com sucesso: ").append(successfulCreations);
+        if (!clientsWithErrors.isEmpty()) {
+            responseMessage.append("\n <br> <br> Clientes que não foram possíveis de cadastrar:");
+            for (Client clientWithError : clientsWithErrors) {
+                System.out.println(clientWithError.getName());
+                responseMessage.append("\n<br>- ").append(clientWithError.getName());
+            }
+        }
+
+        return ResponseEntity.ok().body(responseMessage.toString());
+    }
 
     // Atualiza um cliente
     public ResponseEntity<?> updateClient(Client client) {

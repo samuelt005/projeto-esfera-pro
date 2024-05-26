@@ -3,6 +3,7 @@ let buttonAddNewProposal;
 let buttonCloseModalProposal;
 let cancelCloseModalProposal;
 let saveCloseModalProposal;
+let importOpenModalProposal;
 let clientSelectProposal;
 let serviceTypeSelectProposal;
 let offerDateInputProposal;
@@ -96,7 +97,7 @@ async function getProposals(searchTerm = "") {
             proposalPage++;
             isLoadingMoreProposals = false;
             proposalList.push(...itemsToAdd);
-            addProposalRows(itemsToAdd);
+            addProposalRows(itemsToAdd, false);
         })
         .catch((e) => {
             getMainFrameContent('error');
@@ -128,7 +129,7 @@ async function getOneProposal(id, isEditing) {
                 addCheckboxesEvents();
             } else {
                 proposalList.push(data);
-                addProposalRows([data]);
+                addProposalRows([data], true);
             }
         })
         .catch(error => {
@@ -179,12 +180,17 @@ function setStatusSelect() {
 }
 
 // Adiciona linhas a tabela de propostas
-function addProposalRows(proposals) {
+function addProposalRows(proposals, insertAtStart) {
     const tableContent = document.querySelector(".table-content");
 
     proposals.forEach((proposal) => {
         const newRow = createProposalTableRow(proposal);
-        tableContent.appendChild(newRow);
+
+        if (insertAtStart) {
+            tableContent.insertBefore(newRow, tableContent.firstChild);
+        } else {
+            tableContent.appendChild(newRow);
+        }
     });
 
     addCheckboxesEvents();
@@ -199,7 +205,7 @@ function createProposalTableRow(proposal) {
             ${rowCheckboxIcon}
         </th>
         <td>${proposal.id}</td>
-        <td>${proposal.client.company ? proposal.client.company : proposal.name}</td>
+        <td>${proposal.client.name ? proposal.client.name : '-'}</td>
         <td>${getServiceTypeText(proposal.serviceType)}</td>
         <td>${getStatusDiv(proposal.status)}</td>
         <td>${proposal.description === "" ? '-' : proposal.description}</td>
@@ -329,6 +335,7 @@ function getProposalElements() {
     buttonCloseModalProposal = document.querySelector('.close-modal-button');
     cancelCloseModalProposal = document.querySelector('.cancel-modal-button');
     saveCloseModalProposal = document.querySelector('.save-modal-button');
+    importOpenModalProposal = document.querySelector('#import');
     clientSelectProposal = document.querySelector('select[name="client"]');
     serviceTypeSelectProposal = document.querySelector('select[name="serviceType"]');
     offerDateInputProposal = document.querySelector('input[name="offerDate"]');
@@ -363,6 +370,7 @@ function propostasStartup() {
         addSwitchOverlayEvent(buttonCloseModalProposal);
         addSwitchOverlayEvent(cancelCloseModalProposal);
         addSwitchOverlayEvent(buttonCloseModalProposal);
+        addSwitchOverlayImportEvent(importOpenModalProposal);
         addSaveProposalEvent(saveCloseModalProposal);
         addSwitchFilterMenuEvent(openFiltersButtonProposal, filtersMenuProposal);
         cleanAllProposalFilters(cleanFiltersButtonProposal);

@@ -2,16 +2,16 @@ package com.projetointegrador.projetointegrador.services;
 
 import com.projetointegrador.projetointegrador.models.Client;
 import com.projetointegrador.projetointegrador.models.Interaction;
+import com.projetointegrador.projetointegrador.models.Proposal;
 import com.projetointegrador.projetointegrador.repositories.InteractionRepository;
 import com.projetointegrador.projetointegrador.responses.Response;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -46,8 +46,10 @@ public class InteractionService {
 
         if (searchTerm != null && !searchTerm.isEmpty()) {
             Client client = new Client();
-            exampleInteraction.setClient(client);
-            exampleInteraction.getClient().setName(searchTerm);
+            Proposal proposal = new Proposal();
+            exampleInteraction.setProposal(proposal);
+            exampleInteraction.getProposal().setClient(client);
+            exampleInteraction.getProposal().getClient().setName(searchTerm);
         }
 
         if (resultId != null) {
@@ -59,6 +61,8 @@ public class InteractionService {
         }
 
         Example<Interaction> example = Example.of(exampleInteraction, matcher);
+
+        pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Direction.DESC, "id"));
 
         return interactionRepository.findAll(example, pageable);
     }
@@ -72,10 +76,25 @@ public class InteractionService {
         return ResponseEntity.ok().body(createdInteraction);
     }
 
+    // Cria várias interações
+    public ResponseEntity<?> createInteractions(List<Interaction> interactions) {
+        int successfulCreations = 0;
+
+        for (Interaction interaction : interactions) {
+            interaction.setInactive(false);
+            interaction.setId(null);
+
+            interactionRepository.save(interaction);
+            successfulCreations++;
+        }
+
+        return ResponseEntity.ok().body("Total de interações cadastradas com sucesso: " + successfulCreations);
+    }
+
     // Atualiza uma interação
     public ResponseEntity<?> updateInteraction(Interaction interaction) {
-        if (interaction.getId() == null || interaction.getClient().getId() == null) {
-            return ResponseEntity.badRequest().body(new Response(HttpStatus.BAD_REQUEST, "IDs da interação ou do cliente não estão presentes."));
+        if (interaction.getId() == null || interaction.getProposal().getId() == null) {
+            return ResponseEntity.badRequest().body(new Response(HttpStatus.BAD_REQUEST, "IDs da interação ou da proposta não estão presentes."));
         }
 
         Interaction updatedInteraction = interactionRepository.save(interaction);

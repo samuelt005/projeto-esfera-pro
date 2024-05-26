@@ -62,13 +62,10 @@
     z-index: 1;
 }
 
-.table tbody {
-}
-
 .table tr {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     flex-direction: row;
     height: 100%;
 }

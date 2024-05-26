@@ -1,6 +1,5 @@
 package com.projetointegrador.projetointegrador.controllers;
 
-import com.projetointegrador.projetointegrador.models.Client;
 import com.projetointegrador.projetointegrador.models.Proposal;
 import com.projetointegrador.projetointegrador.services.ProposalService;
 import org.springframework.data.domain.Page;
@@ -53,15 +52,22 @@ public class ProposalController {
     // Rota para criar uma proposta
     @PostMapping
     @ResponseBody
-    public ResponseEntity<?> createProposals(@RequestBody Proposal proposal) {
+    public ResponseEntity<?> createProposal(@RequestBody Proposal proposal) {
         return proposalService.createProposal(proposal);
+    }
+
+    // Rota para criar várias propostas
+    @PostMapping("/bulk")
+    @ResponseBody
+    public ResponseEntity<?> createProposals(@RequestBody List<Proposal> proposal) {
+        return proposalService.createProposals(proposal);
     }
 
     // Rota para atualizar uma proposta
     @PutMapping
     @ResponseBody
-    public ResponseEntity<?> updateProposals(@RequestBody Proposal proposal) {
-        return proposalService.updateProposal(proposal);
+    public ResponseEntity<?> updateProposals(@RequestBody Proposal proposals) {
+        return proposalService.updateProposal(proposals);
     }
 
     // Rota para desativar uma proposta

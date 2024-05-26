@@ -141,7 +141,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function cadastrar() {
         buttonCadastrar.addEventListener('click', (event) => {
-            console.log(isRegistering);
             if (isRegistering) return;
             isRegistering = true;
 

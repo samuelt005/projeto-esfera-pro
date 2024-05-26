@@ -405,3 +405,20 @@ function setSearchInputEvent(searchInput, searchButton, cleanButton, cleanFuncti
         }
     });
 }
+
+// Função para converter número de anotação cientifica para HH:MM
+function convertNumberToHours(valor) {
+    // Converte o valor para um número
+    var numero = parseFloat(valor.replace(",", "."));
+
+    // Calcula as horas e minutos
+    var horas = Math.floor(numero * 24);
+    var minutos = Math.round((numero * 24 - horas) * 60);
+
+    // Formatação para HH:MM
+    var horaFormatada = horas.toString().padStart(2, '0');
+    var minutosFormatados = minutos.toString().padStart(2, '0');
+
+    // Retorna a hora formatada
+    return horaFormatada + ":" + minutosFormatados;
+}

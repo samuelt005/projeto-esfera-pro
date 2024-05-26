@@ -55,6 +55,13 @@ public class ClientController {
         return clientService.createClient(client);
     }
 
+    // Rota para criar vários clientes
+    @PostMapping("/bulk")
+    @ResponseBody
+    public ResponseEntity<?> createClients(@RequestBody List<Client> clients) {
+        return clientService.createClients(clients);
+    }
+
     // Rota para atualizar um cliente
     @PutMapping
     @ResponseBody

@@ -3,6 +3,7 @@ let buttonAddNewInteraction;
 let buttonCloseModalInteraction;
 let cancelCloseModalInteraction;
 let saveCloseModalInteraction;
+let importOpenModalInteraction;
 let clientSelectInteraction;
 let proposalSelectInteraction;
 let contactSelectInteraction;
@@ -98,7 +99,7 @@ async function getInteractions(searchTerm = "") {
             interactionPage++;
             isLoadingMoreInteractions = false;
             interactionList.push(...itemsToAdd);
-            addInteractionRows(itemsToAdd);
+            addInteractionRows(itemsToAdd, false);
         })
         .catch(() => {
             getMainFrameContent('error');
@@ -130,7 +131,7 @@ async function getOneInteraction(id, isEditing) {
                 addCheckboxesEvents();
             } else {
                 interactionList.push(data);
-                addInteractionRows([data]);
+                addInteractionRows([data], true);
             }
         })
         .catch(error => {
@@ -181,12 +182,17 @@ function setResultSelect() {
 }
 
 // Adiciona linhas a tabela de interações
-function addInteractionRows(interactions) {
+function addInteractionRows(interactions, insertAtStart) {
     const tableContent = document.querySelector(".table-content");
 
     interactions.forEach((interaction) => {
         const newRow = createInteractionTableRow(interaction);
-        tableContent.appendChild(newRow);
+
+        if (insertAtStart) {
+            tableContent.insertBefore(newRow, tableContent.firstChild);
+        } else {
+            tableContent.appendChild(newRow);
+        }
     });
 
     addCheckboxesEvents();
@@ -201,7 +207,7 @@ function createInteractionTableRow(interaction) {
             ${rowCheckboxIcon}
         </th>
         <td>${interaction.id}</td>
-        <td>${interaction.client.company ? interaction.client.company : interaction.name}</td>
+        <td>${interaction.proposal.client.name ? interaction.proposal.client.name : '-'}</td>
         <td>${getResultDiv(interaction.result)}</td>
         <td>${getContactText(interaction.contact)}</td>
         <td>${interaction.description === "" ? '-' : interaction.description}</td>
@@ -331,6 +337,7 @@ function getInteractionElements() {
     buttonCloseModalInteraction = document.querySelector('.close-modal-button');
     cancelCloseModalInteraction = document.querySelector('.cancel-modal-button');
     saveCloseModalInteraction = document.querySelector('.save-modal-button');
+    importOpenModalInteraction = document.querySelector('#import');
     clientSelectInteraction = document.querySelector('select[name="client"]');
     proposalSelectInteraction = document.querySelector('select[name="proposal"]');
     contactSelectInteraction = document.querySelector('select[name="contact"]');
@@ -367,6 +374,7 @@ function interactionStartup() {
         addSwitchOverlayEvent(buttonCloseModalInteraction);
         addSwitchOverlayEvent(cancelCloseModalInteraction);
         addSwitchOverlayEvent(buttonCloseModalInteraction);
+        addSwitchOverlayImportEvent(importOpenModalInteraction);
         addSaveInteractionEvent(saveCloseModalInteraction);
         addSwitchFilterMenuEvent(openFiltersButtonInteraction, filtersMenuInteraction);
         cleanAllInteractionFilters(cleanFiltersButtonInteraction);
