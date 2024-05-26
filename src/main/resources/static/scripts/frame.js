@@ -14,6 +14,7 @@ let canChangePage = true;
 
 // Carrega o script específico de cada página ao selecionar um item do menu
 function loadSelectedPageScript(page) {
+    isSelectAllActive = false;
     let timeout = 1000;
 
     switch (page) {

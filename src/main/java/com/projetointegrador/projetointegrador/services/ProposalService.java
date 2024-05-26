@@ -31,7 +31,7 @@ public class ProposalService {
         }
     }
 
-    // Lista todas as propostas ativas
+    // Lista todas as propostas ativas com paginação, pesquisa e filtros
     public Page<Proposal> listActiveProposal(String searchTerm, Integer statusId, Integer serviceTypeId, Pageable pageable) {
         Proposal exampleProposal = new Proposal();
         exampleProposal.setInactive(false);

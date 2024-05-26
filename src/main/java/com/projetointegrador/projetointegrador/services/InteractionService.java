@@ -34,7 +34,7 @@ public class InteractionService {
         }
     }
 
-    // Lista todas as interações ativas
+    // Lista todas as interações ativas com paginação, pesquisa e filtros
     public Page<Interaction> listActiveInteraction(String searchTerm, Integer resultId, Integer contactId, Pageable pageable) {
         Interaction exampleInteraction = new Interaction();
         exampleInteraction.setInactive(false);
@@ -65,6 +65,18 @@ public class InteractionService {
         pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Direction.DESC, "id"));
 
         return interactionRepository.findAll(example, pageable);
+    }
+
+    // Lista todas as interações ativas
+    public List<Interaction> listAllActiveInteractions() {
+        Interaction exampleInteraction = new Interaction();
+        exampleInteraction.setInactive(false);
+
+        ExampleMatcher matcher = ExampleMatcher.matching().withIgnorePaths("id");
+
+        Example<Interaction> example = Example.of(exampleInteraction, matcher);
+
+        return interactionRepository.findAll(example);
     }
 
     // Cria uma interação
