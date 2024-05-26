@@ -12,7 +12,7 @@
             <div th:replace="~{components/search :: search('search', 'Pesquisar por cliente')}"></div>
             <div class="buttons">
                 <div class="filter-container">
-                    <div th:replace="~{components/button1 :: button('filter', 'Filtros', ~{icons/buttons/filters :: filters})}"></div>
+                    <div th:replace="~{components/button1 :: button('filter', 'Filtros', false, ~{icons/buttons/filters :: filters})}"></div>
 
                     <div class="filter-menu hidden">
                         <div class="top-filter-section">
@@ -27,7 +27,7 @@
                         </div>
                     </div>
                 </div>
-                <div th:replace="~{components/button1 :: button('exportar', 'Exportar', ~{icons/buttons/export :: export})}"></div>
+                <div th:replace="~{components/button1 :: button('exportar', 'Exportar', false, ~{icons/buttons/export :: export})}"></div>
                 <div th:replace="~{components/button1 :: button('import', 'Importar', true, ~{icons/buttons/import :: import})}"></div>
             </div>
         </div>

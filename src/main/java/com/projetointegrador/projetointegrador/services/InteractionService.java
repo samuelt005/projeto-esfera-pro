@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -70,6 +72,21 @@ public class InteractionService {
 
         Interaction createdInteraction = interactionRepository.save(interaction);
         return ResponseEntity.ok().body(createdInteraction);
+    }
+
+    // Cria várias interações
+    public ResponseEntity<?> createInteractions(List<Interaction> interactions) {
+        int successfulCreations = 0;
+
+        for (Interaction interaction : interactions) {
+            interaction.setInactive(false);
+            interaction.setId(null);
+
+            interactionRepository.save(interaction);
+            successfulCreations++;
+        }
+
+        return ResponseEntity.ok().body("Total de interações cadastradas com sucesso: " + successfulCreations);
     }
 
     // Atualiza uma interação

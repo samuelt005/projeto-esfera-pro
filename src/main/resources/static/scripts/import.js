@@ -1,15 +1,19 @@
 const importModalTitle = document.querySelector(".import-modal-title");
 const buttonCloseModalImport = document.querySelector(".close-modal-import-button");
 const cancelCloseModalImport = document.querySelector(".cancel-modal-import-button");
+const buttonImportModal = document.querySelector(".import-modal-button");
+const FinishModalImport = document.querySelector(".finish-button");
 const fileInputDiv = document.querySelector(".no-file-wrapper");
 const selectedFileDiv = document.querySelector(".selected-file");
+const importSuccess = document.querySelector(".import-success");
 const selectedFileName = document.querySelector(".file-name");
 const selectedFileTotalLines = document.querySelector(".text-total-lines");
-const modelButton = document.querySelector(".model-container");
-const buttonImportModal = document.querySelector(".import-modal-button");
+const modelFileButton = document.querySelector(".model-file-container");
+const successMessage = document.querySelector(".success-message");
 
 let importingObjects = [];
 
+// Define o título do modal baseado na página atual
 function setModalImportTitle() {
     switch (currentPage) {
         case 2:
@@ -29,10 +33,16 @@ function setModalImportTitle() {
 
 // Reinicia os dados da página de importação
 function resetImportingScreen() {
+    buttonImportModal.classList.add('disabled');
     document.getElementById('csvFileInput').value = "";
 
     fileInputDiv.classList.remove('hidden');
+    modelFileButton.classList.remove('hidden');
+    cancelCloseModalImport.classList.remove("hidden");
+    buttonImportModal.classList.remove("hidden");
     selectedFileDiv.classList.add("hidden");
+    importSuccess.classList.add('hidden');
+    FinishModalImport.classList.add('hidden');
 
     importingObjects = [];
     selectedFileName.textContent = "";
@@ -88,18 +98,26 @@ function readCSVFile(file) {
         const csvData = event.target.result;
         const lines = csvData.split('\n');
 
-        for (let i = 1; i < lines.length; i++) {
+        for (let i = 0; i < lines.length; i++) {
             const line = lines[i];
             const columns = line.split(';');
 
-            if (columns.length === 4) {
+            console.log(columns.length)
+
+            if (columns.length === 11) {
                 const obj = {};
 
                 importingObjects.push(createImportingObject(columns));
             }
         }
 
+        if (importingObjects.length === 0) {
+            resetImportingScreen();
+            return;
+        }
+
         selectedFileTotalLines.textContent = importingObjects.length.toString();
+        buttonImportModal.classList.remove('disabled');
         console.log(importingObjects);
     };
 
@@ -111,20 +129,20 @@ function createImportingObject(columns) {
         case 2:
             return {
                 id: null,
-                name: columns[1].trim(),
-                cpf: columns[2].trim(),
+                name: columns[0].trim(),
+                cpf: columns[1].trim(),
+                company: columns[2].trim(),
                 cnpj: columns[3].trim(),
-                company: columns[4].trim(),
-                email: columns[5].trim(),
-                whatsapp: columns[6].trim(),
-                cellphone: columns[7].trim(),
-                telephone: columns[8].trim(),
+                email: columns[4].trim(),
+                whatsapp: columns[5].trim(),
+                cellphone: columns[6].trim(),
+                telephone: columns[7].trim(),
                 inactive: false,
                 address: {
                     id: null,
+                    number: columns[8].trim(),
                     street: columns[9].trim(),
                     zip_code: columns[10].trim(),
-                    number: columns[11].trim(),
                     city: {
                         id: 5610
                     }
@@ -164,18 +182,54 @@ async function getImportingFile() {
         window.URL.revokeObjectURL(blobUrl);
     } catch (error) {
         console.error('Erro durante a solicitação do arquivo modelo:', error);
+        showErrorToast("Não foi possível buscar o arquivo modelo!");
     }
 }
 
+async function importData() {
+    if (importingObjects.length > 0) {
+        console.log("Dados a serem importados:", importingObjects);
+        try {
+            const response = await fetch(`${URL}/client/bulk`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(importingObjects)
+            });
+
+            if (!response.ok) {
+                throw new Error('Erro ao importar os dados.');
+            }
+
+            successMessage.innerHTML = await response.text();
+            cancelCloseModalImport.classList.add("hidden");
+            buttonImportModal.classList.add("hidden");
+            selectedFileDiv.classList.add("hidden");
+            modelFileButton.classList.add("hidden");
+            FinishModalImport.classList.remove("hidden");
+            importSuccess.classList.remove("hidden");
+        } catch (error) {
+            console.error('Erro ao importar os dados:', error);
+            showErrorToast("Erro ao importar dados!");
+        }
+    } else {
+        console.log("Não há dados para importar.");
+    }
+}
+
+
 function setupImportButtons() {
+    resetImportingScreen();
     addSwitchOverlayImportEvent(buttonCloseModalImport);
     addSwitchOverlayImportEvent(cancelCloseModalImport);
-    addGetModelFileEvent(modelButton);
+    addSwitchOverlayImportEvent(FinishModalImport);
+    buttonImportModal.addEventListener('click', importData);
+    addGetModelFileEvent(modelFileButton);
     addFileInputEvent();
     addFileInputChangeEvent();
 }
 
 function importSetup() {
-    console.log('page: ' + currentPage);
     setModalImportTitle();
 }

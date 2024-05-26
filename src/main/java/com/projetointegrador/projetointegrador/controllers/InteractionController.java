@@ -7,6 +7,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/interaction")
 public class InteractionController {
@@ -42,8 +44,15 @@ public class InteractionController {
     // Rota para criar uma interação
     @PostMapping
     @ResponseBody
-    public ResponseEntity<?> createInteractions(@RequestBody Interaction interaction) {
+    public ResponseEntity<?> createInteraction(@RequestBody Interaction interaction) {
         return interactionService.createInteraction(interaction);
+    }
+
+    // Rota para criar várias interações
+    @PostMapping("/bulk")
+    @ResponseBody
+    public ResponseEntity<?> createInteractions(@RequestBody List<Interaction> interactions) {
+        return interactionService.createInteractions(interactions);
     }
 
     // Rota para atualizar uma interação

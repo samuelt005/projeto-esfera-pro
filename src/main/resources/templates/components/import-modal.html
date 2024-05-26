@@ -25,15 +25,21 @@
                         <p class="text-total-lines"></p>
                     </div>
                 </div>
+                <div class="import-success">
+                    <div class="success-message-wrapper">
+                        <p class="success-message"></p>
+                    </div>
+                </div>
             </div>
 
-            <div class="model-container">
+            <div class="model-file-container">
                 <p>Baixar arquivo modelo para importação</p>
             </div>
         </main>
         <footer>
             <div th:replace="~{components/button2 :: button('cancel-modal-import-button', 'Cancelar', false)}"></div>
             <div th:replace="~{components/button2 :: button('import-modal-button', 'Importar', true)}"></div>
+            <div th:replace="~{components/button2 :: button('finish-button', 'Finalizar', true)}"></div>
         </footer>
     </div>
 </div>

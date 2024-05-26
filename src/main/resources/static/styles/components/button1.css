@@ -38,6 +38,7 @@
     fill: var(--text-primary);
 }
 
+.button1.filled svg path,
 .button1.active svg path {
     fill: var(--white);
 }
