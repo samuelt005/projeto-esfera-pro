@@ -15,26 +15,35 @@ import java.nio.file.Files;
 public class Models {
 
     @GetMapping("/getClientsModel")
-    public ResponseEntity<byte[]> downloadModel() throws IOException {
-        // Caminho para o arquivo modelo na pasta resources
+    public ResponseEntity<byte[]> downloadModelClient() throws IOException {
         String filePath = "static/models/modelo_importacao_clientes.xlsm";
 
-        // Carregar o arquivo modelo como um recurso
+        return getResponseEntity(filePath);
+    }
+
+    @GetMapping("/getProposalsModel")
+    public ResponseEntity<byte[]> downloadModelProposal() throws IOException {
+        String filePath = "static/models/modelo_importacao_propostas.xlsm";
+
+        return getResponseEntity(filePath);
+    }
+
+    @GetMapping("/getInteractionsModel")
+    public ResponseEntity<byte[]> downloadModelInteraction() throws IOException {
+        String filePath = "static/models/modelo_importacao_interacoes.xlsm";
+
+        return getResponseEntity(filePath);
+    }
+
+    private ResponseEntity<byte[]> getResponseEntity(String filePath) throws IOException {
         Resource resource = new ClassPathResource(filePath);
-
-        // Obter o nome do arquivo
         String fileName = resource.getFilename();
-
-        // Ler bytes do arquivo modelo
         byte[] data = Files.readAllBytes(resource.getFile().toPath());
-
-        // Configurar os cabeçalhos de resposta
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
         assert fileName != null;
         headers.setContentDispositionFormData(fileName, fileName);
 
-        // Retornar uma resposta com os bytes do arquivo e os cabeçalhos
         return ResponseEntity.ok().headers(headers).body(data);
     }
 }
