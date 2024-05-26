@@ -45,8 +45,8 @@ public class ProposalController {
     @GetMapping("/all")
     @ResponseBody
     public ResponseEntity<?> listAllProposals() {
-        List<Proposal> proposal = proposalService.listAllActiveProposals();
-        return ResponseEntity.ok().body(proposal);
+        List<Proposal> proposals = proposalService.listAllActiveProposals();
+        return ResponseEntity.ok().body(proposals);
     }
 
     // Rota para criar uma proposta

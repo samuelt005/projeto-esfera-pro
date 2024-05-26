@@ -38,7 +38,7 @@ public class ClientService {
         }
     }
 
-    // Lista todos os clientes ativos
+    // Lista todas os clientes ativos com paginação, pesquisa e filtros
     public Page<Client> listActiveClients(String searchTerm, Long stateId, Pageable pageable) {
         Client exampleClient = new Client();
         exampleClient.setInactive(false);

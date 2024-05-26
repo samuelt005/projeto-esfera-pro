@@ -4,6 +4,7 @@ let buttonCloseModalInteraction;
 let cancelCloseModalInteraction;
 let saveCloseModalInteraction;
 let importOpenModalInteraction;
+let exportItemsButtonInteraction;
 let clientSelectInteraction;
 let proposalSelectInteraction;
 let contactSelectInteraction;
@@ -95,6 +96,12 @@ async function getInteractions(searchTerm = "") {
                     itemsToAdd.push(item);
                 }
             });
+
+            if (isSelectAllActive) {
+                itemsToAdd.forEach((item) => {
+                    selectedIds.push(item.id)
+                })
+            }
 
             interactionPage++;
             isLoadingMoreInteractions = false;
@@ -203,7 +210,7 @@ function createInteractionTableRow(interaction) {
     const newRow = document.createElement('tr');
     newRow.setAttribute('data-row-id', interaction.id);
     newRow.innerHTML = `
-        <th class="row-checkbox" data-checkbox-id="${interaction.id}">
+        <th class="row-checkbox ${isSelectAllActive ? 'selected' : ''}" data-checkbox-id="${interaction.id}">
             ${rowCheckboxIcon}
         </th>
         <td>${interaction.id}</td>
@@ -338,6 +345,7 @@ function getInteractionElements() {
     cancelCloseModalInteraction = document.querySelector('.cancel-modal-button');
     saveCloseModalInteraction = document.querySelector('.save-modal-button');
     importOpenModalInteraction = document.querySelector('#import');
+    exportItemsButtonInteraction = document.querySelector('#export');
     clientSelectInteraction = document.querySelector('select[name="client"]');
     proposalSelectInteraction = document.querySelector('select[name="proposal"]');
     contactSelectInteraction = document.querySelector('select[name="contact"]');
@@ -375,6 +383,7 @@ function interactionStartup() {
         addSwitchOverlayEvent(cancelCloseModalInteraction);
         addSwitchOverlayEvent(buttonCloseModalInteraction);
         addSwitchOverlayImportEvent(importOpenModalInteraction);
+        addExportEvent(exportItemsButtonInteraction);
         addSaveInteractionEvent(saveCloseModalInteraction);
         addSwitchFilterMenuEvent(openFiltersButtonInteraction, filtersMenuInteraction);
         cleanAllInteractionFilters(cleanFiltersButtonInteraction);

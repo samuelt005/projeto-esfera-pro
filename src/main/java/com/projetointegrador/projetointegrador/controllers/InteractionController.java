@@ -1,6 +1,7 @@
 package com.projetointegrador.projetointegrador.controllers;
 
 import com.projetointegrador.projetointegrador.models.Interaction;
+import com.projetointegrador.projetointegrador.models.Proposal;
 import com.projetointegrador.projetointegrador.services.InteractionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -38,6 +39,14 @@ public class InteractionController {
         PageRequest pageRequest = PageRequest.of(page, size);
         Page<Interaction> interactions = interactionService.listActiveInteraction(searchTerm, resultId, contactId, pageRequest);
 
+        return ResponseEntity.ok().body(interactions);
+    }
+
+    // Rota para listar todas as interações ativos sem paginação
+    @GetMapping("/all")
+    @ResponseBody
+    public ResponseEntity<?> listAllInteractions() {
+        List<Interaction> interactions = interactionService.listAllActiveInteractions();
         return ResponseEntity.ok().body(interactions);
     }
 

@@ -6,6 +6,7 @@ let buttonCloseModal;
 let cancelCloseModal;
 let saveCloseModal;
 let importOpenModal;
+let exportItemsButton;
 let nameInput;
 let cpfInput;
 let companyInput;
@@ -92,6 +93,12 @@ async function getClients(searchTerm = "") {
                     itemsToAdd.push(item);
                 }
             });
+
+            if (isSelectAllActive) {
+                itemsToAdd.forEach((item) => {
+                    selectedIds.push(item.id)
+                })
+            }
 
             clientPage++;
             isLoadingMoreClient = false;
@@ -232,7 +239,7 @@ function createClientTableRow(client) {
     const newRow = document.createElement('tr');
     newRow.setAttribute('data-row-id', client.id);
     newRow.innerHTML = `
-        <th class="row-checkbox" data-checkbox-id="${client.id}">
+        <th class="row-checkbox ${isSelectAllActive ? 'selected' : ''}" data-checkbox-id="${client.id}">
             ${rowCheckboxIcon}
         </th>
         <td>${client.id}</td>
@@ -382,6 +389,7 @@ function getClientElements() {
     cancelCloseModal = document.querySelector('.cancel-modal-button');
     saveCloseModal = document.querySelector('.save-modal-button');
     importOpenModal = document.querySelector('#import');
+    exportItemsButton = document.querySelector('#export');
     nameInput = document.querySelector('input[name="name"]');
     cpfInput = document.querySelector('input[name="cpf"]');
     companyInput = document.querySelector('input[name="company"]');
@@ -422,6 +430,7 @@ function clientesStartup() {
         addSwitchOverlayEvent(cancelCloseModal);
         addSwitchOverlayEvent(buttonCloseModal);
         addSwitchOverlayImportEvent(importOpenModal);
+        addExportEvent(exportItemsButton);
         addSwitchFilterMenuEvent(openFiltersButtonClient, filtersMenuClient);
         cleanAllClientFilters(cleanFiltersButtonClient);
         applyClientFilters(applyFiltersButtonClient);

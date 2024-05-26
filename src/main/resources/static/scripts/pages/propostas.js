@@ -4,6 +4,7 @@ let buttonCloseModalProposal;
 let cancelCloseModalProposal;
 let saveCloseModalProposal;
 let importOpenModalProposal;
+let exportItemsButtonProposal;
 let clientSelectProposal;
 let serviceTypeSelectProposal;
 let offerDateInputProposal;
@@ -93,6 +94,12 @@ async function getProposals(searchTerm = "") {
                     itemsToAdd.push(item);
                 }
             });
+
+            if (isSelectAllActive) {
+                itemsToAdd.forEach((item) => {
+                    selectedIds.push(item.id)
+                })
+            }
 
             proposalPage++;
             isLoadingMoreProposals = false;
@@ -201,7 +208,7 @@ function createProposalTableRow(proposal) {
     const newRow = document.createElement('tr');
     newRow.setAttribute('data-row-id', proposal.id);
     newRow.innerHTML = `
-        <th class="row-checkbox" data-checkbox-id="${proposal.id}">
+        <th class="row-checkbox ${isSelectAllActive ? 'selected' : ''}" data-checkbox-id="${proposal.id}">
             ${rowCheckboxIcon}
         </th>
         <td>${proposal.id}</td>
@@ -336,6 +343,7 @@ function getProposalElements() {
     cancelCloseModalProposal = document.querySelector('.cancel-modal-button');
     saveCloseModalProposal = document.querySelector('.save-modal-button');
     importOpenModalProposal = document.querySelector('#import');
+    exportItemsButtonProposal = document.querySelector('#export');
     clientSelectProposal = document.querySelector('select[name="client"]');
     serviceTypeSelectProposal = document.querySelector('select[name="serviceType"]');
     offerDateInputProposal = document.querySelector('input[name="offerDate"]');
@@ -371,6 +379,7 @@ function propostasStartup() {
         addSwitchOverlayEvent(cancelCloseModalProposal);
         addSwitchOverlayEvent(buttonCloseModalProposal);
         addSwitchOverlayImportEvent(importOpenModalProposal);
+        addExportEvent(exportItemsButtonProposal);
         addSaveProposalEvent(saveCloseModalProposal);
         addSwitchFilterMenuEvent(openFiltersButtonProposal, filtersMenuProposal);
         cleanAllProposalFilters(cleanFiltersButtonProposal);
