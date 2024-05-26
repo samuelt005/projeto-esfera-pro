@@ -64,59 +64,6 @@ const rowCheckboxIcon = `
 </div>
 `
 
-// Variável comum para ids selecionados das checkboxes
-let selectedIds = [];
-
-// Altera o estado da checkbox e adiciona/remove o id a lista
-function checkboxClicked(event) {
-    const checkbox = event.currentTarget;
-    const id = parseInt(checkbox.dataset.checkboxId);
-
-    const index = selectedIds.indexOf(id);
-
-    if (index !== -1) {
-        selectAllCheckbox.classList.remove("selected");
-        selectedIds.splice(index, 1);
-    } else {
-        selectedIds.push(id);
-    }
-
-    checkbox.classList.toggle("selected");
-}
-
-// Altera o estado da checkbox de selecionar tudo e adiciona/remove todos os ids da lista
-function selectAllHandler() {
-    if (selectAllCheckbox.classList.contains("selected")) {
-        selectedIds = [];
-        checkboxes.forEach((checkbox) => {
-            checkbox.classList.remove("selected");
-        });
-    } else {
-        selectedIds = [];
-        checkboxes.forEach((checkbox) => {
-            const id = parseInt(checkbox.dataset.checkboxId);
-            selectedIds.push(id);
-            checkbox.classList.add("selected");
-        });
-    }
-
-    selectAllCheckbox.classList.toggle("selected");
-}
-
-// Adiciona o evento da checkbox em todas as checkboxes
-function addCheckboxesEvents() {
-    checkboxes = document.querySelectorAll('.row-checkbox');
-    selectAllCheckbox = document.querySelector('.select-all-checkbox');
-
-    checkboxes.forEach((checkbox) => {
-        checkbox.removeEventListener('click', checkboxClicked);
-        checkbox.addEventListener('click', checkboxClicked);
-    });
-
-    selectAllCheckbox.removeEventListener('click', selectAllHandler);
-    selectAllCheckbox.addEventListener('click', selectAllHandler);
-}
-
 // Altera a visibilidade do overlay (aonde vai os modais)
 function switchOverlay() {
     if (overlay.classList.contains("hidden")) {
@@ -152,56 +99,6 @@ function addSwitchFilterMenuEvent(button, filtersWrapper) {
             filtersWrapper.classList.add('hidden');
         }
     });
-}
-
-// Converte um CPF no formato padrão para exibição
-function getCpfFormatted(cpfString) {
-    cpfString = cpfString.replace(/\D/g, '');
-    return cpfString.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
-}
-
-// Converte um CNPJ no formato padrão para exibição
-function getCnpjFormatted(cnpjString) {
-    cnpjString = cnpjString.replace(/\D/g, '');
-    return cnpjString.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, "$1.$2.$3/$4-$5");
-}
-
-// Converte tipo date para formato DD/MM/YYYY
-function getDateFormatted(dateISO) {
-    const dateParts = dateISO.split('T')[0].split('-');
-    return dateParts[2] + '/' + dateParts[1] + '/' + dateParts[0];
-}
-
-// Converte tipo date para formato DD/MM/YYYY
-function getPhoneFormatted(phoneISO) {
-    const DDD = phoneISO.slice(0, 2);
-    const part1 = phoneISO.slice(2, 7);
-    const part2 = phoneISO.slice(7);
-
-    return DDD + ' ' + part1 + '-' + part2;
-}
-
-// Converte formato DD/MM/YYYY para tipo date
-function getDateISO(date) {
-    const dateParts = date.split('/');
-    return dateParts[2] + '-' + dateParts[1] + '-' + dateParts[0];
-}
-
-// Recebe um double e converte para o formato de reais
-function formatCurrency(value) {
-    const valueParts = String(value).split('.');
-    let formattedValue = valueParts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-
-    if (valueParts.length > 1) {
-        let decimalPart = valueParts[1].padEnd(2, '0').slice(0, 2);
-        formattedValue += ',' + decimalPart;
-    } else {
-        formattedValue += ',00';
-    }
-
-    formattedValue = 'R$ ' + formattedValue;
-
-    return formattedValue;
 }
 
 // Recebe um id de result e retorna um fragmento de HTML
@@ -404,21 +301,4 @@ function setSearchInputEvent(searchInput, searchButton, cleanButton, cleanFuncti
             cleanButton.classList.add('hidden');
         }
     });
-}
-
-// Função para converter número de anotação cientifica para HH:MM
-function convertNumberToHours(valor) {
-    // Converte o valor para um número
-    var numero = parseFloat(valor.replace(",", "."));
-
-    // Calcula as horas e minutos
-    var horas = Math.floor(numero * 24);
-    var minutos = Math.round((numero * 24 - horas) * 60);
-
-    // Formatação para HH:MM
-    var horaFormatada = horas.toString().padStart(2, '0');
-    var minutosFormatados = minutos.toString().padStart(2, '0');
-
-    // Retorna a hora formatada
-    return horaFormatada + ":" + minutosFormatados;
 }
