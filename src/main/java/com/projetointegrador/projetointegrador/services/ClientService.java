@@ -177,6 +177,10 @@ public class ClientService {
 
     // Valida CPF e CNPJ do cliente
     public boolean validateClient(Client client) {
+        if (client.getCnpj() != null && client.getCpf() != null) {
+            return true;
+        }
+
         if (client.getCnpj() != null && client.getCpf() == null) {
             return !isCnpjValid(client.getCnpj());
         }
