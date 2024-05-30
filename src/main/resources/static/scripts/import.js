@@ -157,18 +157,17 @@ function createImportingObject(columns) {
                 id: null,
                 name: columns[0].trim(),
                 cpf: columns[1].trim(),
-                company: columns[2].trim(),
-                cnpj: columns[3].trim(),
-                email: columns[4].trim(),
-                whatsapp: columns[5].trim(),
-                cellphone: columns[6].trim(),
-                telephone: columns[7].trim(),
+                cnpj: columns[2].trim(),
+                email: columns[3].trim(),
+                whatsapp: columns[4].trim(),
+                cellphone: columns[5].trim(),
+                telephone: columns[6].trim(),
                 inactive: false,
                 address: {
                     id: null,
-                    number: columns[8].trim(),
-                    street: columns[9].trim(),
-                    zip_code: columns[10].trim(),
+                    number: columns[7].trim(),
+                    street: columns[8].trim(),
+                    zip_code: columns[9].trim(),
                     city: {
                         id: 5610
                     }

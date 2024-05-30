@@ -89,6 +89,10 @@
     gap: 10px;
 }
 
+.input-wrapper.hidden {
+    display: none;
+}
+
 .input-wrapper.small {
     max-width: 120px;
 }

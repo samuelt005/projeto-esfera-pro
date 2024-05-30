@@ -1,7 +1,7 @@
 let isSavingClient = false;
 
 let clientForm = {
-    id: null, name: "", cpf: "", cnpj: "", company: "", inactive: false, address: {
+    id: null, name: "", cpf: "", cnpj: "", inactive: false, address: {
         id: null, street: "", zip_code: "", number: null, city: {
             id: null
         }
@@ -16,7 +16,6 @@ function resetForm() {
         name: "",
         cpf: "",
         cnpj: "",
-        company: "",
         email: "",
         whatsapp: "",
         cellphone: "",
@@ -37,7 +36,6 @@ function fillFields(client) {
     clientForm.address.id = client.address.id;
     nameInput.value = client.name;
     cpfInput.value = client.cpf;
-    companyInput.value = client.company;
     cnpjInput.value = client.cnpj;
     emailInput.value = client.email;
     whatsappInput.value = client.whatsapp;
@@ -68,7 +66,6 @@ function fillFields(client) {
 function cleanInvalidClasses() {
     nameInput.parentElement.classList.remove('invalid');
     cpfInput.parentElement.classList.remove('invalid');
-    companyInput.parentElement.classList.remove('invalid');
     cnpjInput.parentElement.classList.remove('invalid');
     emailInput.parentElement.classList.remove('invalid');
     whatsappInput.parentElement.classList.remove('invalid');
@@ -85,8 +82,10 @@ function cleanInvalidClasses() {
 function resetFields() {
     nameInput.value = "";
     cpfInput.value = "";
-    companyInput.value = "";
+    cpfWrapper.classList.add('hidden');
+    clientTypeSelect.value = 2;
     cnpjInput.value = "";
+    cnpjWrapper.classList.remove('hidden');
     emailInput.value = "";
     whatsappInput.value = "";
     cellphoneInput.value = "";
@@ -146,13 +145,6 @@ function validateClientForm() {
         clientForm.cpf = unmaskedCpf;
     } else {
         cpfInput.parentElement.classList.add('invalid');
-        isFormValid = false;
-    }
-
-    if (companyInput.value.trim() !== "") {
-        clientForm.company = companyInput.value;
-    } else {
-        companyInput.parentElement.classList.add('invalid');
         isFormValid = false;
     }
 
