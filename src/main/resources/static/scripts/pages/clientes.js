@@ -223,8 +223,8 @@ async function getCitiesByState(state_id, event) {
 function setClientTypeSelect() {
     const selectElements = [clientTypeSelect];
     const options = [
-        {name: 'Pessoa física', value: 1},
-        {name: 'Pessoa jurídica', value: 2}
+        {name: 'Pessoa jurídica', value: 1},
+        {name: 'Pessoa física', value: 2}
     ]
 
     options.forEach((option) => {
@@ -368,11 +368,15 @@ function addSelectedClientTypeEvent(select) {
     select.addEventListener('change', (event) => {
         const clientType = event.target.value;
         if (clientType === '1') {
-            cpfWrapper.classList.remove('hidden')
-            cnpjWrapper.classList.add('hidden')
-        } else {
+            cpfInput.value = "";
+            cpfInput.parentElement.classList.remove('invalid');
             cpfWrapper.classList.add('hidden')
             cnpjWrapper.classList.remove('hidden')
+        } else {
+            cnpjInput.value = "";
+            cnpjInput.parentElement.classList.remove('invalid');
+            cpfWrapper.classList.remove('hidden')
+            cnpjWrapper.classList.add('hidden')
         }
     });
 }

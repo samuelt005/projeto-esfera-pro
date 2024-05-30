@@ -1,7 +1,7 @@
 let isSavingClient = false;
 
 let clientForm = {
-    id: null, name: "", cpf: "", cnpj: "", inactive: false, address: {
+    id: null, name: "", cpf: null, cnpj: null, inactive: false, address: {
         id: null, street: "", zip_code: "", number: null, city: {
             id: null
         }
@@ -14,8 +14,8 @@ function resetForm() {
     clientForm = {
         id: null,
         name: "",
-        cpf: "",
-        cnpj: "",
+        cpf: null,
+        cnpj: null,
         email: "",
         whatsapp: "",
         cellphone: "",
@@ -35,8 +35,19 @@ function fillFields(client) {
     clientForm.id = client.id;
     clientForm.address.id = client.address.id;
     nameInput.value = client.name;
-    cpfInput.value = client.cpf;
-    cnpjInput.value = client.cnpj;
+
+    if (client.cpf !== null) {
+        clientTypeSelect.value = 2;
+        cpfInput.value = client.cpf;
+        cpfWrapper.classList.remove('hidden')
+        cnpjWrapper.classList.add('hidden')
+    } else if (client.cnpj !== null) {
+        clientTypeSelect.value = 1;
+        cnpjInput.value = client.cnpj;
+        cpfWrapper.classList.add('hidden')
+        cnpjWrapper.classList.remove('hidden')
+    }
+
     emailInput.value = client.email;
     whatsappInput.value = client.whatsapp;
     cellphoneInput.value = client.cellphone;
@@ -81,10 +92,10 @@ function cleanInvalidClasses() {
 // Reinicia os campos do modal
 function resetFields() {
     nameInput.value = "";
-    cpfInput.value = "";
+    cpfInput.value = null;
     cpfWrapper.classList.add('hidden');
-    clientTypeSelect.value = 2;
-    cnpjInput.value = "";
+    clientTypeSelect.value = 1;
+    cnpjInput.value = null;
     cnpjWrapper.classList.remove('hidden');
     emailInput.value = "";
     whatsappInput.value = "";
@@ -140,20 +151,24 @@ function validateClientForm() {
         isFormValid = false;
     }
 
-    const unmaskedCpf = cpfInput.value.replace(/\D+/g, '');
-    if (validadeCpf(unmaskedCpf)) {
-        clientForm.cpf = unmaskedCpf;
+    if (clientTypeSelect.value === '1') {
+        const unmaskedCnpj = cnpjInput.value.replace(/\D+/g, '');
+        if (validadeCnpj(unmaskedCnpj)) {
+            clientForm.cnpj = unmaskedCnpj;
+            clientForm.cpf = null;
+        } else {
+            cnpjInput.parentElement.classList.add('invalid');
+            isFormValid = false;
+        }
     } else {
-        cpfInput.parentElement.classList.add('invalid');
-        isFormValid = false;
-    }
-
-    const unmaskedCnpj = cnpjInput.value.replace(/\D+/g, '');
-    if (validadeCnpj(unmaskedCnpj)) {
-        clientForm.cnpj = unmaskedCnpj;
-    } else {
-        cnpjInput.parentElement.classList.add('invalid');
-        isFormValid = false;
+        const unmaskedCpf = cpfInput.value.replace(/\D+/g, '');
+        if (validadeCpf(unmaskedCpf)) {
+            clientForm.cpf = unmaskedCpf;
+            clientForm.cnpj = null;
+        } else {
+            cpfInput.parentElement.classList.add('invalid');
+            isFormValid = false;
+        }
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Expressão regular para validar o e-mail

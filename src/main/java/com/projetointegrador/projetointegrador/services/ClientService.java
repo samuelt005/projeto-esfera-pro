@@ -83,6 +83,10 @@ public class ClientService {
 
     // Cria um cliente
     public ResponseEntity<?> createClient(Client client) {
+        if (client.getCnpj() != null && client.getCpf() != null) {
+            return ResponseEntity.badRequest().body(new Response(HttpStatus.BAD_REQUEST, "Informe somente o CPF ou CNPJ."));
+        }
+
         if (validateClient(client)) {
             return ResponseEntity.badRequest().body(new Response(HttpStatus.BAD_REQUEST, "Dados do cliente inválidos."));
         }
@@ -126,7 +130,6 @@ public class ClientService {
         if (!clientsWithErrors.isEmpty()) {
             responseMessage.append("\n <br> <br> Clientes que não foram possíveis de cadastrar:");
             for (Client clientWithError : clientsWithErrors) {
-                System.out.println(clientWithError.getName());
                 responseMessage.append("\n<br>- ").append(clientWithError.getName());
             }
         }
@@ -138,6 +141,10 @@ public class ClientService {
     public ResponseEntity<?> updateClient(Client client) {
         if (client.getId() == null || client.getAddress().getId() == null) {
             return ResponseEntity.badRequest().body(new Response(HttpStatus.BAD_REQUEST, "IDs de cliente ou endereço não estão presentes."));
+        }
+
+        if (client.getCnpj() != null && client.getCpf() != null) {
+            return ResponseEntity.badRequest().body(new Response(HttpStatus.BAD_REQUEST, "Informe somente o CPF ou CNPJ."));
         }
 
         if (validateClient(client)) {
@@ -170,11 +177,15 @@ public class ClientService {
 
     // Valida CPF e CNPJ do cliente
     public boolean validateClient(Client client) {
-        if (client.getCpf() != null && !isCpfValid(client.getCpf())) {
-            return true;
+        if (client.getCnpj() != null && client.getCpf() == null) {
+            return !isCnpjValid(client.getCnpj());
         }
 
-        return client.getCnpj() != null && !isCnpjValid(client.getCnpj());
+        if (client.getCpf() != null && client.getCnpj() == null) {
+            return !isCpfValid(client.getCpf());
+        }
+
+        return false;
     }
 
     // Verifica se o cliente já está cadastrado no banco
