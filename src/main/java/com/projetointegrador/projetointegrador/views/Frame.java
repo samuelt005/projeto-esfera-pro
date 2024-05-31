@@ -1,10 +1,13 @@
 package com.projetointegrador.projetointegrador.views;
 
+import com.projetointegrador.projetointegrador.utils.JwtUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.security.Key;
 
 @Controller
 public class Frame {

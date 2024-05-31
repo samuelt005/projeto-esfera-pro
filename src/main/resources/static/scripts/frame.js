@@ -57,49 +57,81 @@ function loadSelectedPageScript(page) {
 
 // Busca o HTML da página selecionada no menu lateral
 async function getMainFrameContent(page) {
-    const loggedIn = JSON.parse(localStorage.getItem('isLogged'));
+    console.log(page)
+    const tokenString = localStorage.getItem("token");
 
-    if (loggedIn) {
-        await fetch(`${URL}/page${page}`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`Erro ao recuperar tela: ${page}`);
+    // Verifica se o tokenString não está vazio e se é uma string JSON válida
+    if (tokenString && typeof tokenString === 'string') {
+        try {
+            // Tenta analisar o tokenString como um objeto JSON
+            const tokenObject = JSON.parse(tokenString);
+
+            // Verifica se o tokenObject é um objeto
+            if (typeof tokenObject === 'object' && tokenObject !== null) {
+                // Verifica se o tokenObject contém o campo "token"
+                if (tokenObject.token) {
+                    const token = tokenObject.token;
+                    await fetch(`${URL}/page${page}`, {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': token,
+                            'Content-Type': 'text/html'
+                        }
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`Erro ao recuperar tela: ${page}`);
+                            }
+                            console.log(response)
+                            return response.text();
+                        })
+                        .then(data => {
+                            const tempElement = document.createElement("div");
+                            tempElement.innerHTML = data;
+
+                            const contentDiv = tempElement.querySelector('content');
+                            const modalDiv = tempElement.querySelector('modal');
+                            const stylesDiv = tempElement.querySelector('styles');
+
+                            if (modalDiv) {
+                                overlay.innerHTML = modalDiv.innerHTML;
+                            }
+
+                            if (stylesDiv) {
+                                allStyles.innerHTML = stylesDiv.innerHTML;
+                            }
+
+                            if (contentDiv) {
+                                mainContent.innerHTML = contentDiv.innerHTML;
+                            }
+
+                            loadSelectedPageScript(page);
+                        })
+                        .catch(error => {
+                            console.error(error);
+                            loading.classList.add("hidden");
+                            mainContent.classList.add("hidden");
+                            canChangePage = true;
+                        });
+                } else {
+                    // Se o campo "token" estiver ausente no objeto, redireciona para a página de login
+                    window.location.href = "/login";
                 }
-                return response.text();
-            })
-            .then(data => {
-                const tempElement = document.createElement("div");
-                tempElement.innerHTML = data;
-
-                const contentDiv = tempElement.querySelector('content');
-                const modalDiv = tempElement.querySelector('modal');
-                const stylesDiv = tempElement.querySelector('styles');
-
-
-                if (modalDiv) {
-                    overlay.innerHTML = modalDiv.innerHTML;
-                }
-
-                if (stylesDiv) {
-                    allStyles.innerHTML = stylesDiv.innerHTML;
-                }
-
-                if (contentDiv) {
-                    mainContent.innerHTML = contentDiv.innerHTML;
-                }
-
-                loadSelectedPageScript(page);
-            })
-            .catch(error => {
-                console.error(error);
-                loading.classList.add("hidden");
-                mainContent.classList.add("hidden");
-                canChangePage = true;
-            });
+            } else {
+                // Se o tokenObject não for um objeto, redireciona para a página de login
+                window.location.href = "/login";
+            }
+        } catch (error) {
+            // Se ocorrer um erro ao analisar o JSON, redireciona para a página de login
+            console.error("Erro ao analisar o token JSON:", error);
+            window.location.href = "/login";
+        }
     } else {
+        // Se o tokenString estiver vazio ou não for uma string, redireciona para a página de login
         window.location.href = "/login";
     }
 }
+
 
 // Expande o menu lateral
 function expandButtonClicked() {

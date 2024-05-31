@@ -121,16 +121,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     }, body: JSON.stringify(dataLogin)
                 }).then(response => {
                     if (response.ok) {
-                        localStorage.setItem("isLogged", JSON.stringify(true));
-                        window.location.href = '/';
+                        return response.json();
                     } else {
-                        localStorage.setItem("isLogged", JSON.stringify(false));
+                        localStorage.setItem("token", JSON.stringify(null));
                         showErrorToast("Erro ao realizar login");
                     }
+                }).then(responseJSON => {
+                    localStorage.setItem("token", JSON.stringify(responseJSON));
+                    window.location.href = '/';
                 }).catch((error) => {
                     showErrorToast("Erro ao realizar login");
                     console.error(error)
-                    localStorage.setItem("isLogged", JSON.stringify(false));
+                    localStorage.setItem("token", JSON.stringify(null));
                 });
             } else {
                 console.error("Erro na validação do login");
@@ -165,7 +167,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     isRegistering = false;
                 });
             } else {
-                localStorage.setItem("isLogged", JSON.stringify(false));
+                localStorage.setItem("token", JSON.stringify(null));
             }
         });
     }
@@ -193,7 +195,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function loginStartup() {
-        localStorage.setItem("isLogged", JSON.stringify(false));
+        localStorage.setItem("token", JSON.stringify(null));
         maskInputs();
         toggleButtonClick();
         login();

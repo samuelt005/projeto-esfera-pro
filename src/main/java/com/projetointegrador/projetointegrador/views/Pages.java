@@ -7,12 +7,6 @@ import org.springframework.ui.Model;
 @Controller
 public class Pages {
 
-    //Rota da página de login
-    @GetMapping("/pagelogin")
-    public String pageLogin(Model model) throws InterruptedException {
-        return "pages/login";
-    }
-
     // Rota da página de calendário
     @GetMapping("/pagecalendario")
     public String pageCalendario(Model model) throws InterruptedException {
