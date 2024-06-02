@@ -8,9 +8,11 @@ let saveCloseModal;
 let importOpenModal;
 let exportItemsButton;
 let nameInput;
+let clientTypeSelect;
 let cpfInput;
-let companyInput;
+let cpfWrapper;
 let cnpjInput;
+let cnpjWrapper;
 let emailInput;
 let whatsappInput;
 let cellphoneInput;
@@ -217,6 +219,25 @@ async function getCitiesByState(state_id, event) {
         });
 }
 
+// Criar opções do select do tipo de resultado
+function setClientTypeSelect() {
+    const selectElements = [clientTypeSelect];
+    const options = [
+        {name: 'Pessoa jurídica', value: 1},
+        {name: 'Pessoa física', value: 2}
+    ]
+
+    options.forEach((option) => {
+        selectElements.forEach(select => {
+            const newOption = document.createElement('option');
+            newOption.value = option.value;
+            newOption.textContent = option.name;
+            newOption.classList.add('client-type-option');
+            select.appendChild(newOption);
+        });
+    })
+}
+
 // Adiciona linhas a tabela de clientes
 function addClientRows(clients, insertAtStart) {
     const tableContent = document.querySelector(".table-content");
@@ -245,7 +266,6 @@ function createClientTableRow(client) {
         <td>${client.id}</td>
         <td>${client.name}</td>
         <td>${client.cnpj ? getCnpjFormatted(client.cnpj) : getCpfFormatted(client.cpf)}</td>
-        <td>${client.company}</td>
         <td>${client.telephone === "" || client.telephone === null ? '-' : getPhoneFormatted(client.telephone)}</td>
         <td>${client.email === "" || client.email === null ? '-' : client.email}</td>
         <td>${client.address.city.name} - ${client.address.city.state.uf}</td>
@@ -343,6 +363,24 @@ function addSelectedStateEvent(select) {
     });
 }
 
+// Adiciona o evento de trocar entre cpf e cnpj ao selecionar o tipo do cliente
+function addSelectedClientTypeEvent(select) {
+    select.addEventListener('change', (event) => {
+        const clientType = event.target.value;
+        if (clientType === '1') {
+            cpfInput.value = "";
+            cpfInput.parentElement.classList.remove('invalid');
+            cpfWrapper.classList.add('hidden')
+            cnpjWrapper.classList.remove('hidden')
+        } else {
+            cnpjInput.value = "";
+            cnpjInput.parentElement.classList.remove('invalid');
+            cpfWrapper.classList.remove('hidden')
+            cnpjWrapper.classList.add('hidden')
+        }
+    });
+}
+
 // Adiciona o evento de adicionar novo cliente no botão de adicionar
 function addNewClientEvent(button) {
     button.addEventListener('click', () => {
@@ -391,9 +429,11 @@ function getClientElements() {
     importOpenModal = document.querySelector('#import');
     exportItemsButton = document.querySelector('#export');
     nameInput = document.querySelector('input[name="name"]');
+    clientTypeSelect = document.querySelector('select[name="client-type"]');
     cpfInput = document.querySelector('input[name="cpf"]');
-    companyInput = document.querySelector('input[name="company"]');
+    cpfWrapper = document.querySelector('.cpf-wrapper');
     cnpjInput = document.querySelector('input[name="cnpj"]');
+    cnpjWrapper = document.querySelector('.cnpj-wrapper');
     emailInput = document.querySelector('input[name="email"]');
     whatsappInput = document.querySelector('input[name="whatsapp"]');
     cellphoneInput = document.querySelector('input[name="cellphone"]');
@@ -437,6 +477,8 @@ function clientesStartup() {
         addSaveClientEvent(saveCloseModal);
 
         getStates(stateSelect, stateFilterSelect).then(() => {
+            setClientTypeSelect();
+            addSelectedClientTypeEvent(clientTypeSelect);
             addSelectedStateEvent(stateSelect);
             addSelectedDataEvent(citySelect);
             addSelectedDataEvent(stateFilterSelect);

@@ -9,14 +9,12 @@ public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(length = 50, nullable = false)
+    @Column(length = 100, nullable = false)
     private String name;
     @Column(length = 11)
     private String cpf;
     @Column(length = 14)
     private String cnpj;
-    @Column(length = 50)
-    private String company;
     @Column(length = 50)
     private String email;
     @Column(length = 50)
@@ -61,14 +59,6 @@ public class Client {
 
     public void setCnpj(String cnpj) {
         this.cnpj = cnpj;
-    }
-
-    public String getCompany() {
-        return company;
-    }
-
-    public void setCompany(String company) {
-        this.company = company;
     }
 
     public String getEmail() {
@@ -124,11 +114,11 @@ public class Client {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Client client = (Client) o;
-        return Objects.equals(id, client.id) && Objects.equals(name, client.name) && Objects.equals(cpf, client.cpf) && Objects.equals(cnpj, client.cnpj) && Objects.equals(company, client.company) && Objects.equals(email, client.email) && Objects.equals(whatsapp, client.whatsapp) && Objects.equals(cellphone, client.cellphone) && Objects.equals(telephone, client.telephone) && Objects.equals(inactive, client.inactive) && Objects.equals(address, client.address);
+        return Objects.equals(id, client.id) && Objects.equals(name, client.name) && Objects.equals(cpf, client.cpf) && Objects.equals(cnpj, client.cnpj) && Objects.equals(email, client.email) && Objects.equals(whatsapp, client.whatsapp) && Objects.equals(cellphone, client.cellphone) && Objects.equals(telephone, client.telephone) && Objects.equals(inactive, client.inactive) && Objects.equals(address, client.address);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, cpf, cnpj, company, email, whatsapp, cellphone, telephone, inactive, address);
+        return Objects.hash(id, name, cpf, cnpj, email, whatsapp, cellphone, telephone, inactive, address);
     }
 }

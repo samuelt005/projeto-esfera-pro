@@ -168,7 +168,6 @@ function generateInteractionCSV(data) {
 function createClientCSVLine(client) {
     const name = client.name || '';
     const cpf = client.cpf || '';
-    const company = client.company || '';
     const cnpj = client.cnpj || '';
     const email = client.email || '';
     const whatsapp = client.whatsapp || '';
@@ -180,7 +179,7 @@ function createClientCSVLine(client) {
     const city = client.address ? client.address.city.name || '' : '';
     const state = client.address ? client.address.city.state.uf || '' : '';
 
-    return `${name};${cpf};${company};${cnpj};${email};${whatsapp};${cellphone};${telephone};${street};${cep};${city};${state}`;
+    return `${name};${cpf};${cnpj};${email};${whatsapp};${cellphone};${telephone};${street};${cep};${city};${state}`;
 }
 
 // Função para criar uma linha de csv de proposta

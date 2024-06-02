@@ -43,7 +43,6 @@
                     <th>ID</th>
                     <th>Nome</th>
                     <th>CPF/CNPJ</th>
-                    <th>Empresa</th>
                     <th>Telefone</th>
                     <th>E-mail</th>
                     <th>Endereço</th>
@@ -72,21 +71,22 @@
             <section>
                 <h3>Dados básicos</h3>
                 <div class="inputs-row">
-                    <div class="input-wrapper half-space">
+                    <div class="input-wrapper">
                         <h4>Nome</h4>
                         <div th:replace="~{components/input1 :: input('name', 'Digite o nome do cliente', 'text')}"></div>
-                    </div>
-                    <div class="input-wrapper half-space">
-                        <h4>CPF</h4>
-                        <div th:replace="~{components/input1 :: input('cpf', '999.999.999-99', 'text')}"></div>
                     </div>
                 </div>
                 <div class="inputs-row">
                     <div class="input-wrapper half-space">
-                        <h4>Empresa</h4>
-                        <div th:replace="~{components/input1 :: input('company', 'Digite o nome da empresa', 'text')}"></div>
+                        <h4>Tipo de cliente</h4>
+                        <select name="client-type" class="input-select no-first-option">
+                        </select>
                     </div>
-                    <div class="input-wrapper half-space">
+                    <div class="input-wrapper cpf-wrapper hidden half-space">
+                        <h4>CPF</h4>
+                        <div th:replace="~{components/input1 :: input('cpf', '999.999.999-99', 'text')}"></div>
+                    </div>
+                    <div class="input-wrapper cnpj-wrapper half-space">
                         <h4>CNPJ</h4>
                         <div th:replace="~{components/input1 :: input('cnpj', '99.999.999/9999-99', 'text')}"></div>
                     </div>
