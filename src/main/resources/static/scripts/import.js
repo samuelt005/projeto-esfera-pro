@@ -79,7 +79,7 @@ function checkPageVariables() {
             modalToGet = 'getClientsModel';
             fileName = 'modelo_importacao_clientes.xlsm';
             tableToInsert = 'client';
-            lineLength = 11;
+            lineLength = 10;
             break;
         case 3:
             modalToGet = 'getProposalsModel';
@@ -153,22 +153,35 @@ function readCSVFile(file) {
 function createImportingObject(columns) {
     switch (currentPage) {
         case 2:
+            let cpf = null;
+            if (columns[1].trim().length === 10) {
+                cpf = "0" + columns[1].trim()
+            } else if (columns[1].trim().length === 11) {
+                cpf = columns[1].trim()
+            }
+
+            let cnpj = null;
+            if (columns[2].trim().length === 13) {
+                cnpj = "0" + columns[2].trim()
+            } else if (columns[2].trim().length === 14) {
+                cnpj = columns[2].trim()
+            }
+
             return {
                 id: null,
                 name: columns[0].trim(),
-                cpf: columns[1].trim(),
-                company: columns[2].trim(),
-                cnpj: columns[3].trim(),
-                email: columns[4].trim(),
-                whatsapp: columns[5].trim(),
-                cellphone: columns[6].trim(),
-                telephone: columns[7].trim(),
+                cpf: cpf,
+                cnpj: cnpj,
+                email: columns[3].trim(),
+                whatsapp: columns[4].trim(),
+                cellphone: columns[5].trim(),
+                telephone: columns[6].trim(),
                 inactive: false,
                 address: {
                     id: null,
-                    number: columns[8].trim(),
-                    street: columns[9].trim(),
-                    zip_code: columns[10].trim(),
+                    number: columns[7].trim(),
+                    street: columns[8].trim(),
+                    zip_code: columns[9].trim(),
                     city: {
                         id: 5610
                     }

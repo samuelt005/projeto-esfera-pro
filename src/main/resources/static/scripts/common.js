@@ -228,7 +228,7 @@ async function getAllClients(clientSelect) {
             data.forEach((data) => {
                 const newOption = document.createElement('option');
                 newOption.value = data.id;
-                newOption.textContent = data.id + ' - ' + data.company + ' - ' + getCnpjFormatted(data.cnpj);
+                newOption.textContent = data.id + ' - ' + data.name + ' - ' + (data.cnpj ? getCnpjFormatted(data.cnpj) : getCpfFormatted(data.cpf));
                 newOption.classList.add('contact-option');
 
                 clientSelect.appendChild(newOption);
