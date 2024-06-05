@@ -33,13 +33,8 @@ public class User {
     @Column(length = 100, nullable = true)
     private String image_key;
 
-    @JoinColumn(name = "role_id", nullable = true)
-    @ManyToOne(fetch = FetchType.EAGER, optional = true)
-    private Role role;
-
-    @JoinColumn(name = "status_id", nullable = true)
-    @ManyToOne(fetch = FetchType.EAGER, optional = true)
-    private Status status;
+    @Column(nullable = false)
+    private Boolean status;
 
     @JoinColumn(name = "team_id")
     @ManyToOne(fetch = FetchType.EAGER)
@@ -49,13 +44,18 @@ public class User {
     public User() {
     }
 
-    public User(String name, String email, String password, String phone, String image_key, Role role, Status status, Team team) {
+    public User(String name, String email, String phone) {
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+    }
+
+    public User(String name, String email, String password, String phone, String image_key, Boolean status, Team team) {
         this.name = name;
         this.email = email;
         this.password = password;
         this.phone = phone;
         this.image_key = image_key;
-        this.role = role;
         this.status = status;
         this.team = team;
     }
@@ -109,19 +109,11 @@ public class User {
         this.image_key = image_key;
     }
 
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
-    public Status getStatus() {
+    public Boolean getStatus() {
         return status;
     }
 
-    public void setStatus(Status status) {
+    public void setStatus(boolean status) {
         this.status = status;
     }
 
@@ -138,11 +130,11 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(id, user.id) && Objects.equals(name, user.name) && Objects.equals(email, user.email) && Objects.equals(password, user.password) && Objects.equals(phone, user.phone) && Objects.equals(image_key, user.image_key) && Objects.equals(role, user.role) && Objects.equals(status, user.status) && Objects.equals(team, user.team);
+        return Objects.equals(id, user.id) && Objects.equals(name, user.name) && Objects.equals(email, user.email) && Objects.equals(password, user.password) && Objects.equals(phone, user.phone) && Objects.equals(image_key, user.image_key) && Objects.equals(status, user.status) && Objects.equals(team, user.team);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, email, password, phone, image_key, role, status, team);
+        return Objects.hash(id, name, email, password, phone, image_key, status, team);
     }
 }

@@ -1,12 +1,11 @@
 package com.projetointegrador.projetointegrador.services;
 
 import com.projetointegrador.projetointegrador.dto.UserDTO;
-import com.projetointegrador.projetointegrador.models.Role;
-import com.projetointegrador.projetointegrador.models.Status;
 import com.projetointegrador.projetointegrador.models.Team;
 import com.projetointegrador.projetointegrador.models.User;
 import com.projetointegrador.projetointegrador.repositories.UserRepository;
 import com.projetointegrador.projetointegrador.responses.Response;
+import com.projetointegrador.projetointegrador.utils.JwtUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -17,16 +16,15 @@ import java.util.Optional;
 @Service
 public class UserService {
         private final UserRepository userRepository;
-        private final RoleService roleService;
         private final TeamService teamService;
-        private final StatusService statusService;
+
+        private final JwtUtils jwtUtils;
 
 
-        public UserService(UserRepository userRepository, RoleService roleService, TeamService teamService, StatusService statusService) {
+        public UserService(UserRepository userRepository, TeamService teamService, JwtUtils jwtUtils) {
             this.userRepository = userRepository;
-            this.roleService = roleService;
             this.teamService = teamService;
-            this.statusService = statusService;
+            this.jwtUtils = jwtUtils;
         }
 
         // Encontra um usuário pelo id
@@ -57,7 +55,12 @@ public class UserService {
                 if (existentUser.isPresent()) {
                     // Verifica se a senha está correta
                     if (verifyPassword(user.getPassword(), existentUser.get().getPassword())) {
-                        return ResponseEntity.ok().body("Pode entrar");
+                        try {
+                            // Gera um token JWT
+                            return ResponseEntity.ok().body(jwtUtils.generateToken(existentUser.get(), 3600000));
+                        } catch (Exception e) {
+                            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage()));
+                        }
                     } else {
                         return ResponseEntity.badRequest().body(new Response(HttpStatus.BAD_REQUEST, "Senha ou Email incorretos."));
                     }
@@ -81,6 +84,7 @@ public class UserService {
 
                 user.setId(null);
                 user.setPassword(encryptPassword(user.getPassword()));
+                user.setStatus(true);
 
                 if (user.getTeam() != null){
                     Team team = teamService.findById(user.getTeam().getId());
@@ -89,20 +93,7 @@ public class UserService {
                     }
                     user.setTeam(team);
                 }
-                if (user.getRole() != null){
-                    Role role = roleService.findById(user.getRole().getId());
-                    if (role == null){
-                        throw new Exception("Cargo não encontrado.");
-                    }
-                    user.setRole(role);
-                }
-                if (user.getStatus() != null){
-                    Status status = statusService.findById(user.getStatus().getId());
-                    if (status == null){
-                        throw new Exception("Status não encontrado.");
-                    }
-                    user.setStatus(status);
-                }
+
 
                 User createdUser = userRepository.save(user);
                 return ResponseEntity.ok().body(createdUser);

@@ -60,7 +60,7 @@ function teamConfigsButtonSetup() {
 
 function logOutButtonSetup() {
     logOutButton.addEventListener("click", () => {
-        localStorage.setItem("isLogged", JSON.stringify(false));
+        localStorage.setItem("token", JSON.stringify(null));
         window.location.href = "/login";
     });
 }
