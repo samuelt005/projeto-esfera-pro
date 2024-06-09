@@ -57,7 +57,6 @@ function loadSelectedPageScript(page) {
 
 // Busca o HTML da página selecionada no menu lateral
 async function getMainFrameContent(page) {
-    console.log(page)
     const tokenString = localStorage.getItem("token");
 
     // Verifica se o tokenString não está vazio e se é uma string JSON válida
@@ -82,7 +81,6 @@ async function getMainFrameContent(page) {
                             if (!response.ok) {
                                 throw new Error(`Erro ao recuperar tela: ${page}`);
                             }
-                            console.log(response)
                             return response.text();
                         })
                         .then(data => {
