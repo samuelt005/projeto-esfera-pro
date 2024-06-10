@@ -270,7 +270,7 @@ async function getAllProposals(proposalSelect) {
 // Função para definir o evento do scroll infinito na tabela
 function setInfiniteScroll(tableContainer, callFunction) {
     tableContainer.addEventListener('scroll', function () {
-        if (tableContainer.scrollTop + tableContainer.offsetHeight >= tableContainer.scrollHeight) {
+        if (tableContainer.scrollTop + tableContainer.offsetHeight >= tableContainer.scrollHeight - 1) {
             callFunction();
         }
     });
