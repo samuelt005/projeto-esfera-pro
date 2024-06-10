@@ -27,8 +27,6 @@ public class JwtInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String token = request.getHeader("Authorization");
 
-        System.out.println(token);
-
         if (token == null || !jwtUtils.isValidToken(token)) {
             setJsonResponse(response, HttpStatus.UNAUTHORIZED, "Token inválido ou faltante");
             return false;
