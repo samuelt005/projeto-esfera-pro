@@ -1,5 +1,6 @@
 import random
 import re
+import string
 from datetime import datetime
 
 import mysql.connector
@@ -19,12 +20,19 @@ projetointegradorpopulado = mysql.connector.connect(
 )
 
 
+# Gerar um código aleatório de 50 dígitos
+def generate_code(length=50):
+    characters = string.ascii_letters + string.digits
+    return ''.join(random.choices(characters, k=length))
+
+
 # Gerar times
 def generate_teams():
     for i in range(1, 101):
-        name = fake.name()
-        my_cursor.execute("INSERT INTO team(id, name) VALUES(%s, %s)",
-                          (i, name))
+        code = generate_code()
+        name = fake.company()
+        my_cursor.execute("INSERT INTO team(id, code, name) VALUES(%s, %s, %s)",
+                          (i, code, name))
 
 
 def generate_phone_number():
