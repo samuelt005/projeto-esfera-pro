@@ -8,9 +8,13 @@ const expandButton = document.querySelector(".expand-menu");
 const menuButtons = document.querySelectorAll(".sidebar-button");
 const helpSidebarButton = document.querySelector(".need-help");
 const loading = document.querySelector(".loading");
+const userNameHeader = document.querySelector(".user-name");
+const userTeamHeader = document.querySelector(".user-team");
 let isConfigPageOpened = false;
 let currentPage = 0;
 let canChangePage = true;
+let userToken = null;
+let tokenData = null;
 
 // Carrega o script específico de cada página ao selecionar um item do menu
 function loadSelectedPageScript(page) {
@@ -57,79 +61,51 @@ function loadSelectedPageScript(page) {
 
 // Busca o HTML da página selecionada no menu lateral
 async function getMainFrameContent(page) {
-    const tokenString = localStorage.getItem("token");
-
-    // Verifica se o tokenString não está vazio e se é uma string JSON válida
-    if (tokenString && typeof tokenString === 'string') {
-        try {
-            // Tenta analisar o tokenString como um objeto JSON
-            const tokenObject = JSON.parse(tokenString);
-
-            // Verifica se o tokenObject é um objeto
-            if (typeof tokenObject === 'object' && tokenObject !== null) {
-                // Verifica se o tokenObject contém o campo "token"
-                if (tokenObject.token) {
-                    const token = tokenObject.token;
-                    await fetch(`${URL}/page${page}`, {
-                        method: 'GET',
-                        headers: {
-                            'Authorization': token,
-                            'Content-Type': 'text/html'
-                        }
-                    })
-                        .then(response => {
-                            if (!response.ok) {
-                                throw new Error(`Erro ao recuperar tela: ${page}`);
-                            }
-                            return response.text();
-                        })
-                        .then(data => {
-                            const tempElement = document.createElement("div");
-                            tempElement.innerHTML = data;
-
-                            const contentDiv = tempElement.querySelector('content');
-                            const modalDiv = tempElement.querySelector('modal');
-                            const stylesDiv = tempElement.querySelector('styles');
-
-                            if (modalDiv) {
-                                overlay.innerHTML = modalDiv.innerHTML;
-                            }
-
-                            if (stylesDiv) {
-                                allStyles.innerHTML = stylesDiv.innerHTML;
-                            }
-
-                            if (contentDiv) {
-                                mainContent.innerHTML = contentDiv.innerHTML;
-                            }
-
-                            loadSelectedPageScript(page);
-                        })
-                        .catch(error => {
-                            console.error(error);
-                            loading.classList.add("hidden");
-                            mainContent.classList.add("hidden");
-                            canChangePage = true;
-                        });
-                } else {
-                    // Se o campo "token" estiver ausente no objeto, redireciona para a página de login
-                    window.location.href = "/login";
-                }
-            } else {
-                // Se o tokenObject não for um objeto, redireciona para a página de login
-                window.location.href = "/login";
+    try {
+        await fetch(`${URL}/page${page}`, {
+            method: 'GET', headers: {
+                'Authorization': userToken, 'Content-Type': 'text/html'
             }
-        } catch (error) {
-            // Se ocorrer um erro ao analisar o JSON, redireciona para a página de login
-            console.error("Erro ao analisar o token JSON:", error);
-            window.location.href = "/login";
-        }
-    } else {
-        // Se o tokenString estiver vazio ou não for uma string, redireciona para a página de login
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Erro ao recuperar tela: ${page}`);
+                }
+                return response.text();
+            })
+            .then(data => {
+                const tempElement = document.createElement("div");
+                tempElement.innerHTML = data;
+
+                const contentDiv = tempElement.querySelector('content');
+                const modalDiv = tempElement.querySelector('modal');
+                const stylesDiv = tempElement.querySelector('styles');
+
+                if (modalDiv) {
+                    overlay.innerHTML = modalDiv.innerHTML;
+                }
+
+                if (stylesDiv) {
+                    allStyles.innerHTML = stylesDiv.innerHTML;
+                }
+
+                if (contentDiv) {
+                    mainContent.innerHTML = contentDiv.innerHTML;
+                }
+
+                loadSelectedPageScript(page);
+            })
+            .catch(error => {
+                console.error(error);
+                loading.classList.add("hidden");
+                mainContent.classList.add("hidden");
+                canChangePage = true;
+            });
+    } catch (error) {
+        console.error(error);
         window.location.href = "/login";
     }
 }
-
 
 // Expande o menu lateral
 function expandButtonClicked() {
@@ -183,6 +159,58 @@ function helpSidebarButtonSetup() {
     });
 }
 
+// Inicialização da variável global
+function initializeToken() {
+    const tokenString = localStorage.getItem("token");
+
+    if (tokenString && typeof tokenString === 'string') {
+        try {
+            const tokenObject = JSON.parse(tokenString);
+            if (typeof tokenObject === 'object' && tokenObject !== null && tokenObject.token) {
+                userToken = tokenObject.token;
+            } else {
+                window.location.href = "/login";
+            }
+        } catch (error) {
+            console.error("Erro ao analisar o token JSON:", error);
+            window.location.href = "/login";
+        }
+    } else {
+        window.location.href = "/login";
+    }
+}
+
+// Decodificar o token
+function decodeToken(arrayLike) {
+    try {
+        const payload = userToken.split('.')[1];
+        const decodedPayload = atob(payload.replace(/-/g, '+').replace(/_/g, '/'));
+        const binaryPayload = Uint8Array.from(decodedPayload, c => c.charCodeAt(0));
+        const decodedPayloadText = new TextDecoder('utf-8').decode(binaryPayload);
+
+        tokenData = JSON.parse(decodedPayloadText);
+    } catch (error) {
+        console.error("Erro ao decodificar o token:", error);
+        window.location.href = "/login";
+    }
+}
+
+
+// Definir o nome e time a partir do token decodificado
+function setUserDetails() {
+    if (tokenData) {
+        const userName = tokenData.name;
+        const userTeam = tokenData.team;
+
+        if (userNameHeader && userTeamHeader) {
+            userNameHeader.textContent = userName;
+            userNameHeader.title = userName;
+            userTeamHeader.textContent = userTeam;
+            userTeamHeader.title = userTeam;
+        }
+    }
+}
+
 // Inicialização do frame do site
 function frameSetup() {
     expandButton.addEventListener("click", expandButtonClicked);
@@ -191,6 +219,9 @@ function frameSetup() {
         button.addEventListener("click", menuButtonClicked);
     })
 
+    initializeToken();
+    decodeToken();
+    setUserDetails();
     setupImportButtons();
     helpSidebarButtonSetup();
 }

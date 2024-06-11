@@ -21,13 +21,15 @@ public class JwtUtils {
     public JwtToken generateToken(User user, long expirationMillis) {
         Key key = Keys.hmacShaKeyFor(SECRET_KEY.getEncoded());
         String token = Jwts.builder()
-                        .setSubject(user.getEmail())
-                        .setExpiration(new Date(System.currentTimeMillis() + expirationMillis))
-                        .claim("name", user.getName())
-                        .claim("email", user.getEmail())
-                        .claim("phone", user.getPhone())
-                        .signWith(key)
-                        .compact();
+                .setSubject(user.getEmail())
+                .setExpiration(new Date(System.currentTimeMillis() + expirationMillis))
+                .claim("name", user.getName())
+                .claim("email", user.getEmail())
+                .claim("phone", user.getPhone())
+                .claim("team", user.getTeam().getName())
+                .claim("teamId", user.getTeam().getId())
+                .signWith(key)
+                .compact();
         return new JwtToken(token, expirationMillis);
     }
 
