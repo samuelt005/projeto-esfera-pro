@@ -147,6 +147,48 @@ async function getOneInteraction(id, isEditing) {
         });
 }
 
+// Busca propostas pelo ID do cliente
+async function getProposalsByClient(client_id, event) {
+    if (event?.target) {
+        switchSelectClass(event);
+    }
+
+    if (!proposalSelectInteraction.classList.contains('unselected')) {
+        proposalSelectInteraction.classList.add('unselected')
+    }
+
+    await fetch(`${URL}/proposal/byClient/${client_id}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Erro ao recuperar propostas`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            proposalSelectInteraction.querySelectorAll('.proposal-option').forEach(option => option.remove());
+            proposalSelectInteraction.selectedIndex = 0;
+
+            if (data.length === 0) {
+                proposalSelectInteraction.disabled = true;
+                return
+            }
+
+            data.forEach((data) => {
+                const newOption = document.createElement('option');
+                newOption.value = data.id;
+                newOption.textContent = getDateFormatted(data.offerDate) + ' - ' + formatCurrency(data.value);
+                newOption.classList.add('proposal-option');
+
+                proposalSelectInteraction.appendChild(newOption);
+            })
+            proposalSelectInteraction.disabled = false;
+        })
+        .catch(error => {
+            console.error(error);
+            showErrorToast("Erro ao buscar propostas!");
+        });
+}
+
 // Criar opções do select do tipo de contato
 function setContactSelect() {
     const selectElements = [contactSelectInteraction, contactFilterSelect];
@@ -288,6 +330,14 @@ async function deleteInteraction(row) {
     }
 }
 
+// Adiciona o evento de buscar propostas ao select de cliente
+function addSelectedStateEvent(select) {
+    select.addEventListener('change', (event) => {
+        getProposalsByClient(event.target.value, event)
+            .catch(error => console.error(error));
+    });
+}
+
 // Adiciona o evento de salvar uma interação no botão de salvar
 function addSaveInteractionEvent(button) {
     button.addEventListener('click', saveInteraction);
@@ -396,11 +446,9 @@ function interactionStartup() {
 
         getAllClients(clientSelectInteraction).then(() => {
             addSelectedDataEvent(clientSelectInteraction);
-        });
-
-        getAllProposals(proposalSelectInteraction).then(() => {
+            addSelectedStateEvent(clientSelectInteraction);
             addSelectedDataEvent(proposalSelectInteraction);
-        })
+        });
 
         setContactSelect();
         setResultSelect();
