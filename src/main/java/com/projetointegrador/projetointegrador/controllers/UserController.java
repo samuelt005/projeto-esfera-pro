@@ -1,5 +1,6 @@
 package com.projetointegrador.projetointegrador.controllers;
 
+import com.projetointegrador.projetointegrador.dto.UserCreateDTO;
 import com.projetointegrador.projetointegrador.dto.UserDTO;
 import com.projetointegrador.projetointegrador.models.User;
 import com.projetointegrador.projetointegrador.services.UserService;
@@ -24,7 +25,7 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestBody User newUser) {
+    public ResponseEntity<?> registerUser(@RequestBody UserCreateDTO newUser) {
         return userService.createUser(newUser);
     }
 

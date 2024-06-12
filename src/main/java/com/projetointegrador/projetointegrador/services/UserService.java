@@ -1,5 +1,6 @@
 package com.projetointegrador.projetointegrador.services;
 
+import com.projetointegrador.projetointegrador.dto.UserCreateDTO;
 import com.projetointegrador.projetointegrador.dto.UserDTO;
 import com.projetointegrador.projetointegrador.models.Team;
 import com.projetointegrador.projetointegrador.models.User;
@@ -73,29 +74,30 @@ public class UserService {
         }
 
         // Cria um usuário
-        public ResponseEntity<?> createUser(User user) {
+        public ResponseEntity<?> createUser(UserCreateDTO user) {
             try {
-                if (user.getEmail().isBlank() || user.getPassword().isBlank() || user.getName().isBlank() || user.getPhone().isBlank()) {
-                    return ResponseEntity.badRequest().body(new Response(HttpStatus.BAD_REQUEST, "Por favor, preencha todos os campos obrigatórios: nome, email, telefone e senha."));
+                if (user.getEmail().isBlank() || user.getPassword().isBlank() || user.getName().isBlank() || user.getPhone().isBlank() || user.getTeam().isBlank()){
+                    return ResponseEntity.badRequest().body(new Response(HttpStatus.BAD_REQUEST, "Por favor, preencha todos os campos obrigatórios: nome, email, telefone, senha e o numero da sua equipe."));
                 }
                 if (userRepository.findByEmail(user.getEmail()).isPresent()){
                     throw new Exception("Email já cadastrado.");
                 }
 
-                user.setId(null);
-                user.setPassword(encryptPassword(user.getPassword()));
-                user.setStatus(true);
-
-                if (user.getTeam() != null){
-                    Team team = teamService.findById(user.getTeam().getId());
-                    if (team == null){
-                        throw new Exception("Time não encontrado.");
-                    }
-                    user.setTeam(team);
+                Team team = teamService.findByCode(user.getTeam());
+                if (team == null) {
+                    return ResponseEntity.badRequest().body(new Response(HttpStatus.BAD_REQUEST, "Código da equipe inválido."));
                 }
 
+                User user1 = new User(
+                    user.getName(),
+                    user.getEmail(),
+                    encryptPassword(user.getPassword()),
+                    user.getPhone(),
+                    team
+                );
 
-                User createdUser = userRepository.save(user);
+
+                User createdUser = userRepository.save(user1);
                 return ResponseEntity.ok().body(createdUser);
             }catch (Exception e) {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage()));

@@ -13,11 +13,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const inputTelefone = document.querySelector('#telefone');
     const RinputEmail = document.querySelector('#Remail');
     const RinputSenha = document.querySelector('#Rpassword');
+    const TeamCode = document.querySelector('#teamCode');
 
     let isRegistering = false;
 
     let data = {
-        name: '', email: '', password: '', phone: ''
+        name: '', email: '', password: '', phone: '', team: ''
     };
 
     let dataLogin = {
@@ -31,6 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
         labels[3].classList.remove('invalid');
         labels[4].classList.remove('invalid');
         labels[5].classList.remove('invalid');
+        labels[6].classList.remove('invalid');
     }
 
     function maskInputs() {
@@ -105,6 +107,13 @@ document.addEventListener('DOMContentLoaded', () => {
             data.password = RinputSenha.value.trim();
         } else {
             labels[5].classList.add('invalid');
+            isFormValid = false;
+        }
+
+        if (TeamCode.value.trim().length === 4) {
+            data.team = TeamCode.value.trim();
+        } else {
+            labels[6].classList.add('invalid');
             isFormValid = false;
         }
 

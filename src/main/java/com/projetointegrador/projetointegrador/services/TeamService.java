@@ -21,6 +21,14 @@ public class TeamService {
         }
     }
 
+    public Team findByCode(String code) {
+        try {
+            return teamRepository.findByCode(code).get();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     public Team findById(Long id) {
         try {
             if (teamRepository.existsById(id)) {

@@ -25,7 +25,8 @@ function resetForm() {
             id: null, street: "", zip_code: "", number: null, city: {
                 id: null
             }
-        }
+        },
+        teamCode: tokenData.team,
     }
 }
 
@@ -254,6 +255,7 @@ async function saveClient() {
         const response = await fetch(`${URL}/client`, {
             method: isEditing ? 'PUT' : 'POST', headers: {
                 'Content-Type': 'application/json',
+                'Authorization': JSON.parse(localStorage.getItem('token')).token
             }, body: JSON.stringify(clientForm),
         });
 
