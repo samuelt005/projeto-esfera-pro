@@ -31,6 +31,21 @@ public class ProposalService {
         }
     }
 
+    //  Encontra propostas pelo ID do cliente
+    public ResponseEntity<?> listProposalsPerClient(Long clientId) {
+        Proposal exampleProposal = new Proposal();
+        Client exampleClient = new Client();
+        exampleClient.setId(clientId);
+        exampleProposal.setClient(exampleClient);
+
+        ExampleMatcher matcher = ExampleMatcher.matching()
+                .withIgnorePaths("id");
+
+        Example<Proposal> example = Example.of(exampleProposal, matcher);
+
+        return ResponseEntity.ok().body(proposalRepository.findAll(example));
+    }
+
     // Lista todas as propostas ativas com paginação, pesquisa e filtros
     public Page<Proposal> listActiveProposal(String searchTerm, Integer statusId, Integer serviceTypeId, Pageable pageable) {
         Proposal exampleProposal = new Proposal();

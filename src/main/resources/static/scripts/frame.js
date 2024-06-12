@@ -228,7 +228,7 @@ function frameSetup() {
 
 frameSetup();
 if (!showError) {
-    menuButtons[2].click();
+    menuButtons[4].click();
 
     // TODO fazer a mensagem só exibir uma vez caso venha do login
     setTimeout(() => {
