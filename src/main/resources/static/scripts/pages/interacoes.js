@@ -331,7 +331,7 @@ async function deleteInteraction(row) {
 }
 
 // Adiciona o evento de buscar propostas ao select de cliente
-function addSelectedStateEvent(select) {
+function addSelectedProposalEvent(select) {
     select.addEventListener('change', (event) => {
         getProposalsByClient(event.target.value, event)
             .catch(error => console.error(error));
@@ -446,7 +446,7 @@ function interactionStartup() {
 
         getAllClients(clientSelectInteraction).then(() => {
             addSelectedDataEvent(clientSelectInteraction);
-            addSelectedStateEvent(clientSelectInteraction);
+            addSelectedProposalEvent(clientSelectInteraction);
             addSelectedDataEvent(proposalSelectInteraction);
         });
 
