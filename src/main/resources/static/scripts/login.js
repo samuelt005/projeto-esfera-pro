@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
             isFormValid = false;
         }
 
-        if (TeamCode.value.trim().length === 4) {
+        if (TeamCode.value.trim() !== "") {
             data.team = TeamCode.value.trim();
         } else {
             labels[6].classList.add('invalid');
