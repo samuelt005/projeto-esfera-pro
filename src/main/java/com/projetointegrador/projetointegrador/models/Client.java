@@ -29,7 +29,7 @@ public class Client {
     @JoinColumn(name = "address_id")
     private Address address;
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "team_id")
+    @JoinColumn(name = "team_id", referencedColumnName = "id", nullable = false)
     private Team team;
 
     public Long getId() {

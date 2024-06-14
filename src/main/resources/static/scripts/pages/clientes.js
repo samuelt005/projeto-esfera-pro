@@ -73,7 +73,11 @@ async function getClients(searchTerm = "") {
         }
     }
 
-    await fetch(fetchUrl)
+    await fetch(fetchUrl, {
+        method: 'GET', headers: {
+            'Authorization': userToken, 'Content-Type': 'text/html'
+        }
+    })
         .then(response => {
             if (!response.ok) {
                 throw new Error(`Erro ao recuperar clientes`);
@@ -115,32 +119,34 @@ async function getClients(searchTerm = "") {
 
 // Busca apenas um cliente pelo id
 async function getOneClient(id, isEditing) {
-    await fetch(`${URL}/client/byId/${id}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Erro ao recuperar cliente`);
+    await fetch(`${URL}/client/byId/${id}`, {
+        method: 'GET', headers: {
+            'Authorization': userToken, 'Content-Type': 'text/html'
+        }
+    }).then(response => {
+        if (!response.ok) {
+            throw new Error(`Erro ao recuperar cliente`);
+        }
+        return response.json();
+    }).then(data => {
+        if (isEditing) {
+            const oldRow = document.querySelector(`tr[data-row-id="${id}"]`);
+            if (oldRow) {
+                const newRow = createClientTableRow(data);
+                oldRow.parentNode.replaceChild(newRow, oldRow);
             }
-            return response.json();
-        })
-        .then(data => {
-            if (isEditing) {
-                const oldRow = document.querySelector(`tr[data-row-id="${id}"]`);
-                if (oldRow) {
-                    const newRow = createClientTableRow(data);
-                    oldRow.parentNode.replaceChild(newRow, oldRow);
-                }
 
-                const index = clientList.findIndex(client => client.id === id);
-                if (index !== -1) {
-                    clientList[index] = data;
-                }
-
-                addCheckboxesEvents();
-            } else {
-                clientList.push(data);
-                addClientRows([data], true);
+            const index = clientList.findIndex(client => client.id === id);
+            if (index !== -1) {
+                clientList[index] = data;
             }
-        })
+
+            addCheckboxesEvents();
+        } else {
+            clientList.push(data);
+            addClientRows([data], true);
+        }
+    })
         .catch(error => {
             console.error(error);
             showErrorToast("Erro ao buscar cliente!");
@@ -149,37 +155,38 @@ async function getOneClient(id, isEditing) {
 
 // Busca todos os estados
 async function getStates(stateSelect, stateFilterSelect) {
-    await fetch(`${URL}/state`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Erro ao recuperar estados`);
-            }
-            return response.json();
+    await fetch(`${URL}/state`, {
+        method: 'GET', headers: {
+            'Authorization': userToken, 'Content-Type': 'text/html'
+        }
+    }).then(response => {
+        if (!response.ok) {
+            throw new Error(`Erro ao recuperar estados`);
+        }
+        return response.json();
+    }).then(data => {
+        stateSelect.querySelectorAll('.state-option').forEach(option => option.remove());
+        stateSelect.selectedIndex = 0;
+
+        data.forEach((data) => {
+            const newOptionModal = document.createElement('option');
+            newOptionModal.value = data.id;
+            newOptionModal.textContent = data.name;
+            newOptionModal.classList.add('state-option');
+
+            stateSelect.appendChild(newOptionModal);
+
+            const newOptionFilter = document.createElement('option');
+            newOptionFilter.value = data.id;
+            newOptionFilter.textContent = data.name;
+            newOptionFilter.classList.add('state-option');
+            stateFilterSelect.appendChild(newOptionFilter);
         })
-        .then(data => {
-            stateSelect.querySelectorAll('.state-option').forEach(option => option.remove());
-            stateSelect.selectedIndex = 0;
-
-            data.forEach((data) => {
-                const newOptionModal = document.createElement('option');
-                newOptionModal.value = data.id;
-                newOptionModal.textContent = data.name;
-                newOptionModal.classList.add('state-option');
-
-                stateSelect.appendChild(newOptionModal);
-
-                const newOptionFilter = document.createElement('option');
-                newOptionFilter.value = data.id;
-                newOptionFilter.textContent = data.name;
-                newOptionFilter.classList.add('state-option');
-                stateFilterSelect.appendChild(newOptionFilter);
-            })
-            stateSelect.disabled = false;
-        })
-        .catch(error => {
-            console.error(error);
-            showErrorToast("Erro ao buscar estados!");
-        });
+        stateSelect.disabled = false;
+    }).catch(error => {
+        console.error(error);
+        showErrorToast("Erro ao buscar estados!");
+    });
 }
 
 // Busca cidades pelo ID do estado
@@ -192,40 +199,38 @@ async function getCitiesByState(state_id, event) {
         citySelect.classList.add('unselected')
     }
 
-    await fetch(`${URL}/city/byState/${state_id}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Erro ao recuperar cidades`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            citySelect.querySelectorAll('.state-option').forEach(option => option.remove());
-            citySelect.selectedIndex = 0;
+    await fetch(`${URL}/city/byState/${state_id}`, {
+        method: 'GET', headers: {
+            'Authorization': userToken, 'Content-Type': 'text/html'
+        }
+    }).then(response => {
+        if (!response.ok) {
+            throw new Error(`Erro ao recuperar cidades`);
+        }
+        return response.json();
+    }).then(data => {
+        citySelect.querySelectorAll('.state-option').forEach(option => option.remove());
+        citySelect.selectedIndex = 0;
 
-            data.forEach((data) => {
-                const newOption = document.createElement('option');
-                newOption.value = data.id;
-                newOption.textContent = data.name;
-                newOption.classList.add('state-option');
+        data.forEach((data) => {
+            const newOption = document.createElement('option');
+            newOption.value = data.id;
+            newOption.textContent = data.name;
+            newOption.classList.add('state-option');
 
-                citySelect.appendChild(newOption);
-            })
-            citySelect.disabled = false;
+            citySelect.appendChild(newOption);
         })
-        .catch(error => {
-            console.error(error);
-            showErrorToast("Erro ao buscar cidades!");
-        });
+        citySelect.disabled = false;
+    }).catch(error => {
+        console.error(error);
+        showErrorToast("Erro ao buscar cidades!");
+    });
 }
 
 // Criar opções do select do tipo de resultado
 function setClientTypeSelect() {
     const selectElements = [clientTypeSelect];
-    const options = [
-        {name: 'Pessoa jurídica', value: 1},
-        {name: 'Pessoa física', value: 2}
-    ]
+    const options = [{name: 'Pessoa jurídica', value: 1}, {name: 'Pessoa física', value: 2}]
 
     options.forEach((option) => {
         selectElements.forEach(select => {
@@ -326,6 +331,9 @@ async function deleteClient(row) {
     try {
         const response = await fetch(`${URL}/client/${id}`, {
             method: 'DELETE',
+            headers: {
+                'Authorization': userToken, 'Content-Type': 'text/html'
+            }
         });
 
         const responseData = await response.json();

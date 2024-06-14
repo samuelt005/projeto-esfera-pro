@@ -54,9 +54,10 @@ public class JwtUtils {
         }
     }
 
-    // Obtém o assunto (subject) de um token JWT
-    public String getSubject(String token) {
-        return extractClaims(token).getSubject();
+    // Obtém o teamId do token JWT
+    public Long getTeamId(String token) {
+        Claims claims = extractClaims(token);
+        return claims.get("teamId", Long.class);
     }
 
     // Verifica se um token JWT expirou

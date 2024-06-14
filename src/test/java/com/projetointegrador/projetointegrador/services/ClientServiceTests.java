@@ -3,7 +3,10 @@ package com.projetointegrador.projetointegrador.services;
 import com.projetointegrador.projetointegrador.models.Address;
 import com.projetointegrador.projetointegrador.models.Client;
 import com.projetointegrador.projetointegrador.repositories.ClientRepository;
+import com.projetointegrador.projetointegrador.repositories.TeamRepository;
 import com.projetointegrador.projetointegrador.responses.Response;
+import jakarta.servlet.http.HttpServletRequest;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.*;
@@ -21,9 +24,16 @@ import static org.mockito.Mockito.when;
 
 @SpringBootTest
 public class ClientServiceTests {
+    private ClientRepository clientRepository;
+    private ClientService clientService;
 
-    private final ClientRepository clientRepository = mock(ClientRepository.class);
-    private final ClientService clientService = new ClientService(clientRepository);
+    @BeforeEach
+    public void setUp() {
+        clientRepository = mock(ClientRepository.class);
+        TeamRepository teamRepository = mock(TeamRepository.class);
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        clientService = new ClientService(clientRepository, teamRepository, request);
+    }
 
     @Test
     void testFindOneClient() {

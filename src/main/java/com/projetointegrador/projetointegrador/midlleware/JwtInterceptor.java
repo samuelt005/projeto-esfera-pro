@@ -34,6 +34,10 @@ public class JwtInterceptor implements HandlerInterceptor {
             setJsonResponse(response, HttpStatus.UNAUTHORIZED, "Token expirado");
             return false;
         }
+
+        Long teamId = jwtUtils.getTeamId(token);
+        request.setAttribute("teamId", teamId);
+
         return true;
     }
 

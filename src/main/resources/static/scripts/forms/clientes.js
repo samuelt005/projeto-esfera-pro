@@ -1,10 +1,11 @@
 let isSavingClient = false;
 
 let clientForm = {
-    id: null, name: "", cpf: null, cnpj: null, inactive: false, address: {
+    id: null, name: "", cpf: null, cnpj: null, inactive: false,
+    address: {
         id: null, street: "", zip_code: "", number: null, city: {
             id: null
-        }
+        },
     }
 }
 let isEditing = false;
@@ -25,8 +26,7 @@ function resetForm() {
             id: null, street: "", zip_code: "", number: null, city: {
                 id: null
             }
-        },
-        teamCode: tokenData.team,
+        }
     }
 }
 
@@ -254,8 +254,7 @@ async function saveClient() {
     try {
         const response = await fetch(`${URL}/client`, {
             method: isEditing ? 'PUT' : 'POST', headers: {
-                'Content-Type': 'application/json',
-                'Authorization': JSON.parse(localStorage.getItem('token')).token
+                'Authorization': userToken, 'Content-Type': 'application/json'
             }, body: JSON.stringify(clientForm),
         });
 

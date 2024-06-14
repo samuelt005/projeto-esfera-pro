@@ -29,18 +29,6 @@ public class TeamService {
         }
     }
 
-    public Team findById(Long id) {
-        try {
-            if (teamRepository.existsById(id)) {
-                return teamRepository.findById(id).get();
-            } else {
-                return null;
-            }
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
     public ResponseEntity<?> createTeam(Team team) {
         try {
             Team newTeam = teamRepository.save(team);

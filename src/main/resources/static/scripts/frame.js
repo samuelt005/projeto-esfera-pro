@@ -99,6 +99,7 @@ async function getMainFrameContent(page) {
                 console.error(error);
                 loading.classList.add("hidden");
                 mainContent.classList.add("hidden");
+                window.location.href = "/login";
                 canChangePage = true;
             });
     } catch (error) {
@@ -228,7 +229,7 @@ function frameSetup() {
 
 frameSetup();
 if (!showError) {
-    menuButtons[4].click();
+    menuButtons[2].click();
 
     // TODO fazer a mensagem só exibir uma vez caso venha do login
     setTimeout(() => {

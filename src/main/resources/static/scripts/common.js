@@ -91,9 +91,7 @@ function addSwitchFilterMenuEvent(button, filtersWrapper) {
     });
 
     document.addEventListener("click", function (event) {
-        const isClickedInsideMenu =
-            button.contains(event.target) ||
-            filtersWrapper.contains(event.target);
+        const isClickedInsideMenu = button.contains(event.target) || filtersWrapper.contains(event.target);
 
         if (!isClickedInsideMenu) {
             filtersWrapper.classList.add('hidden');
@@ -217,7 +215,11 @@ function switchSelectClass(event) {
 
 // Busca todos os clientes
 async function getAllClients(clientSelect) {
-    await fetch(`${URL}/client/all`)
+    await fetch(`${URL}/client/all`, {
+        method: 'GET', headers: {
+            'Authorization': userToken, 'Content-Type': 'text/html'
+        }
+    })
         .then(response => {
             if (!response.ok) {
                 throw new Error(`Erro ao recuperar clientes`);
