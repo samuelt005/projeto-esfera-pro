@@ -2,8 +2,12 @@ package com.projetointegrador.projetointegrador.services;
 
 import com.projetointegrador.projetointegrador.models.Client;
 import com.projetointegrador.projetointegrador.models.Interaction;
+import com.projetointegrador.projetointegrador.models.Proposal;
 import com.projetointegrador.projetointegrador.repositories.InteractionRepository;
+import com.projetointegrador.projetointegrador.repositories.ProposalRepository;
 import com.projetointegrador.projetointegrador.responses.Response;
+import jakarta.servlet.http.HttpServletRequest;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.*;
@@ -19,9 +23,15 @@ import static org.mockito.Mockito.*;
 
 @SpringBootTest
 public class InteractionServiceTests {
+    private InteractionRepository interactionRepository;
+    private InteractionService interactionService;
 
-    private final InteractionRepository interactionRepository = mock(InteractionRepository.class);
-    private final InteractionService interactionService = new InteractionService(interactionRepository);
+    @BeforeEach
+    public void setUp() {
+        interactionRepository = mock(InteractionRepository.class);
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        interactionService = new InteractionService(interactionRepository, request);
+    }
 
     @Test
     void testFindOneInteraction() {
@@ -59,7 +69,7 @@ public class InteractionServiceTests {
 
         when(interactionRepository.findAll(any(Example.class), any(Pageable.class))).thenReturn(page);
 
-        Page<Interaction> resultPage = interactionService.listActiveInteraction(PageRequest.of(0, 20));
+        Page<Interaction> resultPage = interactionService.listActiveInteraction(null, null, null, PageRequest.of(0, 20));
 
         // Verificando se o método retornou uma página não nula
         assertNotNull(resultPage);
@@ -71,8 +81,10 @@ public class InteractionServiceTests {
     @Test
     void testCreateInteraction() {
         Client mockClient = new Client();
+        Proposal mockProposal = new Proposal();
         Interaction mockInteraction = new Interaction();
-        mockInteraction.setClient(mockClient);
+        mockInteraction.setProposal(mockProposal);
+        mockInteraction.getProposal().setClient(mockClient);
 
         when(interactionRepository.save(mockInteraction)).thenReturn(mockInteraction);
 
@@ -87,9 +99,11 @@ public class InteractionServiceTests {
     @Test
     void testUpdateInteraction() {
         Client mockClient = new Client();
-        mockClient.setId(1L);
+        Proposal mockProposal = new Proposal();
+        mockProposal.setId(1L);
         Interaction mockInteraction = new Interaction();
-        mockInteraction.setClient(mockClient);
+        mockInteraction.setProposal(mockProposal);
+        mockInteraction.getProposal().setClient(mockClient);
         mockInteraction.setId(1L);
 
         when(interactionRepository.save(mockInteraction)).thenReturn(mockInteraction);

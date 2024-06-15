@@ -1,5 +1,6 @@
 package com.projetointegrador.projetointegrador.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.util.Date;
@@ -24,6 +25,7 @@ public class Proposal {
     private Boolean inactive;
     @ManyToOne
     @JoinColumn(name = "client_id", referencedColumnName = "id")
+    @JsonIgnoreProperties({"address", "cpf", "cnpj", "email", "whatsapp", "cellphone", "telephone", "inactive"})
     private Client client;
 
     public Long getId() {

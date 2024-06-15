@@ -1,3 +1,5 @@
+let isSavingProposal = false;
+
 let proposalForm = {
     id: null,
     offerDate: "",
@@ -136,8 +138,10 @@ function validateProposalForm() {
         proposalForm.serviceType = serviceTypeIdValue;
     }
 
-    if (offerDateInputProposal.value.trim() !== "") {
-        proposalForm.offerDate = getDateISO(offerDateInputProposal.value);
+    const unmaskedOfferDate = offerDateInputProposal.value.replace(/_/g, '');
+    const dateISO = getDateISO(unmaskedOfferDate);
+    if (dateISO.length === 10) {
+        proposalForm.offerDate = dateISO;
     } else {
         proposalForm.offerDate = "";
         offerDateInputProposal.parentElement.classList.add('invalid');
@@ -179,10 +183,13 @@ async function saveProposal() {
         return;
     }
 
+    if (isSavingProposal) return;
+    isSavingProposal = true;
+
     try {
         const response = await fetch(`${URL}/proposal`, {
             method: isEditingProposal ? 'PUT' : 'POST', headers: {
-                'Content-Type': 'application/json',
+                'Authorization': userToken, 'Content-Type': 'application/json'
             }, body: JSON.stringify(proposalForm),
         });
 
@@ -194,6 +201,9 @@ async function saveProposal() {
         } else {
             await getOneProposal(responseData.id, isEditingProposal).then(() => {
                 showSuccessToast(`Proposta ${isEditingProposal ? 'editada' : 'cadastrada'} com sucesso!`);
+                setTimeout(() => {
+                    isSavingProposal = false;
+                }, 1000);
             });
         }
 
@@ -201,5 +211,6 @@ async function saveProposal() {
     } catch (error) {
         console.error(isEditingProposal ? 'Erro ao editar interação:' : 'Erro ao criar interação:', error);
         showErrorToast(`Erro ao ${isEditingProposal ? 'editar' : 'cadastrar'} proposta!`);
+        isSavingProposal = false;
     }
 }

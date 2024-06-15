@@ -1,3 +1,5 @@
+let isSavingInteraction = false;
+
 let interactionForm = {
     id: null,
     date: "",
@@ -7,7 +9,7 @@ let interactionForm = {
     contact: null,
     description: "",
     inactive: false,
-    client: {
+    proposal: {
         id: null
     }
 }
@@ -24,7 +26,7 @@ function resetFormInteraction() {
         contact: null,
         description: "",
         inactive: false,
-        client: {
+        proposal: {
             id: null
         }
     }
@@ -35,13 +37,19 @@ function fillFieldsInteraction(interaction) {
     resetFormInteraction();
 
     interactionForm.id = interaction.id;
-    clientSelectInteraction.value = interaction.client.id;
+    clientSelectInteraction.value = interaction.proposal.client.id;
     contactSelectInteraction.value = interaction.contact;
     resultSelectInteraction.value = interaction.result;
     dateInputInteraction.value = getDateFormatted(interaction.date);
     timeInputInteraction.value = interaction.time;
     durationInputInteraction.value = interaction.duration;
     descriptionInputInteraction.value = interaction.description;
+
+    getProposalsByClient(interaction.proposal.client.id).then(() => {
+        proposalSelectInteraction.value = interaction.proposal.id;
+        proposalSelectInteraction.disabled = false;
+        proposalSelectInteraction.classList.remove('unselected')
+    });
 
     clientSelectInteraction.classList.remove('unselected');
     contactSelectInteraction.classList.remove('unselected');
@@ -55,6 +63,7 @@ function fillFieldsInteraction(interaction) {
 // Limpa os avisos de erro dos campos do modal
 function cleanInvalidClassesInteraction() {
     clientSelectInteraction.classList.remove('invalid');
+    proposalSelectInteraction.classList.remove('invalid');
     contactSelectInteraction.classList.remove('invalid');
     resultSelectInteraction.classList.remove('invalid');
     dateInputInteraction.parentElement.classList.remove('invalid');
@@ -72,10 +81,12 @@ function resetInteractionFields() {
     timeInputInteraction.value = "";
     durationInputInteraction.value = "";
     descriptionInputInteraction.value = "";
-
     clientSelectInteraction.classList.add('unselected')
     contactSelectInteraction.classList.add('unselected')
     resultSelectInteraction.classList.add('unselected')
+    proposalSelectInteraction.value = 0;
+    proposalSelectInteraction.disabled = true;
+    proposalSelectInteraction.classList.add('unselected')
 }
 
 // Coloca máscaras nos inputs do modal
@@ -138,8 +149,14 @@ function validateInteractionForm() {
     if (clientIdValue === null || clientIdValue === 0) {
         clientSelectInteraction.classList.add('invalid');
         isFormValid = false;
+    }
+
+    const proposalIdValue = parseInt(proposalSelectInteraction.value.trim());
+    if (proposalIdValue === null || proposalIdValue === 0) {
+        proposalSelectInteraction.classList.add('invalid');
+        isFormValid = false;
     } else {
-        interactionForm.client.id = clientIdValue;
+        interactionForm.proposal.id = proposalIdValue;
     }
 
     const contactIdValue = parseInt(contactSelectInteraction.value.trim());
@@ -150,8 +167,10 @@ function validateInteractionForm() {
         interactionForm.contact = contactIdValue;
     }
 
-    if (dateInputInteraction.value.trim() !== "") {
-        interactionForm.date = getDateISO(dateInputInteraction.value);
+    const unmaskedDate = dateInputInteraction.value.replace(/_/g, '');
+    const dateISO = getDateISO(unmaskedDate);
+    if (dateISO.length === 10) {
+        interactionForm.date = dateISO;
     } else {
         interactionForm.date = "";
         dateInputInteraction.parentElement.classList.add('invalid');
@@ -166,7 +185,8 @@ function validateInteractionForm() {
         interactionForm.result = resultIdValue;
     }
 
-    if (timeInputInteraction.value.trim() !== "") {
+    const unmaskedTime = timeInputInteraction.value.replace(/_/g, '');
+    if (unmaskedTime.length === 5) {
         interactionForm.time = timeInputInteraction.value;
     } else {
         interactionForm.time = "";
@@ -174,7 +194,8 @@ function validateInteractionForm() {
         isFormValid = false;
     }
 
-    if (durationInputInteraction.value.trim() !== "") {
+    const unmaskedDuration = timeInputInteraction.value.replace(/_/g, '');
+    if (unmaskedDuration.length === 5) {
         interactionForm.duration = durationInputInteraction.value;
     } else {
         interactionForm.duration = "";
@@ -198,10 +219,13 @@ async function saveInteraction() {
         return;
     }
 
+    if (isSavingInteraction) return;
+    isSavingInteraction = true;
+
     try {
         const response = await fetch(`${URL}/interaction`, {
             method: isEditingInteraction ? 'PUT' : 'POST', headers: {
-                'Content-Type': 'application/json',
+                'Authorization': userToken, 'Content-Type': 'application/json'
             }, body: JSON.stringify(interactionForm),
         });
 
@@ -213,6 +237,9 @@ async function saveInteraction() {
         } else {
             await getOneInteraction(responseData.id, isEditingInteraction).then(() => {
                 showSuccessToast(`Interação ${isEditingInteraction ? 'editada' : 'cadastrada'} com sucesso!`);
+                setTimeout(() => {
+                    isSavingInteraction = false;
+                }, 1000);
             });
         }
 
@@ -220,5 +247,6 @@ async function saveInteraction() {
     } catch (error) {
         console.error(isEditingInteraction ? 'Erro ao editar interação:' : 'Erro ao criar interação:', error);
         showErrorToast(`Erro ao ${isEditingInteraction ? 'editar' : 'cadastrar'} interação!`);
+        isSavingInteraction = false;
     }
 }

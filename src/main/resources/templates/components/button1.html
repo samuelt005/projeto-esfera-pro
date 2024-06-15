@@ -1,4 +1,4 @@
-<div th:fragment="button(id, text, icon)" class="button1" th:id="${id}">
+<div th:fragment="button(id, text, filled, icon)" class="button1" th:id="${id}" th:classappend="${filled} ? 'filled ' + ${id} : ${id}">
     <div th:replace="${icon}"></div>
     <p th:text="${text}"></p>
 </div>

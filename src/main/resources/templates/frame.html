@@ -4,12 +4,15 @@
     <meta charset="UTF-8">
     <title>Esfera</title>
     <link rel="stylesheet" th:href="@{/styles/reset.css}">
+    <link rel="stylesheet" th:href="@{/styles/modal.css}"/>
     <link rel="stylesheet" th:href="@{/styles/colors.css}"/>
     <link rel="stylesheet" th:href="@{/styles/frame.css}"/>
     <link rel="stylesheet" th:href="@{/styles/sidebar.css}"/>
     <link rel="stylesheet" th:href="@{/styles/header.css}"/>
     <link rel="stylesheet" th:href="@{/styles/loading.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/components/button2.css}"/>
     <link rel="stylesheet" th:href="@{/styles/components/header-menu.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/components/import-modal.css}"/>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
@@ -47,8 +50,8 @@
         <div th:replace="~{icons/header/settings :: settings}"></div>
         <div class="user-profile">
             <div class="user-text">
-                <p class="user-name">Fulano de Tal</p>
-                <p class="user-team">User Team</p>
+                <p class="user-name" title="">-</p>
+                <p class="user-team" title="">-</p>
             </div>
             <div th:replace="~{icons/header/user :: user}"></div>
         </div>
@@ -68,6 +71,10 @@
 
     <div class="overlay hidden fade-out">
     </div>
+
+    <div class="overlay-import hidden fade-out">
+        <div th:replace="~{components/import-modal :: import-modal}"></div>
+    </div>
 </section>
 
 <div id="styles">
@@ -86,15 +93,15 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://unpkg.com/imask"></script>
 
-    <script type="text/javascript" th:src="@{/scripts/table-buttons/cliente.js}"></script>
-    <script type="text/javascript" th:src="@{/scripts/table-buttons/interacoes.js}"></script>
-    <script type="text/javascript" th:src="@{/scripts/table-buttons/propostas.js}"></script>
+    <script type="text/javascript" th:src="@{/scripts/table-buttons/client.js}"></script>
+    <script type="text/javascript" th:src="@{/scripts/table-buttons/interaction.js}"></script>
+    <script type="text/javascript" th:src="@{/scripts/table-buttons/proposal.js}"></script>
 
-    <script type="text/javascript" th:src="@{/scripts/pages/calendario.js}"></script>
-    <script type="text/javascript" th:src="@{/scripts/pages/clientes.js}"></script>
+    <script type="text/javascript" th:src="@{/scripts/pages/calendar.js}"></script>
+    <script type="text/javascript" th:src="@{/scripts/pages/client.js}"></script>
     <script type="text/javascript" th:src="@{/scripts/pages/dashboard.js}"></script>
-    <script type="text/javascript" th:src="@{/scripts/pages/interacoes.js}"></script>
-    <script type="text/javascript" th:src="@{/scripts/pages/propostas.js}"></script>
+    <script type="text/javascript" th:src="@{/scripts/pages/interaction.js}"></script>
+    <script type="text/javascript" th:src="@{/scripts/pages/proposal.js}"></script>
     <script type="text/javascript" th:src="@{/scripts/pages/configs.js}"></script>
     <script type="text/javascript" th:src="@{/scripts/pages/error.js}"></script>
 
@@ -103,17 +110,19 @@
     <script type="text/javascript" th:src="@{/scripts/pages/configs/profile.js}"></script>
     <script type="text/javascript" th:src="@{/scripts/pages/configs/team.js}"></script>
 
-    <script type="text/javascript" th:src="@{/scripts/forms/clientes.js}"></script>
-    <script type="text/javascript" th:src="@{/scripts/forms/interacoes.js}"></script>
-    <script type="text/javascript" th:src="@{/scripts/forms/propostas.js}"></script>
+    <script type="text/javascript" th:src="@{/scripts/forms/client.js}"></script>
+    <script type="text/javascript" th:src="@{/scripts/forms/interaction.js}"></script>
+    <script type="text/javascript" th:src="@{/scripts/forms/proposal.js}"></script>
     <script type="text/javascript" th:src="@{/scripts/forms/validadeCpf.js}"></script>
     <script type="text/javascript" th:src="@{/scripts/forms/validadeCnpj.js}"></script>
 
-
+    <script type="text/javascript" th:src="@{/scripts/utils.js}"></script>
+    <script type="text/javascript" th:src="@{/scripts/import.js}"></script>
+    <script type="text/javascript" th:src="@{/scripts/export.js}"></script>
     <script type="text/javascript" th:src="@{/scripts/toasts.js}"></script>
     <script type="text/javascript" th:src="@{/scripts/frame.js}"></script>
-    <script type="text/javascript" th:src="@{/scripts/header.js}"></script>
     <script type="text/javascript" th:src="@{/scripts/common.js}"></script>
+    <script type="text/javascript" th:src="@{/scripts/header.js}"></script>
 </div>
 </body>
 </html>

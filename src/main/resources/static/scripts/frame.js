@@ -1,18 +1,24 @@
 // Elementos comuns da página
 const mainContent = document.querySelector(".main-content");
 const overlay = document.querySelector(".overlay");
+const overlayImport = document.querySelector(".overlay-import");
 const allStyles = document.getElementById("styles");
 const sidebar = document.querySelector(".sidebar");
 const expandButton = document.querySelector(".expand-menu");
 const menuButtons = document.querySelectorAll(".sidebar-button");
 const helpSidebarButton = document.querySelector(".need-help");
 const loading = document.querySelector(".loading");
+const userNameHeader = document.querySelector(".user-name");
+const userTeamHeader = document.querySelector(".user-team");
 let isConfigPageOpened = false;
 let currentPage = 0;
 let canChangePage = true;
+let userToken = null;
+let tokenData = null;
 
 // Carrega o script específico de cada página ao selecionar um item do menu
 function loadSelectedPageScript(page) {
+    isSelectAllActive = false;
     let timeout = 1000;
 
     switch (page) {
@@ -55,10 +61,12 @@ function loadSelectedPageScript(page) {
 
 // Busca o HTML da página selecionada no menu lateral
 async function getMainFrameContent(page) {
-    const loggedIn = JSON.parse(localStorage.getItem('isLogged'));
-
-    if (loggedIn) {
-        await fetch(`${URL}/page${page}`)
+    try {
+        await fetch(`${URL}/page${page}`, {
+            method: 'GET', headers: {
+                'Authorization': userToken, 'Content-Type': 'text/html'
+            }
+        })
             .then(response => {
                 if (!response.ok) {
                     throw new Error(`Erro ao recuperar tela: ${page}`);
@@ -72,7 +80,6 @@ async function getMainFrameContent(page) {
                 const contentDiv = tempElement.querySelector('content');
                 const modalDiv = tempElement.querySelector('modal');
                 const stylesDiv = tempElement.querySelector('styles');
-
 
                 if (modalDiv) {
                     overlay.innerHTML = modalDiv.innerHTML;
@@ -92,9 +99,11 @@ async function getMainFrameContent(page) {
                 console.error(error);
                 loading.classList.add("hidden");
                 mainContent.classList.add("hidden");
+                window.location.href = "/login";
                 canChangePage = true;
             });
-    } else {
+    } catch (error) {
+        console.error(error);
         window.location.href = "/login";
     }
 }
@@ -151,6 +160,58 @@ function helpSidebarButtonSetup() {
     });
 }
 
+// Inicialização da variável global
+function initializeToken() {
+    const tokenString = localStorage.getItem("token");
+
+    if (tokenString && typeof tokenString === 'string') {
+        try {
+            const tokenObject = JSON.parse(tokenString);
+            if (typeof tokenObject === 'object' && tokenObject !== null && tokenObject.token) {
+                userToken = tokenObject.token;
+            } else {
+                window.location.href = "/login";
+            }
+        } catch (error) {
+            console.error("Erro ao analisar o token JSON:", error);
+            window.location.href = "/login";
+        }
+    } else {
+        window.location.href = "/login";
+    }
+}
+
+// Decodificar o token
+function decodeToken(arrayLike) {
+    try {
+        const payload = userToken.split('.')[1];
+        const decodedPayload = atob(payload.replace(/-/g, '+').replace(/_/g, '/'));
+        const binaryPayload = Uint8Array.from(decodedPayload, c => c.charCodeAt(0));
+        const decodedPayloadText = new TextDecoder('utf-8').decode(binaryPayload);
+
+        tokenData = JSON.parse(decodedPayloadText);
+    } catch (error) {
+        console.error("Erro ao decodificar o token:", error);
+        window.location.href = "/login";
+    }
+}
+
+
+// Definir o nome e time a partir do token decodificado
+function setUserDetails() {
+    if (tokenData) {
+        const userName = tokenData.name;
+        const userTeam = tokenData.team;
+
+        if (userNameHeader && userTeamHeader) {
+            userNameHeader.textContent = userName;
+            userNameHeader.title = userName;
+            userTeamHeader.textContent = userTeam;
+            userTeamHeader.title = userTeam;
+        }
+    }
+}
+
 // Inicialização do frame do site
 function frameSetup() {
     expandButton.addEventListener("click", expandButtonClicked);
@@ -159,6 +220,10 @@ function frameSetup() {
         button.addEventListener("click", menuButtonClicked);
     })
 
+    initializeToken();
+    decodeToken();
+    setUserDetails();
+    setupImportButtons();
     helpSidebarButtonSetup();
 }
 

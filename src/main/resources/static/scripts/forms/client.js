@@ -1,8 +1,11 @@
+let isSavingClient = false;
+
 let clientForm = {
-    id: null, name: "", cpf: "", cnpj: "", company: "", inactive: false, address: {
+    id: null, name: "", cpf: null, cnpj: null, inactive: false,
+    address: {
         id: null, street: "", zip_code: "", number: null, city: {
             id: null
-        }
+        },
     }
 }
 let isEditing = false;
@@ -12,9 +15,8 @@ function resetForm() {
     clientForm = {
         id: null,
         name: "",
-        cpf: "",
-        cnpj: "",
-        company: "",
+        cpf: null,
+        cnpj: null,
         email: "",
         whatsapp: "",
         cellphone: "",
@@ -34,9 +36,19 @@ function fillFields(client) {
     clientForm.id = client.id;
     clientForm.address.id = client.address.id;
     nameInput.value = client.name;
-    cpfInput.value = client.cpf;
-    companyInput.value = client.company;
-    cnpjInput.value = client.cnpj;
+
+    if (client.cpf !== null) {
+        clientTypeSelect.value = 2;
+        cpfInput.value = client.cpf;
+        cpfWrapper.classList.remove('hidden')
+        cnpjWrapper.classList.add('hidden')
+    } else if (client.cnpj !== null) {
+        clientTypeSelect.value = 1;
+        cnpjInput.value = client.cnpj;
+        cpfWrapper.classList.add('hidden')
+        cnpjWrapper.classList.remove('hidden')
+    }
+
     emailInput.value = client.email;
     whatsappInput.value = client.whatsapp;
     cellphoneInput.value = client.cellphone;
@@ -66,7 +78,6 @@ function fillFields(client) {
 function cleanInvalidClasses() {
     nameInput.parentElement.classList.remove('invalid');
     cpfInput.parentElement.classList.remove('invalid');
-    companyInput.parentElement.classList.remove('invalid');
     cnpjInput.parentElement.classList.remove('invalid');
     emailInput.parentElement.classList.remove('invalid');
     whatsappInput.parentElement.classList.remove('invalid');
@@ -82,9 +93,11 @@ function cleanInvalidClasses() {
 // Reinicia os campos do modal
 function resetFields() {
     nameInput.value = "";
-    cpfInput.value = "";
-    companyInput.value = "";
-    cnpjInput.value = "";
+    cpfInput.value = null;
+    cpfWrapper.classList.add('hidden');
+    clientTypeSelect.value = 1;
+    cnpjInput.value = null;
+    cnpjWrapper.classList.remove('hidden');
     emailInput.value = "";
     whatsappInput.value = "";
     cellphoneInput.value = "";
@@ -139,27 +152,24 @@ function validateClientForm() {
         isFormValid = false;
     }
 
-    const unmaskedCpf = cpfInput.value.replace(/\D+/g, '');
-    if (validadeCpf(unmaskedCpf)) {
-        clientForm.cpf = unmaskedCpf;
+    if (clientTypeSelect.value === '1') {
+        const unmaskedCnpj = cnpjInput.value.replace(/\D+/g, '');
+        if (validadeCnpj(unmaskedCnpj)) {
+            clientForm.cnpj = unmaskedCnpj;
+            clientForm.cpf = null;
+        } else {
+            cnpjInput.parentElement.classList.add('invalid');
+            isFormValid = false;
+        }
     } else {
-        cpfInput.parentElement.classList.add('invalid');
-        isFormValid = false;
-    }
-
-    if (companyInput.value.trim() !== "") {
-        clientForm.company = companyInput.value;
-    } else {
-        companyInput.parentElement.classList.add('invalid');
-        isFormValid = false;
-    }
-
-    const unmaskedCnpj = cnpjInput.value.replace(/\D+/g, '');
-    if (validadeCnpj(unmaskedCnpj)) {
-        clientForm.cnpj = unmaskedCnpj;
-    } else {
-        cnpjInput.parentElement.classList.add('invalid');
-        isFormValid = false;
+        const unmaskedCpf = cpfInput.value.replace(/\D+/g, '');
+        if (validadeCpf(unmaskedCpf)) {
+            clientForm.cpf = unmaskedCpf;
+            clientForm.cnpj = null;
+        } else {
+            cpfInput.parentElement.classList.add('invalid');
+            isFormValid = false;
+        }
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Expressão regular para validar o e-mail
@@ -238,10 +248,13 @@ async function saveClient() {
         return;
     }
 
+    if (isSavingClient) return;
+    isSavingClient = true;
+
     try {
         const response = await fetch(`${URL}/client`, {
             method: isEditing ? 'PUT' : 'POST', headers: {
-                'Content-Type': 'application/json',
+                'Authorization': userToken, 'Content-Type': 'application/json'
             }, body: JSON.stringify(clientForm),
         });
 
@@ -253,6 +266,9 @@ async function saveClient() {
         } else {
             await getOneClient(responseData.id, isEditing).then(() => {
                 showSuccessToast(`Cliente ${isEditing ? 'editado' : 'cadastrado'} com sucesso!`);
+                setTimeout(() => {
+                    isSavingClient = false;
+                }, 1000);
             });
         }
 
@@ -260,5 +276,6 @@ async function saveClient() {
     } catch (error) {
         console.error(isEditing ? 'Erro ao editar cliente:' : 'Erro ao criar cliente:', error);
         showErrorToast(`Erro ao ${isEditing ? 'editar' : 'cadastrar'} cliente!`);
+        isSavingClient = false;
     }
 }

@@ -19,8 +19,9 @@
 }
 
 .sidebar.expanded {
+    min-width: 300px;
     width: 300px;
-    transition: width 0.5s;
+    transition: width 0.5s, min-width 0.5s;
 }
 
 .expand-menu {

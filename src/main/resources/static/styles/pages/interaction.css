@@ -1,6 +1,6 @@
 .content-container {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: flex-start;
     flex-direction: column;
     width: 100%;
@@ -62,13 +62,10 @@
     z-index: 1;
 }
 
-.table tbody {
-}
-
 .table tr {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     flex-direction: row;
     height: 100%;
 }
@@ -106,10 +103,55 @@
     max-width: 60px;
 }
 
+.table tr th:nth-child(2),
+.table tr td:nth-child(2) {
+    max-width: 60px;
+}
+
+.table tr th:nth-child(3),
+.table tr td:nth-child(3) {
+    flex-grow: 2;
+    max-width: 280px;
+    padding-right: 10px;
+    box-sizing: border-box;
+}
+
+.table tr th:nth-child(4),
+.table tr td:nth-child(4),
+.table tr th:nth-child(5),
+.table tr td:nth-child(5) {
+    max-width: 140px;
+    padding-right: 10px;
+    box-sizing: border-box;
+}
+
+.table tr th:nth-child(6),
+.table tr td:nth-child(6) {
+    width: 200px;
+    padding-right: 10px;
+    box-sizing: border-box;
+    flex-grow: 1;
+}
+
+.table tr th:nth-child(7),
+.table tr td:nth-child(7) {
+    max-width: 150px;
+    padding-right: 10px;
+    box-sizing: border-box;
+}
+
+.table tr th:nth-child(8),
+.table tr td:nth-child(8) {
+    text-align: center;
+    max-width: 100px;
+    padding-right: 10px;
+    box-sizing: border-box;
+}
 
 .table tr th:last-child,
 .table tr td:last-child {
-    min-width: 180px;
+    min-width: 120px;
+    max-width: 180px;
     box-sizing: border-box;
     padding-right: 20px;
 }
@@ -120,4 +162,23 @@
     justify-content: flex-start;
     flex-direction: row;
     gap: 20px;
+}
+
+.result-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+}
+
+.result-container p {
+    font-size: 16px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.small-icon {
+    min-width: 20px;
+    min-height: 20px;
 }
