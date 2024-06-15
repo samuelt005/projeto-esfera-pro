@@ -72,87 +72,88 @@ async function getProposals(searchTerm = "") {
         }
     }
 
-    await fetch(fetchUrl)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Erro ao recuperar propostas`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (proposalPage + 1 === data.totalPages) {
-                shouldLoadMoreProposals = false;
-            }
+    await fetch(fetchUrl, {
+        method: 'GET', headers: {
+            'Authorization': userToken, 'Content-Type': 'text/html'
+        }
+    }).then(response => {
+        if (!response.ok) {
+            throw new Error(`Erro ao recuperar propostas`);
+        }
+        return response.json();
+    }).then(data => {
+        if (proposalPage + 1 === data.totalPages) {
+            shouldLoadMoreProposals = false;
+        }
 
-            const itemsToAdd = [];
-            data.content.forEach((item) => {
-                const isDuplicate = proposalList.some((existingItem) => {
-                    return existingItem.id === item.id;
-                });
-
-                if (!isDuplicate) {
-                    itemsToAdd.push(item);
-                }
+        const itemsToAdd = [];
+        data.content.forEach((item) => {
+            const isDuplicate = proposalList.some((existingItem) => {
+                return existingItem.id === item.id;
             });
 
-            if (isSelectAllActive) {
-                itemsToAdd.forEach((item) => {
-                    selectedIds.push(item.id)
-                })
+            if (!isDuplicate) {
+                itemsToAdd.push(item);
             }
-
-            proposalPage++;
-            isLoadingMoreProposals = false;
-            proposalList.push(...itemsToAdd);
-            addProposalRows(itemsToAdd, false);
-        })
-        .catch((e) => {
-            getMainFrameContent('error');
         });
+
+        if (isSelectAllActive) {
+            itemsToAdd.forEach((item) => {
+                selectedIds.push(item.id)
+            })
+        }
+
+        proposalPage++;
+        isLoadingMoreProposals = false;
+        proposalList.push(...itemsToAdd);
+        addProposalRows(itemsToAdd, false);
+    }).catch((e) => {
+        getMainFrameContent('error');
+    });
 }
 
 // Busca apenas uma proposta pelo id
 async function getOneProposal(id, isEditing) {
-    await fetch(`${URL}/proposal/byId/${id}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Erro ao recuperar proposta`);
+    await fetch(`${URL}/proposal/byId/${id}`, {
+        method: 'GET', headers: {
+            'Authorization': userToken, 'Content-Type': 'text/html'
+        }
+    }).then(response => {
+        if (!response.ok) {
+            throw new Error(`Erro ao recuperar proposta`);
+        }
+        return response.json();
+    }).then(data => {
+        if (isEditing) {
+            const oldRow = document.querySelector(`tr[data-row-id="${id}"]`);
+            if (oldRow) {
+                const newRow = createProposalTableRow(data);
+                oldRow.parentNode.replaceChild(newRow, oldRow);
             }
-            return response.json();
-        })
-        .then(data => {
-            if (isEditing) {
-                const oldRow = document.querySelector(`tr[data-row-id="${id}"]`);
-                if (oldRow) {
-                    const newRow = createProposalTableRow(data);
-                    oldRow.parentNode.replaceChild(newRow, oldRow);
-                }
 
-                const index = proposalList.findIndex(proposal => proposal.id === id);
-                if (index !== -1) {
-                    proposalList[index] = data;
-                }
-
-                addCheckboxesEvents();
-            } else {
-                proposalList.push(data);
-                addProposalRows([data], true);
+            const index = proposalList.findIndex(proposal => proposal.id === id);
+            if (index !== -1) {
+                proposalList[index] = data;
             }
-        })
-        .catch(error => {
-            console.error(error);
-            showErrorToast("Erro ao buscar proposta!");
-        });
+
+            addCheckboxesEvents();
+        } else {
+            proposalList.push(data);
+            addProposalRows([data], true);
+        }
+    }).catch(error => {
+        console.error(error);
+        showErrorToast("Erro ao buscar proposta!");
+    });
 }
 
 // Criar opções do select do tipo de serviço
 function setServiceTypeSelect() {
     const selectElements = [serviceTypeSelectProposal, serviceTypeFilterSelect];
-    const options = [
-        {name: 'Consultoria', value: 1},
-        {name: 'Acompanhamento', value: 2},
-        {name: 'Treinamento', value: 3}
-    ];
+    const options = [{name: 'Consultoria', value: 1}, {name: 'Acompanhamento', value: 2}, {
+        name: 'Treinamento',
+        value: 3
+    }];
 
     options.forEach(option => {
         selectElements.forEach(select => {
@@ -168,12 +169,10 @@ function setServiceTypeSelect() {
 // Criar opções do select do tipo de status
 function setStatusSelect() {
     const selectElements = [statusSelectProposal, statusFilterSelect];
-    const options = [
-        {name: 'Parado', value: 1},
-        {name: 'Negociação', value: 2},
-        {name: 'Acompanhar', value: 3},
-        {name: 'Fechado', value: 4}
-    ];
+    const options = [{name: 'Parado', value: 1}, {name: 'Negociação', value: 2}, {
+        name: 'Acompanhar',
+        value: 3
+    }, {name: 'Fechado', value: 4}];
 
     options.forEach(option => {
         selectElements.forEach(select => {
@@ -262,6 +261,9 @@ async function deleteProposal(row) {
     try {
         const response = await fetch(`${URL}/proposal/${id}`, {
             method: 'DELETE',
+            headers: {
+                'Authorization': userToken, 'Content-Type': 'text/html'
+            }
         });
 
         const responseDataProposal = await response.json();

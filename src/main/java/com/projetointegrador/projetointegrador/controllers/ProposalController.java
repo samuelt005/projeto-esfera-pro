@@ -25,6 +25,13 @@ public class ProposalController {
         return proposalService.findOneProposal(id);
     }
 
+    // Rota para buscar propostas pelo ID do cliente
+    @GetMapping("byClient/{clientId}")
+    @ResponseBody
+    public ResponseEntity<?> listProposalsPerClient(@PathVariable("clientId") Long clientId) {
+        return proposalService.listProposalsPerClient(clientId);
+    }
+
     // Rota para listar todas as propostas ativos com paginação
     @GetMapping("/{page}")
     @ResponseBody

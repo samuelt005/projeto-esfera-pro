@@ -3,7 +3,10 @@ package com.projetointegrador.projetointegrador.services;
 import com.projetointegrador.projetointegrador.models.Address;
 import com.projetointegrador.projetointegrador.models.Client;
 import com.projetointegrador.projetointegrador.repositories.ClientRepository;
+import com.projetointegrador.projetointegrador.repositories.TeamRepository;
 import com.projetointegrador.projetointegrador.responses.Response;
+import jakarta.servlet.http.HttpServletRequest;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.*;
@@ -21,9 +24,16 @@ import static org.mockito.Mockito.when;
 
 @SpringBootTest
 public class ClientServiceTests {
+    private ClientRepository clientRepository;
+    private ClientService clientService;
 
-    private final ClientRepository clientRepository = mock(ClientRepository.class);
-    private final ClientService clientService = new ClientService(clientRepository);
+    @BeforeEach
+    public void setUp() {
+        clientRepository = mock(ClientRepository.class);
+        TeamRepository teamRepository = mock(TeamRepository.class);
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        clientService = new ClientService(clientRepository, teamRepository, request);
+    }
 
     @Test
     void testFindOneClient() {
@@ -47,15 +57,15 @@ public class ClientServiceTests {
 
     @Test
     void testlistActiveClients() {
-        Client interaction1 = new Client();
-        interaction1.setId(1L);
-        interaction1.setInactive(false);
+        Client client1 = new Client();
+        client1.setId(1L);
+        client1.setInactive(false);
 
-        Client interaction2 = new Client();
-        interaction2.setId(2L);
-        interaction2.setInactive(false);
+        Client client2 = new Client();
+        client2.setId(2L);
+        client2.setInactive(false);
 
-        List<Client> clients = Arrays.asList(interaction1, interaction2);
+        List<Client> clients = Arrays.asList(client1, client2);
 
         Page<Client> page = new PageImpl<>(clients);
 

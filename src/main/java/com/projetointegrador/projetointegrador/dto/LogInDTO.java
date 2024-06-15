@@ -2,11 +2,11 @@ package com.projetointegrador.projetointegrador.dto;
 
 import java.util.Objects;
 
-public class UserDTO {
+public class LogInDTO {
     private String email;
     private String password;
 
-    public UserDTO() {
+    public LogInDTO() {
     }
 
     public String getEmail() {
@@ -17,13 +17,12 @@ public class UserDTO {
         return password;
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        UserDTO userDTO = (UserDTO) o;
-        return Objects.equals(email, userDTO.email) && Objects.equals(password, userDTO.password);
+        LogInDTO logInDTO = (LogInDTO) o;
+        return Objects.equals(email, logInDTO.email) && Objects.equals(password, logInDTO.password);
     }
 
     @Override

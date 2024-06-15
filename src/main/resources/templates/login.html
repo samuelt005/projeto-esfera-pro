@@ -38,17 +38,17 @@
                         <h1 class="title">ENTRAR</h1>
                     </div>
                     <div class="div-input">
-                        <label for="email">Email</label>
-                        <input type="email" name="email" id="email" placeholder="Digite seu email">
-                        <label class="error" id="email-error">Preencha este campo com um e-mail valido</label>
+                        <label for="log-in-email">Email</label>
+                        <input type="email" name="email" id="log-in-email" placeholder="Digite seu email">
+                        <label class="error" id="log-in-email-error">Preencha este campo com um e-mail valido</label>
                     </div>
                     <div class="div-input">
-                        <label for="password">Senha</label>
-                        <input type="password" name="password" id="password" placeholder="Digite sua senha">
-                        <label class="error" id="password-error">A senha deve conter mais de 8 caracteres</label>
+                        <label for="log-in-password">Senha</label>
+                        <input type="password" name="password" id="log-in-password" placeholder="Digite sua senha">
+                        <label class="error" id="log-in-password-error">A senha deve conter mais de 8 caracteres</label>
                     </div>
                     <div class="div-button">
-                        <button id="logar" class="button2">ENTRAR</button>
+                        <button id="log-in-button" class="button2">ENTRAR</button>
                     </div>
                 </div>
                 <div class="form-content hidden" id="register-form">
@@ -56,27 +56,32 @@
                         <h1 class="title">CADASTRAR</h1>
                     </div>
                     <div class="div-input">
-                        <label for="nome">Seu nome</label>
-                        <input type="text" name="nome" id="nome" placeholder="Informe seu nome">
-                        <label class="error" id="name-error">Preencha este campo com um nome valido</label>
+                        <label for="sing-up-name">Seu nome</label>
+                        <input type="text" name="nome" id="sing-up-name" placeholder="Informe seu nome">
+                        <label class="error" id="sing-up-name-error">Preencha este campo com um nome valido</label>
                     </div>
                     <div class="div-input">
-                        <label for="telefone">Número de telefone</label>
-                        <input type="text" name="telefone" id="telefone" placeholder="00 00000-0000">
-                        <label class="error" id="phone-error">Preencha este campo com um telefone valido</label>
+                        <label for="sing-up-phone">Número de telefone</label>
+                        <input type="text" name="telefone" id="sing-up-phone" placeholder="00 00000-0000">
+                        <label class="error" id="sing-up-phone-error">Preencha este campo com um telefone valido</label>
                     </div>
                     <div class="div-input">
-                        <label for="Remail">Email</label>
-                        <input type="email" name="email" id="Remail" placeholder="Informe seu email">
-                        <label class="error" id="Remail-error">Preencha este campo com um e-mail valido</label>
+                        <label for="sing-up-email">Email</label>
+                        <input type="email" name="email" id="sing-up-email" placeholder="Informe seu email">
+                        <label class="error" id="sing-up-email-error">Preencha este campo com um e-mail valido</label>
                     </div>
                     <div class="div-input">
-                        <label for="Rpassword">Senha</label>
-                        <input type="password" name="password" id="Rpassword" placeholder="Informe sua senha">
-                        <label class="error" id="Rpassword-error">A senha deve conter mais de 8 caracteres</label>
+                        <label for="sing-up-password">Senha</label>
+                        <input type="password" name="password" id="sing-up-password" placeholder="Informe sua senha">
+                        <label class="error" id="sing-up-password-error">A senha deve conter mais de 8 caracteres</label>
+                    </div>
+                    <div class="div-input">
+                        <label for="sing-up-code">Código da equipe</label>
+                        <input type="text" name="teamCode" id="sing-up-code" placeholder="Informe o código da equipe">
+                        <label class="error" id="sing-up-code-error">Insira um código válido da sua equipe</label>
                     </div>
                     <div class="div-button">
-                        <button id="cadastrar" type="submit" class="button2">CADASTRAR</button>
+                        <button id="sing-up-button" type="submit" class="button2">CADASTRAR</button>
                     </div>
                 </div>
             </form>
@@ -86,7 +91,6 @@
 
 <div id="scripts">
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsonwebtoken/9.0.2/index.js"></script>
     <script type="text/javascript" src="https://unpkg.com/imask"></script>
     <script type="text/javascript" th:src="@{/scripts/toasts.js}"></script>
     <script type="text/javascript" th:src="@{/scripts/login.js}"></script>

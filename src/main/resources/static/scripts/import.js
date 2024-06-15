@@ -153,18 +153,22 @@ function readCSVFile(file) {
 function createImportingObject(columns) {
     switch (currentPage) {
         case 2:
+            const cleanedCpf = columns[1].trim().replace(/\D/g, '');
             let cpf = null;
-            if (columns[1].trim().length === 10) {
-                cpf = "0" + columns[1].trim()
-            } else if (columns[1].trim().length === 11) {
-                cpf = columns[1].trim()
+            if (cleanedCpf.length === 9) {
+                cpf = "0" + "0" + cleanedCpf
+            } else if (cleanedCpf.length === 10) {
+                cpf = "0" + cleanedCpf
+            } else if (cleanedCpf.length === 11) {
+                cpf = cleanedCpf
             }
 
             let cnpj = null;
-            if (columns[2].trim().length === 13) {
-                cnpj = "0" + columns[2].trim()
-            } else if (columns[2].trim().length === 14) {
-                cnpj = columns[2].trim()
+            const cleanedCnpj = columns[2].trim().replace(/\D/g, '');
+            if (cleanedCnpj.length === 13) {
+                cnpj = "0" + cleanedCnpj
+            } else if (cleanedCnpj.length === 14) {
+                cnpj = cleanedCnpj
             }
 
             return {
@@ -183,7 +187,7 @@ function createImportingObject(columns) {
                     street: columns[8].trim(),
                     zip_code: columns[9].trim(),
                     city: {
-                        id: 5610
+                        id: 5595
                     }
                 }
             }
@@ -330,7 +334,11 @@ async function getImportingFile() {
 
         if (modalToGet === "") throw new Error('Erro ao obter o arquivo modelo.');
 
-        const response = await fetch(`${URL}/${modalToGet}`);
+        const response = await fetch(`${URL}/${modalToGet}`, {
+            method: 'GET', headers: {
+                'Authorization': userToken, 'Content-Type': 'text/html'
+            }
+        });
         if (!response.ok) {
             throw new Error('Erro ao obter o arquivo modelo.');
         }
@@ -358,6 +366,7 @@ async function saveData() {
             const response = await fetch(`${URL}/${tableToInsert}/bulk`, {
                 method: 'POST',
                 headers: {
+                    'Authorization': userToken,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(importingObjects)

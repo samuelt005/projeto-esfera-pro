@@ -21,13 +21,15 @@ public class JwtUtils {
     public JwtToken generateToken(User user, long expirationMillis) {
         Key key = Keys.hmacShaKeyFor(SECRET_KEY.getEncoded());
         String token = Jwts.builder()
-                        .setSubject(user.getEmail())
-                        .setExpiration(new Date(System.currentTimeMillis() + expirationMillis))
-                        .claim("name", user.getName())
-                        .claim("email", user.getEmail())
-                        .claim("phone", user.getPhone())
-                        .signWith(key)
-                        .compact();
+                .setSubject(user.getEmail())
+                .setExpiration(new Date(System.currentTimeMillis() + expirationMillis))
+                .claim("name", user.getName())
+                .claim("email", user.getEmail())
+                .claim("phone", user.getPhone())
+                .claim("team", user.getTeam().getName())
+                .claim("teamId", user.getTeam().getId())
+                .signWith(key)
+                .compact();
         return new JwtToken(token, expirationMillis);
     }
 
@@ -52,9 +54,10 @@ public class JwtUtils {
         }
     }
 
-    // Obtém o assunto (subject) de um token JWT
-    public String getSubject(String token) {
-        return extractClaims(token).getSubject();
+    // Obtém o teamId do token JWT
+    public Long getTeamId(String token) {
+        Claims claims = extractClaims(token);
+        return claims.get("teamId", Long.class);
     }
 
     // Verifica se um token JWT expirou

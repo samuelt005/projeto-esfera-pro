@@ -38,16 +38,20 @@ public class User {
 
     @JoinColumn(name = "team_id")
     @ManyToOne(fetch = FetchType.EAGER)
+    @JsonIgnore
     private Team team;
 
 
     public User() {
     }
 
-    public User(String name, String email, String phone) {
+    public User(String name, String email, String password,String phone, Team team) {
         this.name = name;
         this.email = email;
         this.phone = phone;
+        this.team = team;
+        this.password = password;
+        this.status = true;
     }
 
     public User(String name, String email, String password, String phone, String image_key, Boolean status, Team team) {
