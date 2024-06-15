@@ -189,7 +189,7 @@ async function saveProposal() {
     try {
         const response = await fetch(`${URL}/proposal`, {
             method: isEditingProposal ? 'PUT' : 'POST', headers: {
-                'Content-Type': 'application/json',
+                'Authorization': userToken, 'Content-Type': 'application/json'
             }, body: JSON.stringify(proposalForm),
         });
 

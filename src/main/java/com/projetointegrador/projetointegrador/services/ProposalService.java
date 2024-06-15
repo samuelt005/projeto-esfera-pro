@@ -2,7 +2,10 @@ package com.projetointegrador.projetointegrador.services;
 
 import com.projetointegrador.projetointegrador.models.*;
 import com.projetointegrador.projetointegrador.repositories.ProposalRepository;
+import com.projetointegrador.projetointegrador.repositories.TeamRepository;
 import com.projetointegrador.projetointegrador.responses.Response;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,9 +17,12 @@ import java.util.Optional;
 @Service
 public class ProposalService {
     private final ProposalRepository proposalRepository;
+    private final HttpServletRequest request;
 
-    public ProposalService(ProposalRepository proposalRepository) {
+    @Autowired
+    public ProposalService(ProposalRepository proposalRepository, HttpServletRequest request) {
         this.proposalRepository = proposalRepository;
+        this.request = request;
     }
 
     // Encontra uma proposta pelo id
@@ -48,8 +54,7 @@ public class ProposalService {
 
     // Lista todas as propostas ativas com paginação, pesquisa e filtros
     public Page<Proposal> listActiveProposal(String searchTerm, Integer statusId, Integer serviceTypeId, Pageable pageable) {
-        Proposal exampleProposal = new Proposal();
-        exampleProposal.setInactive(false);
+        Proposal exampleProposal = getProposalExample();
 
         ExampleMatcher matcher = ExampleMatcher.matching()
                 .withIgnorePaths("id")
@@ -79,8 +84,7 @@ public class ProposalService {
 
     // Lista todas as propostas ativas
     public List<Proposal> listAllActiveProposals() {
-        Proposal exampleProposal = new Proposal();
-        exampleProposal.setInactive(false);
+        Proposal exampleProposal = getProposalExample();
 
         ExampleMatcher matcher = ExampleMatcher.matching().withIgnorePaths("id");
 
@@ -139,4 +143,20 @@ public class ProposalService {
         }
     }
 
+    // Cria um exemplo de proposta para busca
+    private Proposal getProposalExample() {
+        Team exampleTeam = new Team();
+        Client exampleClient = new Client();
+        Proposal exampleProposal = new Proposal();
+        exampleTeam.setId(getTeamIdFromRequest());
+        exampleClient.setTeam(exampleTeam);
+        exampleProposal.setClient(exampleClient);
+        exampleProposal.setInactive(false);
+        return exampleProposal;
+    }
+
+    // Busca o teamId da request
+    private Long getTeamIdFromRequest() {
+        return (Long) request.getAttribute("teamId");
+    }
 }

@@ -225,7 +225,7 @@ async function saveInteraction() {
     try {
         const response = await fetch(`${URL}/interaction`, {
             method: isEditingInteraction ? 'PUT' : 'POST', headers: {
-                'Content-Type': 'application/json',
+                'Authorization': userToken, 'Content-Type': 'application/json'
             }, body: JSON.stringify(interactionForm),
         });
 

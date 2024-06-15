@@ -3,8 +3,12 @@ package com.projetointegrador.projetointegrador.services;
 import com.projetointegrador.projetointegrador.models.Client;
 import com.projetointegrador.projetointegrador.models.Interaction;
 import com.projetointegrador.projetointegrador.models.Proposal;
+import com.projetointegrador.projetointegrador.models.Team;
 import com.projetointegrador.projetointegrador.repositories.InteractionRepository;
+import com.projetointegrador.projetointegrador.repositories.ProposalRepository;
 import com.projetointegrador.projetointegrador.responses.Response;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +21,12 @@ import java.util.Optional;
 @Service
 public class InteractionService {
     private final InteractionRepository interactionRepository;
+    private final HttpServletRequest request;
 
-    public InteractionService(InteractionRepository interactionRepository) {
+    @Autowired
+    public InteractionService(InteractionRepository interactionRepository, HttpServletRequest request) {
         this.interactionRepository = interactionRepository;
+        this.request = request;
     }
 
     // Encontra uma interação pelo id
@@ -36,8 +43,7 @@ public class InteractionService {
 
     // Lista todas as interações ativas com paginação, pesquisa e filtros
     public Page<Interaction> listActiveInteraction(String searchTerm, Integer resultId, Integer contactId, Pageable pageable) {
-        Interaction exampleInteraction = new Interaction();
-        exampleInteraction.setInactive(false);
+        Interaction exampleInteraction = getInteractionExample();
 
         ExampleMatcher matcher = ExampleMatcher.matching()
                 .withIgnorePaths("id")
@@ -69,8 +75,7 @@ public class InteractionService {
 
     // Lista todas as interações ativas
     public List<Interaction> listAllActiveInteractions() {
-        Interaction exampleInteraction = new Interaction();
-        exampleInteraction.setInactive(false);
+        Interaction exampleInteraction = getInteractionExample();
 
         ExampleMatcher matcher = ExampleMatcher.matching().withIgnorePaths("id");
 
@@ -129,4 +134,22 @@ public class InteractionService {
         }
     }
 
+    // Cria um exemplo de interação para busca
+    private Interaction getInteractionExample() {
+        Team exampleTeam = new Team();
+        Client exampleClient = new Client();
+        Proposal exampleProposal = new Proposal();
+        Interaction exampleInteraction = new Interaction();
+        exampleTeam.setId(getTeamIdFromRequest());
+        exampleClient.setTeam(exampleTeam);
+        exampleProposal.setClient(exampleClient);
+        exampleInteraction.setProposal(exampleProposal);
+        exampleInteraction.setInactive(false);
+        return exampleInteraction;
+    }
+
+    // Busca o teamId da request
+    private Long getTeamIdFromRequest() {
+        return (Long) request.getAttribute("teamId");
+    }
 }

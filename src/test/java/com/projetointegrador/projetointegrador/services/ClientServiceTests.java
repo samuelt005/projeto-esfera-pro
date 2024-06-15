@@ -57,15 +57,15 @@ public class ClientServiceTests {
 
     @Test
     void testlistActiveClients() {
-        Client interaction1 = new Client();
-        interaction1.setId(1L);
-        interaction1.setInactive(false);
+        Client client1 = new Client();
+        client1.setId(1L);
+        client1.setInactive(false);
 
-        Client interaction2 = new Client();
-        interaction2.setId(2L);
-        interaction2.setInactive(false);
+        Client client2 = new Client();
+        client2.setId(2L);
+        client2.setInactive(false);
 
-        List<Client> clients = Arrays.asList(interaction1, interaction2);
+        List<Client> clients = Arrays.asList(client1, client2);
 
         Page<Client> page = new PageImpl<>(clients);
 
