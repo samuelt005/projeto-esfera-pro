@@ -1,7 +1,5 @@
 package com.projetointegrador.projetointegrador.dto;
 
-import com.projetointegrador.projetointegrador.models.Interaction;
-
 import java.util.List;
 
 public class DashboardDTO {
@@ -13,6 +11,8 @@ public class DashboardDTO {
     private Integer totalInteractionsCurrentMonth;
     private Integer totalInteractionsLastYear;
     private Integer totalInteractionsCurrentYear;
+    private List<Integer> totalProposalsCurrentYearByStatus;
+    private List<Integer> totalInteractionsCurrentYearByResult;
 
     public List<Double> getSalesValueLastMonth() {
         return salesValueLastMonth;
@@ -76,5 +76,21 @@ public class DashboardDTO {
 
     public void setTotalInteractionsCurrentYear(Integer totalInteractionsCurrentYear) {
         this.totalInteractionsCurrentYear = totalInteractionsCurrentYear;
+    }
+
+    public List<Integer> getTotalProposalsCurrentYearByStatus() {
+        return totalProposalsCurrentYearByStatus;
+    }
+
+    public void setTotalProposalsCurrentYearByStatus(List<Integer> totalProposalsCurrentYearByStatus) {
+        this.totalProposalsCurrentYearByStatus = totalProposalsCurrentYearByStatus;
+    }
+
+    public List<Integer> getTotalInteractionsCurrentYearByResult() {
+        return totalInteractionsCurrentYearByResult;
+    }
+
+    public void setTotalInteractionsCurrentYearByResult(List<Integer> totalInteractionsCurrentYearByResult) {
+        this.totalInteractionsCurrentYearByResult = totalInteractionsCurrentYearByResult;
     }
 }

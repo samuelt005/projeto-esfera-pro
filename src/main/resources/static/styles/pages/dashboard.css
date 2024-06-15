@@ -6,6 +6,7 @@
     gap: 10px;
     width: 100%;
     height: 100%;
+    max-height: calc(100% - 30px);
     background-color: var(--dashboard-background);
     padding: 15px;
     border-radius: 35px;
@@ -13,22 +14,22 @@
     overflow-x: auto;
 }
 
-.first-line {
+.first-line,
+.second-line {
     display: flex;
     align-items: flex-start;
     justify-content: flex-start;
     gap: 10px;
     width: 100%;
-    height: 200px;
 }
 
-.second-line,
 .third-line {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
     width: 100%;
+    height: 100%;
 }
 
 .small-graph-container {
@@ -37,6 +38,7 @@
     justify-content: space-between;
     flex-direction: column;
     border-radius: 20px;
+    width: calc(25% - 2.5px);
     height: 100%;
     background-color: var(--white);
     padding: 24px;
@@ -47,9 +49,11 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    flex-direction: column;
     border-radius: 20px;
     gap: 14px;
-    height: 100%;
+    height: 152px;
+    max-width: calc(50% - 5px);
     flex-grow: 1;
     background-color: var(--white);
     padding: 24px;
@@ -59,9 +63,11 @@
 .large-graph-container {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
+    flex-direction: column;
     border-radius: 20px;
-    height: 100px;
+    gap: 40px;
+    height: 100%;
     flex-grow: 1;
     background-color: var(--white);
     max-width: calc(50% - 5px);
@@ -78,14 +84,23 @@
     min-width: 160px;
 }
 
-.small-graph-title,
-.medium-graph-title {
+.graph-title {
     font-size: 20px;
     font-weight: bold;
     width: 100%;
-    max-width: 100px;
     line-height: 24px;
     color: var(--text-primary);
+}
+
+.graph-title.centered {
+    text-align: center;
+}
+
+.data-container {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    width: 100%;
 }
 
 .data-text-wrapper {
@@ -95,8 +110,9 @@
 }
 
 .small-graph-total,
-.medium-graph-total {
-    font-size: 60px;
+.medium-graph-total,
+.medium-graph-total-quanty {
+    font-size: 40px;
     font-weight: bold;
     width: 100%;
     color: var(--text-primary);
@@ -104,9 +120,18 @@
 
 .increase-wrapper {
     display: flex;
+    align-items: center;
+    justify-content: flex-end;
     gap: 4px;
 }
 
+.increase-wrapper.negative svg {
+    rotate: 180deg;
+}
+
+.increase-wrapper.hidden {
+    display: none;
+}
 
 .graph-wrapper {
     display: flex;
@@ -114,5 +139,4 @@
     justify-content: center;
     width: 100%;
     height: 100%;
-    background-color: #cbcbcb;
 }

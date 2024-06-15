@@ -22,7 +22,7 @@ public class DashboardService {
     }
 
     // Busca todas as propostas do teamId específico com status = 4 e inactive = false
-    public List<Double> getTotalSalesValueInAMonth(int monthOffset) {
+    public List<Double> getTotalSalesValueInAMonth(Integer monthOffset) {
         LocalDateTime startOfMonth = getStartOfMonth(LocalDate.now().minusMonths(monthOffset));
         LocalDateTime endOfMonth = getEndOfMonth(LocalDate.now().minusMonths(monthOffset));
 
@@ -32,7 +32,7 @@ public class DashboardService {
     }
 
     // Método para calcular o valor total das vendas para um período de anos
-    public List<Double> getTotalSalesValueInAYear(int yearOffset) {
+    public List<Double> getTotalSalesValueInAYear(Integer yearOffset) {
         LocalDateTime startOfYear = getStartOfYear(LocalDate.now().minusYears(yearOffset));
         LocalDateTime endOfYear = getEndOfYear(LocalDate.now().minusYears(yearOffset));
 
@@ -42,7 +42,7 @@ public class DashboardService {
     }
 
     // Método para buscar o total de interações em um mês
-    public Integer getTotalInteractionsInAMonth(int monthOffset) {
+    public Integer getTotalInteractionsInAMonth(Integer monthOffset) {
         LocalDateTime startOfMonth = getStartOfMonth(LocalDate.now().minusMonths(monthOffset));
         LocalDateTime endOfMonth = getEndOfMonth(LocalDate.now().minusMonths(monthOffset));
 
@@ -52,13 +52,33 @@ public class DashboardService {
     }
 
     // Método para buscar o total de interações em um ano
-    public Integer getTotalInteractionsInAYear(int yearOffset) {
+    public Integer getTotalInteractionsInAYear(Integer yearOffset) {
         LocalDateTime startOfYear = getStartOfYear(LocalDate.now().minusYears(yearOffset));
         LocalDateTime endOfYear = getEndOfYear(LocalDate.now().minusYears(yearOffset));
 
         Long teamId = getTeamIdFromRequest();
 
         return proposalRepository.findTotalAmountOfInteractions(teamId, startOfYear, endOfYear);
+    }
+
+    // Método para buscar o total de interações em um ano
+    public Integer getTotalProposalsInAYearByStatus(Integer yearOffset, Integer status) {
+        LocalDateTime startOfYear = getStartOfYear(LocalDate.now().minusYears(yearOffset));
+        LocalDateTime endOfYear = getEndOfYear(LocalDate.now().minusYears(yearOffset));
+
+        Long teamId = getTeamIdFromRequest();
+
+        return proposalRepository.findTotalAmountOfProposalsByStatus(teamId, status, startOfYear, endOfYear);
+    }
+
+    // Método para buscar o total de interações em um ano
+    public Integer getTotalInteractionsInAYearByResult(Integer yearOffset, Integer result) {
+        LocalDateTime startOfYear = getStartOfYear(LocalDate.now().minusYears(yearOffset));
+        LocalDateTime endOfYear = getEndOfYear(LocalDate.now().minusYears(yearOffset));
+
+        Long teamId = getTeamIdFromRequest();
+
+        return proposalRepository.findTotalAmountOfInteractionsByResult(teamId, result, startOfYear, endOfYear);
     }
 
     // Retorna a data e hora de início do mês para a data especificada
