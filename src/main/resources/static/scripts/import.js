@@ -187,7 +187,7 @@ function createImportingObject(columns) {
                     street: columns[8].trim(),
                     zip_code: columns[9].trim(),
                     city: {
-                        id: 5610
+                        id: 5595
                     }
                 }
             }
@@ -334,7 +334,11 @@ async function getImportingFile() {
 
         if (modalToGet === "") throw new Error('Erro ao obter o arquivo modelo.');
 
-        const response = await fetch(`${URL}/${modalToGet}`);
+        const response = await fetch(`${URL}/${modalToGet}`, {
+            method: 'GET', headers: {
+                'Authorization': userToken, 'Content-Type': 'text/html'
+            }
+        });
         if (!response.ok) {
             throw new Error('Erro ao obter o arquivo modelo.');
         }
@@ -362,6 +366,7 @@ async function saveData() {
             const response = await fetch(`${URL}/${tableToInsert}/bulk`, {
                 method: 'POST',
                 headers: {
+                    'Authorization': userToken,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(importingObjects)
