@@ -1,6 +1,6 @@
 let dashboardData;
 
-const colors = ['255, 0, 0', '255, 153, 0', '0, 10, 255', '59, 184, 0'];
+const colors = ['238, 41, 41', '255, 245, 6', '97, 0, 255', '59, 187, 14'];
 
 // Busca os dados do dashboard
 async function getDashboardData() {
@@ -17,7 +17,6 @@ async function getDashboardData() {
         })
         .then(data => {
             dashboardData = data;
-            console.log(dashboardData)
         })
         .catch(error => {
             console.error(error);
@@ -36,9 +35,9 @@ function createChart(ctx, data, labels) {
                 data: data,
                 label: 'teste',
                 backgroundColor: colors.map(color => `rgba(${color}, 0.5)`),
-                borderColor: colors.map(color => `#${color}`),
+                borderColor: colors.map(color => `rgba(${color}, 1)`),
                 borderWidth: 2,
-                borderRadius: 20
+                borderRadius: 10
             }]
         },
         options: {
@@ -146,6 +145,16 @@ function createInteractionChart() {
     const labels = ['Desligado', 'Ocupado', 'Cx. Postal', 'Atendido'];
 
     return createChart(ctx, data, labels);
+}
+
+function updateCompanyName() {
+    const userTeamDashboard = document.querySelector(".user-team-dashboard");
+    const userTeam = tokenData.team;
+
+    if (userTeamDashboard) {
+        userTeamDashboard.textContent = userTeam;
+        userTeamDashboard.title = userTeam;
+    }
 }
 
 function updateCurrentYear() {
@@ -258,6 +267,12 @@ function setInteractionTotalsForYear() {
     interactionValueYear.textContent = dashboardData.totalInteractionsCurrentYear;
 }
 
+function setClientTotal() {
+    const clientValue = document.querySelector('.client-value');
+
+    clientValue.textContent = dashboardData.totalClients;
+}
+
 function rotateIcon(div) {
     const parentDiv = div.parentElement;
     const increaseWrapper = parentDiv.closest('.increase-wrapper');
@@ -277,6 +292,8 @@ function hideIncrease(div) {
 }
 
 function dashboardStartup() {
+    updateCompanyName();
+
     getDashboardData().then(() => {
         const proposalCanva = document.getElementById('proposalChart');
         const interactionCanva = document.getElementById('interactionChart');
@@ -292,6 +309,8 @@ function dashboardStartup() {
 
         setInteractionTotalsForMonth();
         setInteractionTotalsForYear();
+
+        setClientTotal();
     });
 
     updateCurrentYear();

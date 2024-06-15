@@ -36,12 +36,18 @@ public interface ProposalRepository extends JpaRepository<Proposal, Long> {
     Integer findTotalAmountOfProposalsByStatus(Long teamId, Integer status, LocalDateTime startingDate, LocalDateTime endingDate);
 
     @Query("SELECT count(i.id) FROM Interaction i " +
-           "JOIN i.proposal p " +
-           "JOIN p.client c " +
+            "JOIN i.proposal p " +
+            "JOIN p.client c " +
+            "JOIN c.team t " +
+            "WHERE t.id = :teamId " +
+            "AND i.inactive = false " +
+            "AND i.result = :result " +
+            "AND i.date BETWEEN :startingDate AND :endingDate")
+    Integer findTotalAmountOfInteractionsByResult(Long teamId, Integer result, LocalDateTime startingDate, LocalDateTime endingDate);
+
+    @Query("SELECT count(c.id) FROM Client c " +
            "JOIN c.team t " +
            "WHERE t.id = :teamId " +
-           "AND i.inactive = false " +
-           "AND i.result = :result " +
-           "AND i.date BETWEEN :startingDate AND :endingDate")
-    Integer findTotalAmountOfInteractionsByResult(Long teamId, Integer result, LocalDateTime startingDate, LocalDateTime endingDate);
+           "AND c.inactive = false ")
+    Integer findTotalAmountOfClients(Long teamId);
 }

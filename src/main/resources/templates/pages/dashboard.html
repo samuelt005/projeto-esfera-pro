@@ -8,44 +8,10 @@
 <content>
     <div class="content-container">
         <div class="first-line">
-            <div class="medium-graph-container">
-                <p class="graph-title">
-                    Propostas aceitas em
-                    <span class="current-month">-</span>
-                </p>
-                <div class="data-container">
-                    <div class="data-text-wrapper">
-                        <p class="medium-graph-total-quanty proposal-total-month">-</p>
-                    </div>
-                    <div class="data-text-wrapper">
-                        <div class="increase-wrapper">
-                            <div th:replace="~{icons/dashboard/increase-arrow :: increase-arrow}"></div>
-                            <p><span class="proposal-percentage-month">-</span> Mês anterior</p>
-                        </div>
-                        <p class="medium-graph-total proposal-value-month">-</p>
-                    </div>
-                </div>
+            <div class="user-team-dashboard-wrapper">
+                <div th:replace="~{icons/dashboard/company :: company}"></div>
+                <p class="user-team-dashboard">Nome da Empresa</p>
             </div>
-            <div class="medium-graph-container">
-                <p class="graph-title">
-                    Propostas aceitas em
-                    <span class="current-year">-</span>
-                </p>
-                <div class="data-container">
-                    <div class="data-text-wrapper">
-                        <p class="medium-graph-total-quanty proposal-total-year">145</p>
-                    </div>
-                    <div class="data-text-wrapper">
-                        <div class="increase-wrapper">
-                            <div th:replace="~{icons/dashboard/increase-arrow :: increase-arrow}"></div>
-                            <p><span class="proposal-percentage-year">-</span> Ano anterior</p>
-                        </div>
-                        <p class="medium-graph-total proposal-value-year">R$ 30.000,00</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="second-line">
             <div class="small-graph-container">
                 <p class="graph-title">
                     Interações em
@@ -57,7 +23,7 @@
                             <div th:replace="~{icons/dashboard/increase-arrow :: increase-arrow}"></div>
                             <p><span class="interaction-percentage-month">-</span> Mês anterior</p>
                         </div>
-                        <p class="medium-graph-total-quanty interaction-value-month">-</p>
+                        <p class="graph-total interaction-value-month">-</p>
                     </div>
                 </div>
             </div>
@@ -72,37 +38,55 @@
                             <div th:replace="~{icons/dashboard/increase-arrow :: increase-arrow}"></div>
                             <p><span class="interaction-percentage-year">-</span> Ano anterior</p>
                         </div>
-                        <p class="medium-graph-total-quanty interaction-value-year">-</p>
+                        <p class="graph-total interaction-value-year">-</p>
                     </div>
                 </div>
             </div>
             <div class="small-graph-container">
+                <p class="graph-title">
+                    Clientes cadastrados
+                </p>
+                <div class="data-container">
+                    <div class="data-text-wrapper">
+                        <p class="graph-total client-value">-</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="second-line">
+            <div class="medium-graph-container">
                 <p class="graph-title">
                     Propostas aceitas em
                     <span class="current-month">-</span>
                 </p>
                 <div class="data-container">
                     <div class="data-text-wrapper">
-                        <div class="increase-wrapper">
+                        <p class="graph-total proposal-total-month">-</p>
+                    </div>
+                    <div class="data-text-wrapper">
+                        <div class="increase-wrapper align-right">
                             <div th:replace="~{icons/dashboard/increase-arrow :: increase-arrow}"></div>
-                            <p>10% Mês anterior</p>
+                            <p><span class="proposal-percentage-month">-</span> Mês anterior</p>
                         </div>
-                        <p class="medium-graph-total-quanty proposal-value-month">200</p>
+                        <p class="graph-total align-right proposal-value-month">-</p>
                     </div>
                 </div>
             </div>
-            <div class="small-graph-container">
+            <div class="medium-graph-container">
                 <p class="graph-title">
                     Propostas aceitas em
-                    <span class="current-month">-</span>
+                    <span class="current-year">-</span>
                 </p>
                 <div class="data-container">
                     <div class="data-text-wrapper">
-                        <div class="increase-wrapper">
+                        <p class="graph-total proposal-total-year">145</p>
+                    </div>
+                    <div class="data-text-wrapper">
+                        <div class="increase-wrapper align-right">
                             <div th:replace="~{icons/dashboard/increase-arrow :: increase-arrow}"></div>
-                            <p>10% Mês anterior</p>
+                            <p><span class="proposal-percentage-year">-</span> Ano anterior</p>
                         </div>
-                        <p class="medium-graph-total-quanty proposal-value-month">200</p>
+                        <p class="graph-total align-right proposal-value-year">-</p>
                     </div>
                 </div>
             </div>

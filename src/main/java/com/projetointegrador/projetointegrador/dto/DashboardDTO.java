@@ -13,6 +13,8 @@ public class DashboardDTO {
     private Integer totalInteractionsCurrentYear;
     private List<Integer> totalProposalsCurrentYearByStatus;
     private List<Integer> totalInteractionsCurrentYearByResult;
+    private Integer totalClients;
+
 
     public List<Double> getSalesValueLastMonth() {
         return salesValueLastMonth;
@@ -92,5 +94,13 @@ public class DashboardDTO {
 
     public void setTotalInteractionsCurrentYearByResult(List<Integer> totalInteractionsCurrentYearByResult) {
         this.totalInteractionsCurrentYearByResult = totalInteractionsCurrentYearByResult;
+    }
+
+    public Integer getTotalClients() {
+        return totalClients;
+    }
+
+    public void setTotalClients(Integer totalClients) {
+        this.totalClients = totalClients;
     }
 }

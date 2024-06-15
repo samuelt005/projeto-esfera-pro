@@ -47,6 +47,8 @@ public class DashboardController {
         }
         dashboardDTO.setTotalInteractionsCurrentYearByResult(interactionsInAYearByResult);
 
+        dashboardDTO.setTotalClients(dashboardService.getTotalClients());
+
         return ResponseEntity.ok().body(dashboardDTO);
     }
 }

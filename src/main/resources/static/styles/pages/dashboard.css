@@ -5,8 +5,7 @@
     flex-direction: column;
     gap: 10px;
     width: 100%;
-    height: 100%;
-    max-height: calc(100% - 30px);
+    height: calc(100%);
     background-color: var(--dashboard-background);
     padding: 15px;
     border-radius: 35px;
@@ -18,7 +17,7 @@
 .second-line {
     display: flex;
     align-items: flex-start;
-    justify-content: flex-start;
+    justify-content: space-between;
     gap: 10px;
     width: 100%;
 }
@@ -29,7 +28,28 @@
     justify-content: center;
     gap: 10px;
     width: 100%;
-    height: 100%;
+    flex-grow: 1;
+}
+
+.user-team-dashboard-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    border-radius: 20px;
+    font-size: 60px;
+    height: 152px;
+    gap: 20px;
+    width: calc(40% - 10px);
+    background-color: var(--white);
+    padding: 24px;
+    box-sizing: border-box;
+    color: var(--main-purple);
+}
+
+.user-team-dashboard-wrapper p {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .small-graph-container {
@@ -38,8 +58,8 @@
     justify-content: space-between;
     flex-direction: column;
     border-radius: 20px;
-    width: calc(25% - 2.5px);
-    height: 100%;
+    height: 152px;
+    width: calc((60%) / 3 - 10px);
     background-color: var(--white);
     padding: 24px;
     box-sizing: border-box;
@@ -51,7 +71,6 @@
     justify-content: space-between;
     flex-direction: column;
     border-radius: 20px;
-    gap: 14px;
     height: 152px;
     max-width: calc(50% - 5px);
     flex-grow: 1;
@@ -86,10 +105,13 @@
 
 .graph-title {
     font-size: 20px;
+    line-height: 30px;
     font-weight: bold;
     width: 100%;
-    line-height: 24px;
     color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .graph-title.centered {
@@ -106,23 +128,39 @@
 .data-text-wrapper {
     display: flex;
     flex-direction: column;
+    width: 100%;
     gap: 10px;
 }
 
-.small-graph-total,
-.medium-graph-total,
-.medium-graph-total-quanty {
+.graph-total {
+    display: flex;
+    justify-content: flex-start;
     font-size: 40px;
     font-weight: bold;
-    width: 100%;
     color: var(--text-primary);
+}
+
+.graph-total.align-right {
+    justify-content: flex-end;
 }
 
 .increase-wrapper {
     display: flex;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: flex-start;
+    width: 100%;
     gap: 4px;
+}
+
+.increase-wrapper.align-right {
+    justify-content: flex-end;
+}
+
+.increase-wrapper p {
+    line-height: 24px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .increase-wrapper.negative svg {
@@ -138,5 +176,9 @@
     align-items: center;
     justify-content: center;
     width: 100%;
+    height: 100%;
+}
+
+.graph-wrapper canvas {
     height: 100%;
 }

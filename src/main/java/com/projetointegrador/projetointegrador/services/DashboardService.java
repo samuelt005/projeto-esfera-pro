@@ -81,6 +81,12 @@ public class DashboardService {
         return proposalRepository.findTotalAmountOfInteractionsByResult(teamId, result, startOfYear, endOfYear);
     }
 
+    public Integer getTotalClients() {
+        Long teamId = getTeamIdFromRequest();
+
+        return proposalRepository.findTotalAmountOfClients(teamId);
+    }
+
     // Retorna a data e hora de início do mês para a data especificada
     private LocalDateTime getStartOfMonth(LocalDate date) {
         return date.withDayOfMonth(1).atStartOfDay();
