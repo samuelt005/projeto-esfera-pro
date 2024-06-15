@@ -2,13 +2,13 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Clientes</title>
+    <title>Propostas</title>
 </head>
 <body>
 <content>
     <div class="content-container">
         <div class="table-header">
-            <h2>Clientes</h2>
+            <h2>Propostas</h2>
             <div th:replace="~{components/search :: search('search', 'Pesquisar por cliente')}"></div>
             <div class="buttons">
                 <div class="filter-container">
@@ -16,8 +16,10 @@
 
                     <div class="filter-menu hidden">
                         <div class="top-filter-section">
-                            <h4>Estado</h4>
-                            <div th:replace="~{components/input-select :: input('state-filter', 'Selecione', false)}"></div>
+                            <h4>Status</h4>
+                            <div th:replace="~{components/input-select :: input('status-filter', 'Selecione', false)}"></div>
+                            <h4>Tipo de serviço</h4>
+                            <div th:replace="~{components/input-select :: input('service-type-filter', 'Selecione', false)}"></div>
                         </div>
                         <div class="bottom-filter-section">
                             <div th:replace="~{components/button2 :: button('clean-filters-button', 'Limpar', false)}"></div>
@@ -41,11 +43,12 @@
                         </div>
                     </th>
                     <th>ID</th>
-                    <th>Nome</th>
-                    <th>CPF/CNPJ</th>
-                    <th>Telefone</th>
-                    <th>E-mail</th>
-                    <th>Endereço</th>
+                    <th>Cliente</th>
+                    <th>Serviço</th>
+                    <th>Status</th>
+                    <th>Descrição</th>
+                    <th>Data da oferta</th>
+                    <th>Valor</th>
                     <th>Ações</th>
                 </tr>
                 </thead>
@@ -61,7 +64,7 @@
     <div class="modal-container">
         <header class="modal-header">
             <h2>
-                Cadastrar cliente
+                Cadastrar proposta
             </h2>
             <div class="close-modal-button">
                 <div th:replace="~{icons/buttons/close :: close}"></div>
@@ -69,76 +72,36 @@
         </header>
         <main>
             <section>
-                <h3>Dados básicos</h3>
                 <div class="inputs-row">
                     <div class="input-wrapper">
-                        <h4>Nome</h4>
-                        <div th:replace="~{components/input1 :: input('name', 'Digite o nome do cliente', 'text')}"></div>
+                        <h4>Cliente</h4>
+                        <div th:replace="~{components/input-select :: input('client', 'Escolha o cliente', 'false')}"></div>
                     </div>
                 </div>
                 <div class="inputs-row">
                     <div class="input-wrapper half-space">
-                        <h4>Tipo de cliente</h4>
-                        <select name="client-type" class="input-select no-first-option">
-                        </select>
-                    </div>
-                    <div class="input-wrapper cpf-wrapper hidden half-space">
-                        <h4>CPF</h4>
-                        <div th:replace="~{components/input1 :: input('cpf', '999.999.999-99', 'text')}"></div>
-                    </div>
-                    <div class="input-wrapper cnpj-wrapper half-space">
-                        <h4>CNPJ</h4>
-                        <div th:replace="~{components/input1 :: input('cnpj', '99.999.999/9999-99', 'text')}"></div>
-                    </div>
-                </div>
-            </section>
-            <section>
-                <h3>Informações para contato</h3>
-                <div class="inputs-row">
-                    <div class="input-wrapper half-space">
-                        <h4>E-mail</h4>
-                        <div th:replace="~{components/input1 :: input('email', 'Digite o e-mail do cliente', 'email')}"></div>
+                        <h4>Data da Oferta</h4>
+                        <div th:replace="~{components/input1 :: input('offerDate', 'Digite a data da proposta', 'string')}"></div>
                     </div>
                     <div class="input-wrapper half-space">
-                        <h4>Whatsapp</h4>
-                        <div th:replace="~{components/input1 :: input('whatsapp', '(99) 99999-9999', 'text')}"></div>
+                        <h4>Serviço</h4>
+                        <div th:replace="~{components/input-select :: input('serviceType', 'Escolha o tipo de serviço', 'false')}"></div>
                     </div>
                 </div>
                 <div class="inputs-row">
                     <div class="input-wrapper half-space">
-                        <h4>Celular</h4>
-                        <div th:replace="~{components/input1 :: input('cellphone', '(99) 99999-9999', 'text')}"></div>
+                        <h4>Valor</h4>
+                        <div th:replace="~{components/input1 :: input('value', 'R$', 'text')}"></div>
                     </div>
                     <div class="input-wrapper half-space">
-                        <h4>Telefone</h4>
-                        <div th:replace="~{components/input1 :: input('telephone', '(99) 99999-9999', 'text')}"></div>
+                        <h4>Status</h4>
+                        <div th:replace="~{components/input-select :: input('status', 'Defina o status da proposta', 'false')}"></div>
                     </div>
                 </div>
-            </section>
-            <section>
-                <h3>Endereço</h3>
                 <div class="inputs-row">
-                    <div class="input-wrapper small">
-                        <h4>Número</h4>
-                        <div th:replace="~{components/input1 :: input('number', '99999', 'text')}"></div>
-                    </div>
                     <div class="input-wrapper">
-                        <h4>Rua</h4>
-                        <div th:replace="~{components/input1 :: input('street', 'Insira a rua', 'text')}"></div>
-                    </div>
-                    <div class="input-wrapper small">
-                        <h4>CEP</h4>
-                        <div th:replace="~{components/input1 :: input('zip_code', '99999-999', 'text')}"></div>
-                    </div>
-                </div>
-                <div class="inputs-row">
-                    <div class="input-wrapper medium">
-                        <h4>Estado</h4>
-                        <div th:replace="~{components/input-select :: input('state', 'Selecione', false)}"></div>
-                    </div>
-                    <div class="input-wrapper">
-                        <h4>Cidade</h4>
-                        <div th:replace="~{components/input-select :: input('city', 'Selecione', true)}"></div>
+                        <h4>Descrição da proposta</h4>
+                        <div th:replace="~{components/textarea1 :: input('description', 'Escreva informações sobre a proposta')}"></div>
                     </div>
                 </div>
             </section>
@@ -151,11 +114,13 @@
 </modal>
 
 <styles>
-    <link rel="stylesheet" th:href="@{/styles/pages/clientes.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/pages/proposal.css}"/>
     <link rel="stylesheet" th:href="@{/styles/components/search.css}"/>
     <link rel="stylesheet" th:href="@{/styles/components/button1.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/components/button2.css}"/>
     <link rel="stylesheet" th:href="@{/styles/components/button3.css}"/>
     <link rel="stylesheet" th:href="@{/styles/components/input1.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/components/textarea1.css}"/>
     <link rel="stylesheet" th:href="@{/styles/components/input-select.css}"/>
     <link rel="stylesheet" th:href="@{/styles/components/button-table.css}"/>
     <link rel="stylesheet" th:href="@{/styles/components/checkbox-table.css}"/>
