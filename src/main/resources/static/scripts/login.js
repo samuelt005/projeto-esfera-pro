@@ -46,10 +46,12 @@ function validateFormLogin() {
         if (emailRegex.test(logInEmail.value.trim())) {
             loginData.email = logInEmail.value.trim();
         } else {
+            loginData.email = "";
             errorLabels[0].classList.add('invalid');
             isFormValid = false;
         }
     } else {
+        loginData.email = "";
         errorLabels[0].classList.add('invalid');
         isFormValid = false;
     }
@@ -57,6 +59,7 @@ function validateFormLogin() {
     if (logInPassword.value.trim().length >= 8) {
         loginData.password = logInPassword.value.trim();
     } else {
+        loginData.password = "";
         errorLabels[1].classList.add('invalid');
         isFormValid = false;
     }
@@ -130,28 +133,34 @@ function addLoginEvent() {
     logInButton.addEventListener('click', (event) => {
         event.preventDefault();
         if (validateFormLogin()) {
-            fetch('/user/validation', {
-                method: 'POST', headers: {
+            fetch('/user/login', {
+                method: 'POST',
+                headers: {
                     'Content-Type': 'application/json'
-                }, body: JSON.stringify(loginData)
+                },
+                body: JSON.stringify(loginData)
             }).then(response => {
                 if (response.ok) {
                     return response.json();
                 } else {
-                    localStorage.setItem("token", JSON.stringify(null));
-                    showErrorToast("Erro ao realizar login");
+                    return response.json().then(error => {
+                        throw new Error(error.message || "Erro ao realizar login");
+                    });
                 }
             }).then(responseJSON => {
                 localStorage.setItem("token", JSON.stringify(responseJSON));
                 window.location.href = '/';
-            }).catch((error) => {
-                showErrorToast("Erro ao realizar login");
-                console.error(error)
+            }).catch(error => {
+                showErrorToast(error.message);
+                console.error(error);
                 localStorage.setItem("token", JSON.stringify(null));
             });
         } else {
-            console.error("Erro na validação do login");
-            localStorage.setItem("isLogged", JSON.stringify(false));
+            if (loginData.email === "" || loginData.password === "") {
+                showErrorToast("Por favor preencha o e-mail e a senha");
+            } else {
+                showErrorToast("Erro na validação do login");
+            }
         }
     });
 }
@@ -161,7 +170,7 @@ function addSingUpEvent() {
     singUpButton.addEventListener('click', (event) => {
         event.preventDefault();
         if (validateFormSingUp()) {
-            fetch('/user/register', {
+            fetch('/user/signup', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

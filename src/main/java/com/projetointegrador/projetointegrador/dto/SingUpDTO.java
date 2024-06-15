@@ -1,10 +1,8 @@
 package com.projetointegrador.projetointegrador.dto;
 
-import com.projetointegrador.projetointegrador.models.Team;
-
 import java.util.Objects;
 
-public class UserCreateDTO {
+public class SingUpDTO {
 
     private String name;
 
@@ -15,9 +13,6 @@ public class UserCreateDTO {
     private String phone;
 
     private String team;
-
-    public UserCreateDTO() {
-    }
 
     public String getName() {
         return name;
@@ -63,7 +58,7 @@ public class UserCreateDTO {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        UserCreateDTO that = (UserCreateDTO) o;
+        SingUpDTO that = (SingUpDTO) o;
         return Objects.equals(name, that.name) && Objects.equals(email, that.email) && Objects.equals(password, that.password) && Objects.equals(phone, that.phone) && Objects.equals(team, that.team);
     }
 
