@@ -17,7 +17,28 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+        String[] patterns = {
+                "/pagecalendario",
+                "/pageclientes",
+                "/pagedashboard",
+                "/pageinteracoes",
+                "/pagepropostas",
+                "/pageconfigs",
+                "/client/**",
+                "/client",
+                "/proposal/**",
+                "/proposal",
+                "/interaction/**",
+                "/interaction",
+                "/address/**",
+                "/address",
+                "/city",
+                "/city/**",
+                "/state",
+                "/team"
+        };
+
         registry.addInterceptor(jwtInterceptor)
-                .addPathPatterns("/pagecalendario", "/pageclientes", "/pagedashboard", "/pageinteracoes", "/pagepropostas", "/pageconfigs", "/client/**", "/client", "/proposal/**", "/proposal", "/interaction/**", "/interaction");
+                .addPathPatterns(patterns);
     }
 }

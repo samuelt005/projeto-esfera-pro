@@ -28,10 +28,10 @@ public class JwtInterceptor implements HandlerInterceptor {
         String token = request.getHeader("Authorization");
 
         if (token == null || !jwtUtils.isValidToken(token)) {
-            setJsonResponse(response, HttpStatus.UNAUTHORIZED, "Token inválido ou faltante");
+            setJsonResponse(response, "Token inválido ou faltante");
             return false;
         } else if (jwtUtils.isTokenExpired(token)) {
-            setJsonResponse(response, HttpStatus.UNAUTHORIZED, "Token expirado");
+            setJsonResponse(response, "Token expirado");
             return false;
         }
 
@@ -41,8 +41,8 @@ public class JwtInterceptor implements HandlerInterceptor {
         return true;
     }
 
-    private void setJsonResponse(HttpServletResponse response, HttpStatus status, String message) throws IOException {
-        response.setStatus(status.value());
+    private void setJsonResponse(HttpServletResponse response, String message) throws IOException {
+        response.setStatus(HttpStatus.UNAUTHORIZED.value());
         response.setContentType("application/json");
         Map<String, String> errorResponse = new HashMap<>();
         errorResponse.put("error", message);
