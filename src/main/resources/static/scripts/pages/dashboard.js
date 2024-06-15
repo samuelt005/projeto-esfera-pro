@@ -74,7 +74,11 @@ function createChart(ctx, data, labels) {
                 datalabels: {
                     formatter: (value, ctx) => {
                         let percentage = ((value / total) * 100).toFixed(2) + '%';
-                        return value + ' (' + percentage + ')';
+                        if (!isNaN(parseFloat(percentage))) {
+                            return value + ' (' + percentage + ')';
+                        } else {
+                            return value;
+                        }
                     },
                     color: '#101828',
                     font: {
