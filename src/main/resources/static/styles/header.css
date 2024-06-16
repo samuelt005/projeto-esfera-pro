@@ -66,6 +66,7 @@
     color: var(--text-secondary);
     font-style: italic;
     font-size: 13px;
+    line-height: 16px;
     padding-right: 4px;
     white-space: nowrap;
     overflow: hidden;
