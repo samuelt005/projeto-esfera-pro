@@ -36,7 +36,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 "/city/**",
                 "/state",
                 "/team",
-                "/dashboard"
+                "/dashboard",
+                "/user/changepassword"
         };
 
         registry.addInterceptor(jwtInterceptor)

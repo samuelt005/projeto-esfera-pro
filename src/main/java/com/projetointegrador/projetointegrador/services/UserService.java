@@ -1,5 +1,6 @@
 package com.projetointegrador.projetointegrador.services;
 
+import com.projetointegrador.projetointegrador.dto.ChangePasswordDTO;
 import com.projetointegrador.projetointegrador.dto.SingUpDTO;
 import com.projetointegrador.projetointegrador.dto.LogInDTO;
 import com.projetointegrador.projetointegrador.models.Team;
@@ -68,6 +69,28 @@ public class UserService {
             User newUser = new User(user.getName(), user.getEmail(), encryptPassword(user.getPassword()), user.getPhone(), team);
             User createdUser = userRepository.save(newUser);
             return ResponseEntity.ok().body(createdUser);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage()));
+        }
+    }
+
+
+    // Método para alterar a senha
+    public ResponseEntity<?> changePassword(ChangePasswordDTO changePasswordDTO) {
+        try {
+            Optional<User> user = findByEmail(changePasswordDTO.getEmail());
+            if (user.isEmpty()) {
+                return ResponseEntity.badRequest().body(new Response(HttpStatus.BAD_REQUEST, "Usuário não encontrado."));
+            }
+
+            User existingUser = user.get();
+            if (!verifyPassword(changePasswordDTO.getOldPassword(), existingUser.getPassword())) {
+                return ResponseEntity.badRequest().body(new Response(HttpStatus.BAD_REQUEST, "Senha atual incorreta."));
+            }
+
+            existingUser.setPassword(encryptPassword(changePasswordDTO.getNewPassword()));
+            userRepository.save(existingUser);
+            return ResponseEntity.ok().body(new Response(HttpStatus.OK, "Senha alterada com sucesso!"));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage()));
         }

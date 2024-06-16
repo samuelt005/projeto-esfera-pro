@@ -148,6 +148,7 @@ function addLoginEvent() {
                     });
                 }
             }).then(responseJSON => {
+                localStorage.setItem('welcomeMessageShown', 'false');
                 localStorage.setItem("token", JSON.stringify(responseJSON));
                 window.location.href = '/';
             }).catch(error => {

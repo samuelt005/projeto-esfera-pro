@@ -13,6 +13,7 @@ function showConfigPage(page) {
     switch (page) {
         case 'profile':
             profilePage.classList.remove('hidden');
+            profileStartup();
             break;
         case 'team':
             teamPage.classList.remove('hidden');

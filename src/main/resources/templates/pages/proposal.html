@@ -81,7 +81,7 @@
                 <div class="inputs-row">
                     <div class="input-wrapper half-space">
                         <h4>Data da Oferta</h4>
-                        <div th:replace="~{components/input1 :: input('offerDate', 'Digite a data da proposta', 'string')}"></div>
+                        <div th:replace="~{components/input1 :: input('offerDate', 'Digite a data da proposta', 'string', false)}"></div>
                     </div>
                     <div class="input-wrapper half-space">
                         <h4>Serviço</h4>
@@ -91,7 +91,7 @@
                 <div class="inputs-row">
                     <div class="input-wrapper half-space">
                         <h4>Valor</h4>
-                        <div th:replace="~{components/input1 :: input('value', 'R$', 'text')}"></div>
+                        <div th:replace="~{components/input1 :: input('value', 'R$', 'text', false)}"></div>
                     </div>
                     <div class="input-wrapper half-space">
                         <h4>Status</h4>
