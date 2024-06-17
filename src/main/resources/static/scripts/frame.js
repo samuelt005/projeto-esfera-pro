@@ -229,11 +229,11 @@ function frameSetup() {
 
 frameSetup();
 if (!showError) {
-    menuButtons[2].click();
+    menuButtons[0].click();
 
     // TODO fazer a mensagem só exibir uma vez caso venha do login
     setTimeout(() => {
-        showSuccessToast("Seja bem vindo!");
+        // showSuccessToast("Seja bem vindo!");
     }, 200)
 } else {
     getMainFrameContent('error').then();
