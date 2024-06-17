@@ -78,3 +78,5 @@ emailConfigsButtonSetup();
 teamConfigsButtonSetup();
 logOutButtonSetup();
 helpConfigsButtonSetup();
+
+openConfigsScreen(0);

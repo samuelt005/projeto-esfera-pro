@@ -73,7 +73,7 @@
                 <div class="inputs-row">
                     <div class="input-wrapper">
                         <h4>Nome</h4>
-                        <div th:replace="~{components/input1 :: input('name', 'Digite o nome do cliente', 'text')}"></div>
+                        <div th:replace="~{components/input1 :: input('name', 'Digite o nome do cliente', 'text', false)}"></div>
                     </div>
                 </div>
                 <div class="inputs-row">
@@ -84,11 +84,11 @@
                     </div>
                     <div class="input-wrapper cpf-wrapper hidden half-space">
                         <h4>CPF</h4>
-                        <div th:replace="~{components/input1 :: input('cpf', '999.999.999-99', 'text')}"></div>
+                        <div th:replace="~{components/input1 :: input('cpf', '999.999.999-99', 'text', false)}"></div>
                     </div>
                     <div class="input-wrapper cnpj-wrapper half-space">
                         <h4>CNPJ</h4>
-                        <div th:replace="~{components/input1 :: input('cnpj', '99.999.999/9999-99', 'text')}"></div>
+                        <div th:replace="~{components/input1 :: input('cnpj', '99.999.999/9999-99', 'text', false)}"></div>
                     </div>
                 </div>
             </section>
@@ -97,21 +97,21 @@
                 <div class="inputs-row">
                     <div class="input-wrapper half-space">
                         <h4>E-mail</h4>
-                        <div th:replace="~{components/input1 :: input('email', 'Digite o e-mail do cliente', 'email')}"></div>
+                        <div th:replace="~{components/input1 :: input('email', 'Digite o e-mail do cliente', 'email', false)}"></div>
                     </div>
                     <div class="input-wrapper half-space">
                         <h4>Whatsapp</h4>
-                        <div th:replace="~{components/input1 :: input('whatsapp', '(99) 99999-9999', 'text')}"></div>
+                        <div th:replace="~{components/input1 :: input('whatsapp', '(99) 99999-9999', 'text', false)}"></div>
                     </div>
                 </div>
                 <div class="inputs-row">
                     <div class="input-wrapper half-space">
                         <h4>Celular</h4>
-                        <div th:replace="~{components/input1 :: input('cellphone', '(99) 99999-9999', 'text')}"></div>
+                        <div th:replace="~{components/input1 :: input('cellphone', '(99) 99999-9999', 'text', false)}"></div>
                     </div>
                     <div class="input-wrapper half-space">
                         <h4>Telefone</h4>
-                        <div th:replace="~{components/input1 :: input('telephone', '(99) 99999-9999', 'text')}"></div>
+                        <div th:replace="~{components/input1 :: input('telephone', '(99) 99999-9999', 'text', false)}"></div>
                     </div>
                 </div>
             </section>
@@ -120,15 +120,15 @@
                 <div class="inputs-row">
                     <div class="input-wrapper small">
                         <h4>Número</h4>
-                        <div th:replace="~{components/input1 :: input('number', '99999', 'text')}"></div>
+                        <div th:replace="~{components/input1 :: input('number', '99999', 'text', false)}"></div>
                     </div>
                     <div class="input-wrapper">
                         <h4>Rua</h4>
-                        <div th:replace="~{components/input1 :: input('street', 'Insira a rua', 'text')}"></div>
+                        <div th:replace="~{components/input1 :: input('street', 'Insira a rua', 'text', false)}"></div>
                     </div>
                     <div class="input-wrapper small">
                         <h4>CEP</h4>
-                        <div th:replace="~{components/input1 :: input('zip_code', '99999-999', 'text')}"></div>
+                        <div th:replace="~{components/input1 :: input('zip_code', '99999-999', 'text', false)}"></div>
                     </div>
                 </div>
                 <div class="inputs-row">

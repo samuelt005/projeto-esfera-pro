@@ -182,7 +182,7 @@ function initializeToken() {
 }
 
 // Decodificar o token
-function decodeToken(arrayLike) {
+function decodeToken() {
     try {
         const payload = userToken.split('.')[1];
         const decodedPayload = atob(payload.replace(/-/g, '+').replace(/_/g, '/'));
@@ -229,12 +229,14 @@ function frameSetup() {
 
 frameSetup();
 if (!showError) {
-    menuButtons[0].click();
 
-    // TODO fazer a mensagem só exibir uma vez caso venha do login
-    setTimeout(() => {
-        // showSuccessToast("Seja bem vindo!");
-    }, 200)
+    if (localStorage.getItem('welcomeMessageShown') === 'false') {
+        setTimeout(() => {
+            showSuccessToast("Seja bem vindo " + tokenData.name + "!");
+
+            localStorage.setItem('welcomeMessageShown', 'true');
+        }, 200);
+    }
 } else {
     getMainFrameContent('error').then();
 }
