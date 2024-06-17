@@ -2,7 +2,6 @@ package com.projetointegrador.projetointegrador.services;
 
 import com.projetointegrador.projetointegrador.models.*;
 import com.projetointegrador.projetointegrador.repositories.ProposalRepository;
-import com.projetointegrador.projetointegrador.repositories.TeamRepository;
 import com.projetointegrador.projetointegrador.responses.Response;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;

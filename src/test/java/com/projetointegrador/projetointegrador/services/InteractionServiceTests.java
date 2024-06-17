@@ -46,7 +46,7 @@ public class InteractionServiceTests {
         assert optionalInteraction != null;
         Interaction actualInteraction = optionalInteraction.orElse(null);
 
-        // Verificando se encontrou a interaÁ„o
+        // Verificando se encontrou a intera√ß√£o
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(interaction, actualInteraction);
         System.out.println("Expected interaction: " + interaction);
@@ -71,10 +71,10 @@ public class InteractionServiceTests {
 
         Page<Interaction> resultPage = interactionService.listActiveInteraction(null, null, null, PageRequest.of(0, 20));
 
-        // Verificando se o mÈtodo retornou uma p·gina n„o nula
+        // Verificando se o m√©todo retornou uma p√°gina n√£o nula
         assertNotNull(resultPage);
 
-        // Verificando se a p·gina contÈm as interaÁıes simuladas
+        // Verificando se a p√°gina cont√©m as intera√ß√µes simuladas
         assertEquals(interactions, resultPage.getContent());
     }
 
@@ -90,7 +90,7 @@ public class InteractionServiceTests {
 
         ResponseEntity<?> responseEntity = interactionService.createInteraction(mockInteraction);
 
-        // Verifica se a interaÁ„o foi criada com sucesso e compara o status da request
+        // Verifica se a intera√ß√£o foi criada com sucesso e compara o status da request
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertNotNull(responseEntity.getBody());
         assertEquals(mockInteraction, responseEntity.getBody());
@@ -110,7 +110,7 @@ public class InteractionServiceTests {
 
         ResponseEntity<?> responseEntity = interactionService.updateInteraction(mockInteraction);
 
-        // Verifica se a interaÁ„o foi atualizada com sucesso e compara o status da request
+        // Verifica se a intera√ß√£o foi atualizada com sucesso e compara o status da request
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertNotNull(responseEntity.getBody());
 
@@ -127,11 +127,11 @@ public class InteractionServiceTests {
 
         ResponseEntity<?> responseEntity = interactionService.deleteInteraction(interactionId);
 
-        // Verifica se a interaÁ„o foi desativada com sucesso e compara o status da request
+        // Verifica se a intera√ß√£o foi desativada com sucesso e compara o status da request
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         Response responseBody = (Response) responseEntity.getBody();
         assertNotNull(responseBody);
         assertEquals(200, responseBody.getStatus());
-        assertEquals("Interacao inativada.", responseBody.getMessage());
+        assertEquals("Intera√ß√£o inativada.", responseBody.getMessage());
     }
 }

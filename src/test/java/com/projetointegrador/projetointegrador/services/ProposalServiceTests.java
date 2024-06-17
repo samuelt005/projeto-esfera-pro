@@ -72,10 +72,10 @@ public class ProposalServiceTests {
 
         Page<Proposal> resultPage = proposalService.listActiveProposal(null, null, null, PageRequest.of(0, 20));
 
-        // Verificando se o mÈtodo retornou uma p·gina n„o nula
+        // Verificando se o m√©todo retornou uma p√°gina n√£o nula
         assertNotNull(resultPage);
 
-        // Verificando se a p·gina contÈm as propostas simuladas
+        // Verificando se a p√°gina cont√©m as propostas simuladas
         assertEquals(proposals, resultPage.getContent());
     }
 
