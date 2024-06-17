@@ -1,8 +1,77 @@
 <div th:fragment="profile()" class="profile-page hidden">
     <div class="page-title">
         <h3>Informações pessoais</h3>
+        <h4>Atualize suas informações pessoais.</h4>
     </div>
     <div class="config-page-container">
-
+        <section>
+            <div class="section-title">
+                <h4>
+                    Seus dados
+                </h4>
+                <h5>
+                    Confira ao lado os seus dados pessoais.
+                </h5>
+            </div>
+            <div class="section-inputs">
+                <div class="user-data-input">
+                    <h5>
+                        Nome:
+                    </h5>
+                    <div th:replace="~{components/input1 :: input('user-name', 'Nome', 'text', true)}"></div>
+                    <div th:replace="~{icons/configs/locked :: locked}"></div>
+                </div>
+                <div class="user-data-input">
+                    <h5>
+                        E-mail:
+                    </h5>
+                    <div th:replace="~{components/input1 :: input('user-email', 'E-mail', 'text', true)}"></div>
+                    <div th:replace="~{icons/configs/locked :: locked}"></div>
+                </div>
+                <div class="user-data-input">
+                    <h5>
+                        Telefone:
+                    </h5>
+                    <div th:replace="~{components/input1 :: input('user-phone', 'Telefone', 'text', true)}"></div>
+                    <div th:replace="~{icons/configs/locked :: locked}"></div>
+                </div>
+            </div>
+        </section>
+        <section>
+            <div class="section-title">
+                <h4>
+                    Alterar senha
+                </h4>
+                <h5>
+                    Preencha os campos ao lado para alterar sua senha.
+                </h5>
+            </div>
+            <div class="section-inputs">
+                <div class="user-data-input">
+                    <h5>
+                        Senha atual:
+                    </h5>
+                    <div th:replace="~{components/input1 :: input('old-password', 'Insira sua senha atual', 'password', false)}"></div>
+                </div>
+                <div class="user-data-input">
+                    <h5>
+                        Nova senha:
+                    </h5>
+                    <div th:replace="~{components/input1 :: input('new-password', 'Insira sua nova senha', 'password', false)}"></div>
+                </div>
+                <div class="user-data-input">
+                    <h5>
+                        Confirmar senha:
+                    </h5>
+                    <div th:replace="~{components/input1 :: input('confirm-password', 'Confirme a nova senha', 'password', false)}"></div>
+                </div>
+                <div class="user-data-button">
+                    <div class="error-wrapper">
+                        A senha antiga está incorreta!
+                    </div>
+                    <div th:replace="~{components/button2 :: button('save-password-button', 'Salvar', true)}"></div>
+                </div>
+            </div>
+        </section>
     </div>
 </div>

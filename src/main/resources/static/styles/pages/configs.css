@@ -79,19 +79,25 @@
 
 .page-title {
     display: flex;
-    align-items: center;
-    justify-content: flex-start;
+    align-items: flex-start;
+    justify-content: center;
+    flex-direction: column;
     width: 100%;
-    height: 60px;
     border-bottom: 1px solid var(--field-focus);
+    padding: 20px 40px;
+    box-sizing: border-box;
+    gap: 10px;
 }
 
 .page-title h3 {
     font-size: 20px;
     font-weight: bold;
-    line-height: 60px;
-    padding-left: 20px;
     color: var(--text-primary);
+}
+
+.page-title h4 {
+    font-size: 20px;
+    color: var(--text-secondary);
 }
 
 .config-page-container {
@@ -105,4 +111,88 @@
     width: 100%;
     height: calc(100%);
     overflow-y: auto;
+}
+
+.config-page-container section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    border-bottom: 1px solid var(--field-focus);
+    padding: 20px 600px 20px 40px;
+    box-sizing: border-box;
+    gap: 20px;
+}
+
+.section-title {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-direction: column;
+    height: 100%;
+    gap: 10px;
+}
+
+.section-title h4 {
+    font-size: 20px;
+    font-weight: bold;
+    color: var(--text-primary);
+}
+
+.section-title h5,
+.section-inputs h5 {
+    font-size: 20px;
+    color: var(--text-secondary);
+}
+
+.section-inputs {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 20px;
+    min-width: 580px;
+}
+
+.user-data-input {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 20px;
+    width: 100%;
+}
+
+.user-data-input .input1-wrapper {
+    max-width: 400px;
+}
+
+.user-data-input .icon {
+    position: absolute;
+    right: 6px;
+    top: 7px;
+}
+
+.user-data-button {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+
+.user-data-button .button2 {
+    height: 36px;
+}
+
+.error-wrapper {
+    font-weight: bold;
+    color: var(--red);
+    opacity: 0;
+    user-select: none;
+}
+
+.error-wrapper.show {
+    opacity: 1;
 }

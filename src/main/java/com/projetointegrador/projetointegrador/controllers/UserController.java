@@ -1,5 +1,6 @@
 package com.projetointegrador.projetointegrador.controllers;
 
+import com.projetointegrador.projetointegrador.dto.ChangePasswordDTO;
 import com.projetointegrador.projetointegrador.dto.SingUpDTO;
 import com.projetointegrador.projetointegrador.dto.LogInDTO;
 import com.projetointegrador.projetointegrador.services.UserService;
@@ -28,5 +29,8 @@ public class UserController {
         return userService.userSignUp(newUser);
     }
 
-
+    @PostMapping("/changepassword")
+    public ResponseEntity<?> changePassword(@RequestBody ChangePasswordDTO changePasswordDTO) {
+        return userService.changePassword(changePasswordDTO);
+    }
 }

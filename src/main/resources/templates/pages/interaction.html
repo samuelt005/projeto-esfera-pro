@@ -91,7 +91,7 @@
                 <div class="inputs-row">
                     <div class="input-wrapper half-space">
                         <h4>Data</h4>
-                        <div th:replace="~{components/input1 :: input('date', 'Digite a data da interação', 'string')}"></div>
+                        <div th:replace="~{components/input1 :: input('date', 'Digite a data da interação', 'string', false)}"></div>
                     </div>
                     <div class="input-wrapper half-space">
                         <h4>Resultado</h4>
@@ -101,11 +101,11 @@
                 <div class="inputs-row">
                     <div class="input-wrapper half-space">
                         <h4>Horário de interação</h4>
-                        <div th:replace="~{components/input1 :: input('time', '99:99', 'text')}"></div>
+                        <div th:replace="~{components/input1 :: input('time', '99:99', 'text', false)}"></div>
                     </div>
                     <div class="input-wrapper half-space">
                         <h4>Duração</h4>
-                        <div th:replace="~{components/input1 :: input('duration', '99:99', 'text')}"></div>
+                        <div th:replace="~{components/input1 :: input('duration', '99:99', 'text', false)}"></div>
                     </div>
                 </div>
                 <div class="inputs-row">
