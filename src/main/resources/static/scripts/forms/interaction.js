@@ -38,7 +38,6 @@ function fillFieldsInteraction(interaction) {
 
     interactionForm.id = interaction.id;
     clientSelectInteraction.value = interaction.proposal.client.id;
-    proposalSelectInteraction.value = interaction.proposal.id;
     contactSelectInteraction.value = interaction.contact;
     resultSelectInteraction.value = interaction.result;
     dateInputInteraction.value = getDateFormatted(interaction.date);
@@ -46,8 +45,13 @@ function fillFieldsInteraction(interaction) {
     durationInputInteraction.value = interaction.duration;
     descriptionInputInteraction.value = interaction.description;
 
+    getProposalsByClient(interaction.proposal.client.id).then(() => {
+        proposalSelectInteraction.value = interaction.proposal.id;
+        proposalSelectInteraction.disabled = false;
+        proposalSelectInteraction.classList.remove('unselected')
+    });
+
     clientSelectInteraction.classList.remove('unselected');
-    proposalSelectInteraction.classList.remove('unselected');
     contactSelectInteraction.classList.remove('unselected');
     resultSelectInteraction.classList.remove('unselected');
 
@@ -71,18 +75,18 @@ function cleanInvalidClassesInteraction() {
 // Reinicia os campos do modal
 function resetInteractionFields() {
     clientSelectInteraction.value = 0;
-    proposalSelectInteraction.value = 0;
     contactSelectInteraction.value = 0;
     resultSelectInteraction.value = 0;
     dateInputInteraction.value = "";
     timeInputInteraction.value = "";
     durationInputInteraction.value = "";
     descriptionInputInteraction.value = "";
-
     clientSelectInteraction.classList.add('unselected')
-    proposalSelectInteraction.classList.add('unselected')
     contactSelectInteraction.classList.add('unselected')
     resultSelectInteraction.classList.add('unselected')
+    proposalSelectInteraction.value = 0;
+    proposalSelectInteraction.disabled = true;
+    proposalSelectInteraction.classList.add('unselected')
 }
 
 // Coloca máscaras nos inputs do modal
@@ -221,7 +225,7 @@ async function saveInteraction() {
     try {
         const response = await fetch(`${URL}/interaction`, {
             method: isEditingInteraction ? 'PUT' : 'POST', headers: {
-                'Content-Type': 'application/json',
+                'Authorization': userToken, 'Content-Type': 'application/json'
             }, body: JSON.stringify(interactionForm),
         });
 

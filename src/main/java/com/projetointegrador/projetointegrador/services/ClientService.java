@@ -1,13 +1,13 @@
 package com.projetointegrador.projetointegrador.services;
 
-import com.projetointegrador.projetointegrador.models.Address;
-import com.projetointegrador.projetointegrador.models.City;
-import com.projetointegrador.projetointegrador.models.Client;
-import com.projetointegrador.projetointegrador.models.State;
+import com.projetointegrador.projetointegrador.models.*;
 import com.projetointegrador.projetointegrador.repositories.ClientRepository;
+import com.projetointegrador.projetointegrador.repositories.TeamRepository;
 import com.projetointegrador.projetointegrador.responses.Response;
 import com.projetointegrador.projetointegrador.validators.CnpjValidator;
 import com.projetointegrador.projetointegrador.validators.CpfValidator;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,9 +21,14 @@ import java.util.Optional;
 @Service
 public class ClientService {
     private final ClientRepository clientRepository;
+    private final TeamRepository teamRepository;
+    private final HttpServletRequest request;
 
-    public ClientService(ClientRepository clientRepository) {
+    @Autowired
+    public ClientService(ClientRepository clientRepository, TeamRepository teamRepository, HttpServletRequest request) {
         this.clientRepository = clientRepository;
+        this.teamRepository = teamRepository;
+        this.request = request;
     }
 
     // Encontra um cliente pelo id
@@ -41,6 +46,9 @@ public class ClientService {
     // Lista todas os clientes ativos com paginação, pesquisa e filtros
     public Page<Client> listActiveClients(String searchTerm, Long stateId, Pageable pageable) {
         Client exampleClient = new Client();
+        Team exampleTeam = new Team();
+        exampleTeam.setId(getTeamIdFromRequest());
+        exampleClient.setTeam(exampleTeam);
         exampleClient.setInactive(false);
 
         ExampleMatcher matcher = ExampleMatcher.matching()
@@ -72,6 +80,9 @@ public class ClientService {
     // Lista todos os clientes ativos
     public List<Client> listAllActiveClients() {
         Client exampleClient = new Client();
+        Team exampleTeam = new Team();
+        exampleTeam.setId(getTeamIdFromRequest());
+        exampleClient.setTeam(exampleTeam);
         exampleClient.setInactive(false);
 
         ExampleMatcher matcher = ExampleMatcher.matching().withIgnorePaths("id");
@@ -98,6 +109,7 @@ public class ClientService {
         client.setInactive(false);
         client.setId(null);
         client.getAddress().setId(null);
+        client.setTeam(getTeamFromRequest());
 
         Client createdClient = clientRepository.save(client);
         return ResponseEntity.ok().body(createdClient);
@@ -108,12 +120,15 @@ public class ClientService {
         int successfulCreations = 0;
         List<Client> clientsWithErrors = new ArrayList<>();
 
+        Team team = getTeamFromRequest();
+
         for (Client client : clients) {
             if (!validateClient(client)) {
                 if (!isAlreadyRegistered(client.getCpf(), client.getCnpj(), null)) {
                     client.setInactive(false);
                     client.setId(null);
                     client.getAddress().setId(null);
+                    client.setTeam(team);
 
                     clientRepository.save(client);
                     successfulCreations++;
@@ -155,6 +170,8 @@ public class ClientService {
             return ResponseEntity.badRequest().body(new Response(HttpStatus.BAD_REQUEST, "CPF ou CNPJ já está cadastrado."));
         }
 
+        client.setTeam(getTeamFromRequest());
+
         Client updatedClient = clientRepository.save(client);
         return ResponseEntity.ok().body(updatedClient);
     }
@@ -165,6 +182,14 @@ public class ClientService {
 
         if (optionalClient.isPresent()) {
             Client client = optionalClient.get();
+
+            // Verifica se o time do cliente é o mesmo do token
+            Long teamId = getTeamIdFromRequest();
+            if (!client.getTeam().getId().equals(teamId)) {
+                Response response = new Response(HttpStatus.FORBIDDEN, "Você não tem permissão para excluir este cliente.");
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+            }
+
             client.setInactive(true);
             clientRepository.save(client);
             Response response = new Response(HttpStatus.OK, "Cliente inativado.");
@@ -223,5 +248,17 @@ public class ClientService {
     public boolean isCnpjAlreadyRegistered(String cnpj, Long id) {
         Optional<Client> existentCnpj = clientRepository.findByCnpj(cnpj);
         return existentCnpj.isPresent() && !Objects.equals(existentCnpj.get().getId(), id);
+    }
+
+    // Busca o teamId da request
+    private Long getTeamIdFromRequest() {
+        return (Long) request.getAttribute("teamId");
+    }
+
+    // Busca o time a partir do teamId da request
+    private Team getTeamFromRequest() {
+        Long teamId = getTeamIdFromRequest();
+        Optional<Team> optionalTeam = teamRepository.findById(teamId);
+        return optionalTeam.orElse(null);
     }
 }

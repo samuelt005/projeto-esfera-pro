@@ -2,8 +2,12 @@ package com.projetointegrador.projetointegrador.services;
 
 import com.projetointegrador.projetointegrador.models.Client;
 import com.projetointegrador.projetointegrador.models.Proposal;
+import com.projetointegrador.projetointegrador.repositories.ClientRepository;
 import com.projetointegrador.projetointegrador.repositories.ProposalRepository;
+import com.projetointegrador.projetointegrador.repositories.TeamRepository;
 import com.projetointegrador.projetointegrador.responses.Response;
+import jakarta.servlet.http.HttpServletRequest;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.*;
@@ -20,9 +24,15 @@ import static org.mockito.Mockito.*;
 
 @SpringBootTest
 public class ProposalServiceTests {
+    private ProposalRepository proposalRepository;
+    private ProposalService proposalService;
 
-    private final ProposalRepository proposalRepository = mock(ProposalRepository.class);
-    private final ProposalService proposalService = new ProposalService(proposalRepository);
+    @BeforeEach
+    public void setUp() {
+        proposalRepository = mock(ProposalRepository.class);
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        proposalService = new ProposalService(proposalRepository, request);
+    }
 
     @Test
     void testFindOneProposal() {

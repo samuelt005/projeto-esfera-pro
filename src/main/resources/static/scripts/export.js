@@ -64,7 +64,11 @@ function addExportEvent(button) {
         if (isSelectAllActive) {
             async function fetchData(url) {
                 try {
-                    const response = await fetch(url);
+                    const response = await fetch(url, {
+                        method: 'GET', headers: {
+                            'Authorization': userToken, 'Content-Type': 'text/html'
+                        }
+                    });
                     if (!response.ok) {
                         throw new Error(`Erro ao recuperar dados`);
                     }
@@ -274,7 +278,7 @@ function downloadCSV(data, currentPage) {
 
     const filename = generateFilename();
 
-    const csvBlob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
+    const csvBlob = new Blob(["\uFEFF" + csvContent], {type: 'text/csv;charset=utf-8;'});
 
     const url = window.URL.createObjectURL(csvBlob);
 

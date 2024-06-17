@@ -2,8 +2,11 @@ package com.projetointegrador.projetointegrador.services;
 
 import com.projetointegrador.projetointegrador.models.Team;
 import com.projetointegrador.projetointegrador.repositories.TeamRepository;
+import org.springframework.data.domain.Example;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class TeamService {
@@ -21,16 +24,14 @@ public class TeamService {
         }
     }
 
-    public Team findById(Long id) {
-        try {
-            if (teamRepository.existsById(id)) {
-                return teamRepository.findById(id).get();
-            } else {
-                return null;
-            }
-        } catch (Exception e) {
-            return null;
-        }
+    public Team findByCode(String code) {
+        Team exampleTeam = new Team();
+        exampleTeam.setCode(code);
+
+        Example<Team> example = Example.of(exampleTeam);
+        Optional<Team> result = teamRepository.findOne(example);
+
+        return result.orElse(null);
     }
 
     public ResponseEntity<?> createTeam(Team team) {

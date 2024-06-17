@@ -74,77 +74,122 @@ async function getInteractions(searchTerm = "") {
         }
     }
 
-    await fetch(fetchUrl)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Erro ao recuperar interações`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (interactionPage + 1 === data.totalPages) {
-                shouldLoadMoreInteractions = false;
-            }
+    await fetch(fetchUrl, {
+        method: 'GET', headers: {
+            'Authorization': userToken, 'Content-Type': 'text/html'
+        }
+    }).then(response => {
+        if (!response.ok) {
+            throw new Error(`Erro ao recuperar interações`);
+        }
+        return response.json();
+    }).then(data => {
+        if (interactionPage + 1 === data.totalPages) {
+            shouldLoadMoreInteractions = false;
+        }
 
-            const itemsToAdd = [];
-            data.content.forEach((item) => {
-                const isDuplicate = interactionList.some((existingItem) => {
-                    return existingItem.id === item.id;
-                });
-
-                if (!isDuplicate) {
-                    itemsToAdd.push(item);
-                }
+        const itemsToAdd = [];
+        data.content.forEach((item) => {
+            const isDuplicate = interactionList.some((existingItem) => {
+                return existingItem.id === item.id;
             });
 
-            if (isSelectAllActive) {
-                itemsToAdd.forEach((item) => {
-                    selectedIds.push(item.id)
-                })
+            if (!isDuplicate) {
+                itemsToAdd.push(item);
             }
-
-            interactionPage++;
-            isLoadingMoreInteractions = false;
-            interactionList.push(...itemsToAdd);
-            addInteractionRows(itemsToAdd, false);
-        })
-        .catch(() => {
-            getMainFrameContent('error');
         });
+
+        if (isSelectAllActive) {
+            itemsToAdd.forEach((item) => {
+                selectedIds.push(item.id)
+            })
+        }
+
+        interactionPage++;
+        isLoadingMoreInteractions = false;
+        interactionList.push(...itemsToAdd);
+        addInteractionRows(itemsToAdd, false);
+    }).catch(() => {
+        getMainFrameContent('error');
+    });
 }
 
 // Busca apenas uma interação pelo id
 async function getOneInteraction(id, isEditing) {
-    await fetch(`${URL}/interaction/byId/${id}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Erro ao recuperar interação`);
+    await fetch(`${URL}/interaction/byId/${id}`, {
+        method: 'GET', headers: {
+            'Authorization': userToken, 'Content-Type': 'text/html'
+        }
+    }).then(response => {
+        if (!response.ok) {
+            throw new Error(`Erro ao recuperar interação`);
+        }
+        return response.json();
+    }).then(data => {
+        if (isEditing) {
+            const oldRow = document.querySelector(`tr[data-row-id="${id}"]`);
+            if (oldRow) {
+                const newRow = createInteractionTableRow(data);
+                oldRow.parentNode.replaceChild(newRow, oldRow);
             }
-            return response.json();
-        })
-        .then(data => {
-            if (isEditing) {
-                const oldRow = document.querySelector(`tr[data-row-id="${id}"]`);
-                if (oldRow) {
-                    const newRow = createInteractionTableRow(data);
-                    oldRow.parentNode.replaceChild(newRow, oldRow);
-                }
 
-                const index = interactionList.findIndex(interaction => interaction.id === id);
-                if (index !== -1) {
-                    interactionList[index] = data;
-                }
-
-                addCheckboxesEvents();
-            } else {
-                interactionList.push(data);
-                addInteractionRows([data], true);
+            const index = interactionList.findIndex(interaction => interaction.id === id);
+            if (index !== -1) {
+                interactionList[index] = data;
             }
+
+            addCheckboxesEvents();
+        } else {
+            interactionList.push(data);
+            addInteractionRows([data], true);
+        }
+    }).catch(error => {
+        console.error(error);
+        showErrorToast("Erro ao buscar interação!");
+    });
+}
+
+// Busca propostas pelo ID do cliente
+async function getProposalsByClient(client_id, event) {
+    if (event?.target) {
+        switchSelectClass(event);
+    }
+
+    if (!proposalSelectInteraction.classList.contains('unselected')) {
+        proposalSelectInteraction.classList.add('unselected')
+    }
+
+    await fetch(`${URL}/proposal/byClient/${client_id}`, {
+        method: 'GET', headers: {
+            'Authorization': userToken, 'Content-Type': 'text/html'
+        }
+    }).then(response => {
+        if (!response.ok) {
+            throw new Error(`Erro ao recuperar propostas`);
+        }
+        return response.json();
+    }).then(data => {
+        proposalSelectInteraction.querySelectorAll('.proposal-option').forEach(option => option.remove());
+        proposalSelectInteraction.selectedIndex = 0;
+
+        if (data.length === 0) {
+            proposalSelectInteraction.disabled = true;
+            return
+        }
+
+        data.forEach((data) => {
+            const newOption = document.createElement('option');
+            newOption.value = data.id;
+            newOption.textContent = getDateFormatted(data.offerDate) + ' - ' + formatCurrency(data.value);
+            newOption.classList.add('proposal-option');
+
+            proposalSelectInteraction.appendChild(newOption);
         })
-        .catch(error => {
-            console.error(error);
-            showErrorToast("Erro ao buscar interação!");
-        });
+        proposalSelectInteraction.disabled = false;
+    }).catch(error => {
+        console.error(error);
+        showErrorToast("Erro ao buscar propostas!");
+    });
 }
 
 // Criar opções do select do tipo de contato
@@ -264,6 +309,9 @@ async function deleteInteraction(row) {
     try {
         const response = await fetch(`${URL}/interaction/${id}`, {
             method: 'DELETE',
+            headers: {
+                'Authorization': userToken, 'Content-Type': 'text/html'
+            }
         });
 
         const responseDataInteraction = await response.json();
@@ -286,6 +334,14 @@ async function deleteInteraction(row) {
         console.error('Erro ao excluir interação: ', error);
         showErrorToast("Erro ao excluir interação!");
     }
+}
+
+// Adiciona o evento de buscar propostas ao select de cliente
+function addSelectedProposalEvent(select) {
+    select.addEventListener('change', (event) => {
+        getProposalsByClient(event.target.value, event)
+            .catch(error => console.error(error));
+    });
 }
 
 // Adiciona o evento de salvar uma interação no botão de salvar
@@ -396,11 +452,9 @@ function interactionStartup() {
 
         getAllClients(clientSelectInteraction).then(() => {
             addSelectedDataEvent(clientSelectInteraction);
-        });
-
-        getAllProposals(proposalSelectInteraction).then(() => {
+            addSelectedProposalEvent(clientSelectInteraction);
             addSelectedDataEvent(proposalSelectInteraction);
-        })
+        });
 
         setContactSelect();
         setResultSelect();

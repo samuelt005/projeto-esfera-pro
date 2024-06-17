@@ -4,7 +4,10 @@ import com.projetointegrador.projetointegrador.models.Client;
 import com.projetointegrador.projetointegrador.models.Interaction;
 import com.projetointegrador.projetointegrador.models.Proposal;
 import com.projetointegrador.projetointegrador.repositories.InteractionRepository;
+import com.projetointegrador.projetointegrador.repositories.ProposalRepository;
 import com.projetointegrador.projetointegrador.responses.Response;
+import jakarta.servlet.http.HttpServletRequest;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.*;
@@ -20,9 +23,15 @@ import static org.mockito.Mockito.*;
 
 @SpringBootTest
 public class InteractionServiceTests {
+    private InteractionRepository interactionRepository;
+    private InteractionService interactionService;
 
-    private final InteractionRepository interactionRepository = mock(InteractionRepository.class);
-    private final InteractionService interactionService = new InteractionService(interactionRepository);
+    @BeforeEach
+    public void setUp() {
+        interactionRepository = mock(InteractionRepository.class);
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        interactionService = new InteractionService(interactionRepository, request);
+    }
 
     @Test
     void testFindOneInteraction() {

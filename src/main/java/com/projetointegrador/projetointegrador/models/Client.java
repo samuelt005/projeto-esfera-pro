@@ -28,6 +28,9 @@ public class Client {
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id")
     private Address address;
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "team_id", referencedColumnName = "id", nullable = false)
+    private Team team;
 
     public Long getId() {
         return id;
@@ -109,16 +112,24 @@ public class Client {
         this.address = address;
     }
 
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Client client = (Client) o;
-        return Objects.equals(id, client.id) && Objects.equals(name, client.name) && Objects.equals(cpf, client.cpf) && Objects.equals(cnpj, client.cnpj) && Objects.equals(email, client.email) && Objects.equals(whatsapp, client.whatsapp) && Objects.equals(cellphone, client.cellphone) && Objects.equals(telephone, client.telephone) && Objects.equals(inactive, client.inactive) && Objects.equals(address, client.address);
+        return Objects.equals(id, client.id) && Objects.equals(name, client.name) && Objects.equals(cpf, client.cpf) && Objects.equals(cnpj, client.cnpj) && Objects.equals(email, client.email) && Objects.equals(whatsapp, client.whatsapp) && Objects.equals(cellphone, client.cellphone) && Objects.equals(telephone, client.telephone) && Objects.equals(inactive, client.inactive) && Objects.equals(address, client.address) && Objects.equals(team, client.team);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, cpf, cnpj, email, whatsapp, cellphone, telephone, inactive, address);
+        return Objects.hash(id, name, cpf, cnpj, email, whatsapp, cellphone, telephone, inactive, address, team);
     }
 }
