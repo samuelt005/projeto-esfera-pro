@@ -8,8 +8,8 @@ from faker import Faker
 
 fake = Faker('pt_BR')
 
-data_inicial = datetime(2023, 1, 1)
-data_final = datetime(2024, 6, 1)
+data_inicial = datetime(2024, 5, 1)
+data_final = datetime(2024, 6, 30)
 
 projetointegradorpopulado = mysql.connector.connect(
     host="localhost",
@@ -31,8 +31,8 @@ def generate_teams():
     for i in range(1, 101):
         code = generate_code()
         name = fake.company()
-        my_cursor.execute("INSERT INTO team(id, code, name) VALUES(%s, %s, %s)",
-                          (i, code, name))
+        my_cursor.execute("INSERT INTO team(id, code, max_limit, name) VALUES(%s, %s, %s, %s)",
+                          (i, code, 10, name))
 
 
 def generate_phone_number():
