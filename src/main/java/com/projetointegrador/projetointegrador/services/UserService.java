@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import static com.projetointegrador.projetointegrador.utils.PasswordUtils.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -66,8 +67,19 @@ public class UserService {
                 return ResponseEntity.badRequest().body(new Response(HttpStatus.BAD_REQUEST, "Código da equipe ausente"));
             }
 
-            User newUser = new User(user.getName(), user.getEmail(), encryptPassword(user.getPassword()), user.getPhone(), team);
+            long userCount = findByTeam(team).size();
+            String profile = (userCount == 0) ? "admin" : "user";
+
+            User newUser = new User();
+            newUser.setName(user.getName());
+            newUser.setEmail(user.getEmail());
+            newUser.setPassword(encryptPassword(user.getPassword()));
+            newUser.setPhone(user.getPhone());
+            newUser.setProfile(profile);
+            newUser.setTeam(team);
+            newUser.setStatus(true);
             User createdUser = userRepository.save(newUser);
+
             return ResponseEntity.ok().body(createdUser);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage()));
@@ -112,6 +124,14 @@ public class UserService {
 
         Example<User> example = Example.of(exampleUser);
         return userRepository.findOne(example);
+    }
+
+    public List<User> findByTeam(Team team) {
+        User exampleUser = new User();
+        exampleUser.setTeam(team);
+
+        Example<User> example = Example.of(exampleUser);
+        return userRepository.findAll(example);
     }
 }
 
