@@ -81,6 +81,8 @@ public class ClientServiceTests {
         assertEquals(clients, resultPage.getContent());
     }
 
+    // TODO listAllActiveClients
+
     @Test
     void testCreateClient() {
         Address mockAddress = new Address();
@@ -96,6 +98,8 @@ public class ClientServiceTests {
         assertNotNull(responseEntity.getBody());
         assertEquals(mockClient, responseEntity.getBody());
     }
+
+    // TODO createClients
 
     @Test
     void testUpdateClient() {

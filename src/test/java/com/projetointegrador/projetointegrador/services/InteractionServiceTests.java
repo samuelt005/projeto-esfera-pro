@@ -78,6 +78,8 @@ public class InteractionServiceTests {
         assertEquals(interactions, resultPage.getContent());
     }
 
+    // TODO listAllActiveInteractions
+
     @Test
     void testCreateInteraction() {
         Client mockClient = new Client();
@@ -95,6 +97,8 @@ public class InteractionServiceTests {
         assertNotNull(responseEntity.getBody());
         assertEquals(mockInteraction, responseEntity.getBody());
     }
+
+    // TODO createInteractions
 
     @Test
     void testUpdateInteraction() {

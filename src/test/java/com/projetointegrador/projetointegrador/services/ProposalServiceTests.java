@@ -54,6 +54,8 @@ public class ProposalServiceTests {
         System.out.println("Actual proposal: " + actualProposal);
     }
 
+    // TODO listProposalsPerClient
+
     @Test
     void testListActiveProposal() {
         Proposal proposal1 = new Proposal();
@@ -78,6 +80,8 @@ public class ProposalServiceTests {
         // Verificando se a página contém as propostas simuladas
         assertEquals(proposals, resultPage.getContent());
     }
+
+    // TODO listAllActiveProposals
 
     @Test
     void testCreateProposal() {
