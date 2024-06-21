@@ -36,6 +36,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 "/city/**",
                 "/state",
                 "/team",
+                "/team/**",
                 "/dashboard",
                 "/user/changepassword"
         };

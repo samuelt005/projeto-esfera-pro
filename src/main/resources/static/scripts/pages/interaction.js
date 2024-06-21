@@ -255,9 +255,9 @@ function createInteractionTableRow(interaction) {
     const newRow = document.createElement('tr');
     newRow.setAttribute('data-row-id', interaction.id);
     newRow.innerHTML = `
-        <th class="row-checkbox ${isSelectAllActive ? 'selected' : ''}" data-checkbox-id="${interaction.id}">
+        <td class="row-checkbox ${isSelectAllActive ? 'selected' : ''}" data-checkbox-id="${interaction.id}">
             ${rowCheckboxIcon}
-        </th>
+        </td>
         <td>${interaction.id}</td>
         <td>${interaction.proposal.client.name ? interaction.proposal.client.name : '-'}</td>
         <td>${getResultDiv(interaction.result)}</td>

@@ -17,6 +17,7 @@ function showConfigPage(page) {
             break;
         case 'team':
             teamPage.classList.remove('hidden');
+            teamStartup();
             break;
         case 'goals':
             goalsPage.classList.remove('hidden');

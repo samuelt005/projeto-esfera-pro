@@ -196,3 +196,125 @@
 .error-wrapper.show {
     opacity: 1;
 }
+
+.table-members-container {
+    width: 100%;
+    height: 100%;
+    min-width: 900px;
+    margin-bottom: 10px;
+    overflow-y: auto;
+    box-sizing: border-box;
+    margin-top: -10px;
+}
+
+.table-members-container table {
+    position: relative;
+}
+
+.table-members {
+    width: 100%;
+    height: 100%;
+}
+
+.table-members thead {
+    color: var(--text-primary);
+    height: 60px;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.table-members tr {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    height: 100%;
+}
+
+.table-members thead tr {
+    background-color: var(--table-secondary);
+    border-bottom: 1px solid var(--field-focus);
+}
+
+.table-members tbody tr {
+    height: 60px;
+    border-bottom: 1px solid var(--table-primary);
+}
+
+.table-members tr th,
+.table-members tr td {
+    width: 100%;
+    text-align: left;
+    font-size: 16px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 20px;
+}
+
+.table-members tr th {
+    font-weight: 600;
+}
+
+.table-members tr th:first-child,
+.table-members tr td:first-child {
+    box-sizing: border-box;
+    padding-left: 20px;
+}
+
+.table-members tr th:last-child,
+.table-members tr td:last-child {
+    box-sizing: border-box;
+    padding-right: 20px;
+}
+
+.team-data-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 60px;
+}
+
+.team-code-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 1000px;
+    gap: 10px;
+}
+
+.team-name {
+    font-size: 20px;
+    line-height: 24px;
+    font-weight: bold;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.team-code-wrapper .input1-wrapper {
+    height: 44px;
+    border-radius: 10px;
+}
+
+.copy-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 44px;
+    min-width: 44px;
+    background-color: var(--button);
+    border-radius: 10px;
+    transition: background-color 0.5s;
+    user-select: none;
+}
+
+.copy-button:hover {
+    cursor: pointer;
+    background-color: var(--button-hover);
+    transition: background-color 0.5s;
+}
