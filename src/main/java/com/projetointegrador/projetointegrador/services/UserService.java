@@ -3,11 +3,13 @@ package com.projetointegrador.projetointegrador.services;
 import com.projetointegrador.projetointegrador.dto.ChangePasswordDTO;
 import com.projetointegrador.projetointegrador.dto.SingUpDTO;
 import com.projetointegrador.projetointegrador.dto.LogInDTO;
+import com.projetointegrador.projetointegrador.models.Client;
 import com.projetointegrador.projetointegrador.models.Team;
 import com.projetointegrador.projetointegrador.models.User;
 import com.projetointegrador.projetointegrador.repositories.UserRepository;
 import com.projetointegrador.projetointegrador.responses.Response;
 import com.projetointegrador.projetointegrador.utils.JwtUtils;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.data.domain.Example;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,11 +25,13 @@ public class UserService {
     private final UserRepository userRepository;
     private final TeamService teamService;
     private final JwtUtils jwtUtils;
+    private final HttpServletRequest request;
 
-    public UserService(UserRepository userRepository, TeamService teamService, JwtUtils jwtUtils) {
+    public UserService(UserRepository userRepository, TeamService teamService, JwtUtils jwtUtils, HttpServletRequest request) {
         this.userRepository = userRepository;
         this.teamService = teamService;
         this.jwtUtils = jwtUtils;
+        this.request = request;
     }
 
     // Validação de usuário
@@ -86,7 +90,6 @@ public class UserService {
         }
     }
 
-
     // Método para alterar a senha
     public ResponseEntity<?> changePassword(ChangePasswordDTO changePasswordDTO) {
         try {
@@ -105,6 +108,32 @@ public class UserService {
             return ResponseEntity.ok().body(new Response(HttpStatus.OK, "Senha alterada com sucesso!"));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage()));
+        }
+    }
+
+    // Desativa um usuário pelo id
+    public ResponseEntity<?> disableUser(Long id) {
+        Optional<User> optionalUser = userRepository.findById(id);
+
+        // TODO verificar se o user é admin
+
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+
+            // Verifica se o time do user é o mesmo do token
+            Long teamId = getTeamIdFromRequest();
+            if (!user.getTeam().getId().equals(teamId)) {
+                Response response = new Response(HttpStatus.FORBIDDEN, "Você não tem permissão para desativar este usuário.");
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+            }
+
+            user.setStatus(false);
+            userRepository.save(user);
+            Response response = new Response(HttpStatus.OK, "Usuário desativado.");
+            return ResponseEntity.ok().body(response);
+        } else {
+            Response response = new Response(HttpStatus.NOT_FOUND, "Usuário não encontrado.");
+            return ResponseEntity.badRequest().body(response);
         }
     }
 
@@ -132,6 +161,11 @@ public class UserService {
 
         Example<User> example = Example.of(exampleUser);
         return userRepository.findAll(example);
+    }
+
+    // Busca o teamId da request
+    private Long getTeamIdFromRequest() {
+        return (Long) request.getAttribute("teamId");
     }
 }
 

@@ -38,7 +38,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 "/team",
                 "/team/**",
                 "/dashboard",
-                "/user/changepassword"
+                "/user/changepassword",
+                "/user/disableuser/**"
         };
 
         registry.addInterceptor(jwtInterceptor)

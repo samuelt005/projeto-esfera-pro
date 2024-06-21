@@ -62,14 +62,45 @@ async function getNewTeamCode() {
         });
 }
 
-// Adiciona linhas a tabela de clientes
+// Adiciona linhas a tabela da equipe
 function addTeamMemberRows(members) {
     const tableContent = document.querySelector(".table-members-content");
+
+    tableContent.innerHTML = '';
 
     members.forEach((client) => {
         const newRow = createTeamMemberTableRow(client);
         tableContent.appendChild(newRow);
     });
+}
+
+// Remove uma linha da tabela da equipe
+async function disableTeamMember(row) {
+    const id = parseInt(row.getAttribute('data-row-id'));
+
+    // TODO adicionar confirmação de exclusão
+
+    try {
+        const response = await fetch(`${URL}/user/disableuser/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': userToken, 'Content-Type': 'text/html'
+            }
+        });
+
+        const responseData = await response.json();
+
+        if (!response.ok) {
+            console.error('Erro: ' + responseData.message);
+        } else {
+            row.remove();
+            showSuccessToast("Usuário desativado com sucesso!");
+        }
+
+    } catch (error) {
+        console.error('Erro ao desativar usuário: ', error);
+        showErrorToast("Erro ao desativar usuário!");
+    }
 }
 
 // Cria um elemento HTML de uma linha da tabela
@@ -81,8 +112,21 @@ function createTeamMemberTableRow(member) {
         <td>${member.profile === 'admin' ? "Gerente" : "Televendedor"}</td>
         <td>${member.email}</td>
         <td>${getPhoneFormatted(member.phone)}</td>
-        <td>Ações</td>
+        <td>${member.status ? 'Ativo' : 'Desativado'}</td>
+        ${memberButtons}
     `;
+
+    const deleteButton = newRow.querySelector('.delete');
+
+    if (member.profile !== 'admin') {
+        deleteButton.addEventListener('click', () => {
+            disableTeamMember(newRow).catch(error => {
+                console.error(error)
+            });
+        });
+    } else {
+        deleteButton.classList.add('disabled');
+    }
 
     return newRow;
 }

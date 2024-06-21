@@ -44,6 +44,14 @@
     user-select: none;
 }
 
+.header-option.disabled {
+    cursor: default;
+}
+
+.header-option.disabled p {
+    color: var(--table-primary);
+}
+
 .header-option p {
     font-size: 18px;
     color: var(--text-secondary);

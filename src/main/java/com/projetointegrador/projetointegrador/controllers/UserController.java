@@ -30,4 +30,11 @@ public class UserController {
     public ResponseEntity<?> changePassword(@RequestBody ChangePasswordDTO changePasswordDTO) {
         return userService.changePassword(changePasswordDTO);
     }
+
+    // Rota para desativar um cliente
+    @DeleteMapping("/disableuser/{id}")
+    @ResponseBody
+    public ResponseEntity<?> disableUser(@PathVariable Long id) {
+        return userService.disableUser(id);
+    }
 }
