@@ -64,7 +64,6 @@ public class TeamService {
 
             Team team = teamOptional.get();
             String newCode = "ESFERA-" + generateRandomString();
-            System.out.println("New team code: " + newCode);
             team.setCode(newCode);
             teamRepository.save(team);
 
