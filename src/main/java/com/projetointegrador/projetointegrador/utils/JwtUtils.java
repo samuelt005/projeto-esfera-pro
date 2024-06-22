@@ -60,6 +60,10 @@ public class JwtUtils {
         Claims claims = extractClaims(token);
         return claims.get("teamId", Long.class);
     }
+    public String getUserProfile(String token) {
+        Claims claims = extractClaims(token);
+        return claims.get("profile", String.class);
+    }
 
     // Verifica se um token JWT expirou
     public boolean isTokenExpired(String token) {

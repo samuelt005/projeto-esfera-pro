@@ -4,12 +4,15 @@ import com.projetointegrador.projetointegrador.models.Team;
 import com.projetointegrador.projetointegrador.models.User;
 import com.projetointegrador.projetointegrador.repositories.TeamRepository;
 import com.projetointegrador.projetointegrador.repositories.UserRepository;
+import com.projetointegrador.projetointegrador.responses.Response;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
 
@@ -58,6 +61,11 @@ public class TeamService {
             Long teamId = (Long) request.getAttribute("teamId");
             Optional<Team> teamOptional = teamRepository.findById(teamId);
 
+            if (!isProfileAllowed()) {
+                Response response = new Response(HttpStatus.FORBIDDEN, "Você não tem permissão para gerar um novo código.");
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+            }
+
             if (teamOptional.isEmpty()) {
                 return ResponseEntity.badRequest().body("Equipe não encontrada.");
             }
@@ -93,5 +101,10 @@ public class TeamService {
         }
 
         return result.toString();
+    }
+
+    // Verifica se o user é admin
+    private Boolean isProfileAllowed() {
+        return Objects.equals(request.getAttribute("profile"), "admin");
     }
 }

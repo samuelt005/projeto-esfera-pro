@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import static com.projetointegrador.projetointegrador.utils.PasswordUtils.*;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -115,14 +116,12 @@ public class UserService {
     public ResponseEntity<?> disableUser(Long id) {
         Optional<User> optionalUser = userRepository.findById(id);
 
-        // TODO verificar se o user é admin
-
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
 
             // Verifica se o time do user é o mesmo do token
             Long teamId = getTeamIdFromRequest();
-            if (!user.getTeam().getId().equals(teamId)) {
+            if (!user.getTeam().getId().equals(teamId) || !isProfileAllowed()) {
                 Response response = new Response(HttpStatus.FORBIDDEN, "Você não tem permissão para desativar este usuário.");
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
             }
@@ -166,6 +165,11 @@ public class UserService {
     // Busca o teamId da request
     private Long getTeamIdFromRequest() {
         return (Long) request.getAttribute("teamId");
+    }
+
+    // Verifica se o user é admin
+    private Boolean isProfileAllowed() {
+        return Objects.equals(request.getAttribute("profile"), "admin");
     }
 }
 
