@@ -188,7 +188,8 @@ function addSingUpEvent() {
                     });
                 }
             }).catch(error => {
-                showErrorToast(error.message);
+                console.error(error.message)
+                showErrorToast('Não foi possível efetuar o cadastro!');
             });
         } else {
             localStorage.setItem("token", JSON.stringify(null));

@@ -220,6 +220,9 @@ async function saveInteraction() {
     }
 
     if (isSavingInteraction) return;
+    if (isEditingInteraction) {
+        if (!await showConfirmationModal("Você tem certeza que deseja salvar?")) return;
+    }
     isSavingInteraction = true;
 
     try {

@@ -38,6 +38,9 @@ public class JwtInterceptor implements HandlerInterceptor {
         Long teamId = jwtUtils.getTeamId(token);
         request.setAttribute("teamId", teamId);
 
+        String profile = jwtUtils.getUserProfile(token);
+        request.setAttribute("profile", profile);
+
         return true;
     }
 
