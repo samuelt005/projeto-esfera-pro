@@ -19,9 +19,6 @@ public class Team {
     @Column(nullable = false)
     private Long maxLimit;
 
-    public Team() {
-    }
-
     public Long getId() {
         return id;
     }

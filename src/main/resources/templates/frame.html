@@ -13,6 +13,7 @@
     <link rel="stylesheet" th:href="@{/styles/components/button2.css}"/>
     <link rel="stylesheet" th:href="@{/styles/components/header-menu.css}"/>
     <link rel="stylesheet" th:href="@{/styles/components/import-modal.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/components/confirm-modal.css}"/>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
@@ -75,6 +76,10 @@
     <div class="overlay-import hidden fade-out">
         <div th:replace="~{components/import-modal :: import-modal}"></div>
     </div>
+
+    <div class="overlay-confirm hidden fade-out">
+        <div th:replace="~{components/confirm-modal :: confirm-modal}"></div>
+    </div>
 </section>
 
 <div id="styles">
@@ -95,6 +100,7 @@
     <script src="https://unpkg.com/imask"></script>
 
     <script type="text/javascript" th:src="@{/scripts/table-buttons/client.js}"></script>
+    <script type="text/javascript" th:src="@{/scripts/table-buttons/member.js}"></script>
     <script type="text/javascript" th:src="@{/scripts/table-buttons/interaction.js}"></script>
     <script type="text/javascript" th:src="@{/scripts/table-buttons/proposal.js}"></script>
 
@@ -120,6 +126,7 @@
     <script type="text/javascript" th:src="@{/scripts/utils.js}"></script>
     <script type="text/javascript" th:src="@{/scripts/import.js}"></script>
     <script type="text/javascript" th:src="@{/scripts/export.js}"></script>
+    <script type="text/javascript" th:src="@{/scripts/confirm.js}"></script>
     <script type="text/javascript" th:src="@{/scripts/toasts.js}"></script>
     <script type="text/javascript" th:src="@{/scripts/frame.js}"></script>
     <script type="text/javascript" th:src="@{/scripts/common.js}"></script>
