@@ -1,0 +1,24 @@
+<div th:fragment="confirm-modal" class="confirm-modal">
+    <div class="modal-container">
+        <header class="modal-header">
+            <h2 class="confirm-modal-title">
+                Confirmação Necessária
+            </h2>
+            <div class="close-modal-confirm-button">
+                <div th:replace="~{icons/buttons/close :: close('close-confirmation')}"></div>
+            </div>
+        </header>
+        <main>
+            <div class="confirm-text-container">
+                <p class="confirm-text">
+                    Você tem certeza de que deseja prosseguir com esta ação?
+                </p>
+                <p class="confirm-warning">Esta operação não poderá ser desfeita.</p>
+            </div>
+        </main>
+        <footer>
+            <div th:replace="~{components/button2 :: button('cancel-confirmation', 'Cancelar', false)}"></div>
+            <div th:replace="~{components/button2 :: button('confirm-confirmation', 'Confirmar', true)}"></div>
+        </footer>
+    </div>
+</div>

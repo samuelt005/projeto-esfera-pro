@@ -83,7 +83,7 @@ function addTeamMemberRows(members) {
 async function disableTeamMember(row) {
     const id = parseInt(row.getAttribute('data-row-id'));
 
-    // TODO adicionar confirmação de exclusão
+    if (!await showConfirmationModal("Você tem certeza de que deseja desativar este usuário?")) return;
 
     try {
         const response = await fetch(`${URL}/user/disableuser/${id}`, {
