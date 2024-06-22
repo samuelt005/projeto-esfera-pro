@@ -38,6 +38,9 @@ function changeSelectedButton(button) {
 
 function handleMenuButtonClicked(event) {
     const button = event.currentTarget;
+
+    if (button.classList.contains('disabled')) return;
+
     const page = button.getAttribute('data-page');
     changeSelectedButton(button);
     showConfigPage(page);

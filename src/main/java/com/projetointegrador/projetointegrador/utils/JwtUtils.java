@@ -28,6 +28,7 @@ public class JwtUtils {
                 .claim("phone", user.getPhone())
                 .claim("team", user.getTeam().getName())
                 .claim("teamId", user.getTeam().getId())
+                .claim("profile", user.getProfile())
                 .signWith(key)
                 .compact();
         return new JwtToken(token, expirationMillis);

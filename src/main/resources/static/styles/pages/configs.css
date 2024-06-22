@@ -294,6 +294,10 @@
     gap: 10px;
 }
 
+.team-code-wrapper.hidden {
+    display: none;
+}
+
 .team-name {
     font-size: 20px;
     line-height: 24px;

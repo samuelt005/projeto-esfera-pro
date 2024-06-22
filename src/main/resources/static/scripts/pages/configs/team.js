@@ -1,4 +1,6 @@
 async function getTeamData() {
+    if (tokenData.profile !== "admin") return;
+
     await fetch(`${URL}/team`, {
         method: 'GET', headers: {
             'Authorization': userToken, 'Content-Type': 'text/html'
@@ -12,6 +14,7 @@ async function getTeamData() {
         })
         .then(data => {
             setTeamData(data)
+            document.querySelector('.copy-button').addEventListener('click', copyTeamCode);
         })
         .catch(error => {
             console.error(error);
@@ -40,7 +43,9 @@ async function getTeamMembers() {
         });
 }
 
-async function getNewTeamCode() {
+async function getNewTeamCode(event) {
+    if (event.target.classList.contains('disabled')) return;
+
     await fetch(`${URL}/team/generatenewcode`, {
         method: 'GET', headers: {
             'Authorization': userToken, 'Content-Type': 'text/html'
@@ -120,6 +125,8 @@ function createTeamMemberTableRow(member) {
 
     if (member.profile !== 'admin') {
         deleteButton.addEventListener('click', () => {
+            if (deleteButton.classList.contains('disabled')) return;
+
             disableTeamMember(newRow).catch(error => {
                 console.error(error)
             });
@@ -164,10 +171,26 @@ function setTeamData(team) {
     teamCode.value = team.code;
 }
 
-function teamStartup() {
-    getTeamMembers().then();
-    getTeamData().then(() => {
-        document.querySelector('.copy-button').addEventListener('click', copyTeamCode);
+function checkIfIsAdmin() {
+    if (tokenData.profile !== "admin") {
+        const allDeleteButtons = document.querySelectorAll('.button-table.delete');
+        allDeleteButtons.forEach(button => {
+            if (!button.classList.contains('disabled')) {
+                button.classList.add('disabled')
+            }
+        })
+
+        document.querySelector('.team-code-wrapper').remove();
+    } else {
+        document.querySelector('.team-code-wrapper').classList.remove('hidden');
         document.getElementById('generateCode').addEventListener('click', getNewTeamCode);
+    }
+}
+
+function teamStartup() {
+    getTeamMembers().then(() => {
+        getTeamData().then(() => {
+            checkIfIsAdmin();
+        });
     });
 }
