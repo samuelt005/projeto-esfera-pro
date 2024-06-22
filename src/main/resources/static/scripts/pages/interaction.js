@@ -306,8 +306,6 @@ async function deleteInteraction(row) {
         interactionList.splice(index, 1);
     }
 
-    // TODO adicionar confirmação de exclusão
-
     try {
         const response = await fetch(`${URL}/interaction/${id}`, {
             method: 'DELETE',

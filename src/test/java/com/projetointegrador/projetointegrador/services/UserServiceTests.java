@@ -73,7 +73,6 @@ public class UserServiceTests {
         assertEquals("mockToken", ((JwtToken) responseEntity.getBody()).getToken());
     }
 
-
     @Test
     void testUserLogIn_InvalidCredentials() {
         // Mock do usuário existente, mas senha incorreta

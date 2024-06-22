@@ -229,7 +229,7 @@ function frameSetup() {
 
 frameSetup();
 if (!showError) {
-    // TODO adicionar click no dashboard
+    menuButtons[0].click();
 
     if (localStorage.getItem('welcomeMessageShown') === 'false') {
         setTimeout(() => {

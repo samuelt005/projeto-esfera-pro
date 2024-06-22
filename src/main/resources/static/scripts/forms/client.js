@@ -126,7 +126,6 @@ function setInputMasks() {
     const zipCodeMask = {
         mask: '00000-000'
     }
-    // TODO adicionar mais tipos de telefones compatíveis (internacionais?)
     const cellphoneMask = {
         mask: '00 00000-0000'
     }
