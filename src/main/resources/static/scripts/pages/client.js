@@ -300,7 +300,9 @@ function addClientRowButtonEvents(row) {
         sendMessageButton.disabled = true;
     }
 
-    deleteButton.addEventListener('click', () => {
+    deleteButton.addEventListener('click', async () => {
+        if (!await showConfirmationModal("Você tem certeza que deseja excluir este cliente?")) return;
+
         deleteClient(row).catch(error => {
             console.error(error)
         });

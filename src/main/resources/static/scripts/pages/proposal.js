@@ -230,7 +230,9 @@ function addProposalRowButtonEvents(row) {
     const deleteButton = row.querySelector('.delete');
     const editButton = row.querySelector('.edit');
 
-    deleteButton.addEventListener('click', () => {
+    deleteButton.addEventListener('click', async () => {
+        if (!await showConfirmationModal("Você tem certeza que deseja excluir esta proposta?")) return;
+
         deleteProposal(row).catch(error => {
             console.error(error)
         });

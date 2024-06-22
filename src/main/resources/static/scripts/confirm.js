@@ -15,20 +15,18 @@ function hideOverlayConfirm() {
     }, {once: true});
 }
 
-function showConfirmationModal(messageText, warningText) {
+function showConfirmationModal(messageText, hideWarning) {
     return new Promise((resolve, reject) => {
         showOverlayConfirm();
 
         if (messageText) {
             confirmationMessageElement.textContent = messageText;
         } else {
-            confirmationMessageElement.textContent = "Você tem certeza de que deseja prosseguir com esta ação?";
+            confirmationMessageElement.textContent = "Você tem certeza que deseja prosseguir com esta ação?";
         }
 
-        if (warningText) {
-            confirmationWarningElement.textContent = warningText;
-        } else {
-            confirmationWarningElement.textContent = "Esta operação não poderá ser desfeita.";
+        if (hideWarning) {
+            confirmationWarningElement.classList.add('hidden');
         }
 
         function handleConfirm() {
