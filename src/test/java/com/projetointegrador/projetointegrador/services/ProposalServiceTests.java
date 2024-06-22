@@ -1,6 +1,7 @@
 package com.projetointegrador.projetointegrador.services;
 
 import com.projetointegrador.projetointegrador.models.Client;
+import com.projetointegrador.projetointegrador.models.Interaction;
 import com.projetointegrador.projetointegrador.models.Proposal;
 import com.projetointegrador.projetointegrador.repositories.ClientRepository;
 import com.projetointegrador.projetointegrador.repositories.ProposalRepository;
@@ -54,7 +55,32 @@ public class ProposalServiceTests {
         System.out.println("Actual proposal: " + actualProposal);
     }
 
-    // TODO listProposalsPerClient
+    @Test
+    void testListProposalsPerClient() {
+        Long clientId = 1L;
+        Client client = new Client();
+        client.setId(clientId);
+        Proposal proposal1 = new Proposal();
+        proposal1.setClient(client);
+        Proposal proposal2 = new Proposal();
+        proposal2.setClient(client);
+
+        List<Proposal> proposals = Arrays.asList(proposal1, proposal2);
+
+        ExampleMatcher matcher = ExampleMatcher.matching()
+                .withIgnorePaths("id");
+
+        Example<Proposal> example = Example.of(proposal1, matcher);
+
+        when(proposalRepository.findAll(example)).thenReturn(proposals);
+
+        ResponseEntity<?> responseEntity = proposalService.listProposalsPerClient(clientId);
+
+        // Verifica se o método retornou uma resposta HTTP OK
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertNotNull(responseEntity.getBody());
+        assertEquals(proposals, responseEntity.getBody());
+    }
 
     @Test
     void testListActiveProposal() {
@@ -81,7 +107,28 @@ public class ProposalServiceTests {
         assertEquals(proposals, resultPage.getContent());
     }
 
-    // TODO listAllActiveProposals
+    @Test
+    void testListAllActiveProposals() {
+        Proposal proposal1 = new Proposal();
+        proposal1.setId(1L);
+        proposal1.setInactive(false);
+
+        Proposal proposal2 = new Proposal();
+        proposal2.setId(2L);
+        proposal2.setInactive(false);
+
+        List<Proposal> proposals = Arrays.asList(proposal1, proposal2);
+
+        when(proposalRepository.findAll(any(Example.class))).thenReturn(proposals);
+
+        List<Proposal> result = proposalService.listAllActiveProposals();
+
+        // Verificando se o método retornou uma lista não nula
+        assertNotNull(result);
+
+        // Verificando se a lista contém as propostas simuladas
+        assertEquals(proposals, result);
+    }
 
     @Test
     void testCreateProposal() {
@@ -97,6 +144,27 @@ public class ProposalServiceTests {
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertNotNull(responseEntity.getBody());
         assertEquals(mockProposal, responseEntity.getBody());
+    }
+
+    @Test
+    void testCreateProposals() {
+        Client mockClient = new Client();
+        Proposal proposal1 = new Proposal();
+        Proposal proposal2 = new Proposal();
+        proposal1.setClient(mockClient);
+        proposal2.setClient(mockClient);
+
+        List<Proposal> proposals = Arrays.asList(proposal1, proposal2);
+
+        when(proposalRepository.save(proposal1)).thenReturn(proposal1);
+        when(proposalRepository.save(proposal2)).thenReturn(proposal2);
+
+        ResponseEntity<?> responseEntity = proposalService.createProposals(proposals);
+
+        // Verifica se as propostas foram criadas com sucesso e compara o status da request
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertNotNull(responseEntity.getBody());
+        assertEquals("Total de propostas cadastradas com sucesso: 2", responseEntity.getBody());
     }
 
     @Test

@@ -57,7 +57,7 @@ public class ClientServiceTests {
     }
 
     @Test
-    void testlistActiveClients() {
+    void testListActiveClients() {
         Client client1 = new Client();
         client1.setId(1L);
         client1.setInactive(false);
@@ -77,11 +77,32 @@ public class ClientServiceTests {
         // Verificando se o método retornou uma página não nula
         assertNotNull(resultPage);
 
-        // Verificando se a página contém as interações simuladas
+        // Verificando se a página contém os clientes simulados
         assertEquals(clients, resultPage.getContent());
     }
 
-    // TODO listAllActiveClients
+    @Test
+    void testListAllActiveClients() {
+        Client client1 = new Client();
+        client1.setId(1L);
+        client1.setInactive(false);
+
+        Client client2 = new Client();
+        client2.setId(2L);
+        client2.setInactive(false);
+
+        List<Client> clients = Arrays.asList(client1, client2);
+
+        when(clientRepository.findAll(any(Example.class))).thenReturn(clients);
+
+        List<Client> result = clientService.listAllActiveClients();
+
+        // Verificando se o método retornou uma lista não nula
+        assertNotNull(result);
+
+        // Verificando se a lista contém os clientes simulados
+        assertEquals(clients, result);
+    }
 
     @Test
     void testCreateClient() {
@@ -99,7 +120,32 @@ public class ClientServiceTests {
         assertEquals(mockClient, responseEntity.getBody());
     }
 
-    // TODO createClients
+    @Test
+    void testCreateClients() {
+        Address mockAddress1 = new Address();
+        Client mockClient1 = new Client();
+        mockClient1.setAddress(mockAddress1);
+        mockClient1.setCpf("78144559010");
+
+        Address mockAddress2 = new Address();
+        Client mockClient2 = new Client();
+        mockClient2.setAddress(mockAddress2);
+        mockClient2.setCpf("78201260007");
+
+        List<Client> clients = Arrays.asList(mockClient1, mockClient2);
+
+        when(clientRepository.save(mockClient1)).thenReturn(mockClient1);
+        when(clientRepository.save(mockClient2)).thenReturn(mockClient2);
+
+        ResponseEntity<?> responseEntity = clientService.createClients(clients);
+
+        // Verifica se os clientes foram criados com sucesso e compara o status da request
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertNotNull(responseEntity.getBody());
+
+        String responseMessage = responseEntity.getBody().toString();
+        assertTrue(responseMessage.contains("Total de clientes cadastrados com sucesso: 2"));
+    }
 
     @Test
     void testUpdateClient() {

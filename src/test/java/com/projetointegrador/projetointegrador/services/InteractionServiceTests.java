@@ -78,7 +78,28 @@ public class InteractionServiceTests {
         assertEquals(interactions, resultPage.getContent());
     }
 
-    // TODO listAllActiveInteractions
+    @Test
+    void testListAllActiveInteractions() {
+        Interaction interaction1 = new Interaction();
+        interaction1.setId(1L);
+        interaction1.setInactive(false);
+
+        Interaction interaction2 = new Interaction();
+        interaction2.setId(2L);
+        interaction2.setInactive(false);
+
+        List<Interaction> interactions = Arrays.asList(interaction1, interaction2);
+
+        when(interactionRepository.findAll(any(Example.class))).thenReturn(interactions);
+
+        List<Interaction> result = interactionService.listAllActiveInteractions();
+
+        // Verificando se o método retornou uma lista não nula
+        assertNotNull(result);
+
+        // Verificando se a lista contém as interações simuladas
+        assertEquals(interactions, result);
+    }
 
     @Test
     void testCreateInteraction() {
@@ -98,7 +119,29 @@ public class InteractionServiceTests {
         assertEquals(mockInteraction, responseEntity.getBody());
     }
 
-    // TODO createInteractions
+    @Test
+    void testCreateInteractions() {
+        Client mockClient = new Client();
+        Proposal mockProposal = new Proposal();
+        Interaction interaction1 = new Interaction();
+        Interaction interaction2 = new Interaction();
+        interaction1.setProposal(mockProposal);
+        interaction1.getProposal().setClient(mockClient);
+        interaction2.setProposal(mockProposal);
+        interaction2.getProposal().setClient(mockClient);
+
+        List<Interaction> interactions = Arrays.asList(interaction1, interaction2);
+
+        when(interactionRepository.save(interaction1)).thenReturn(interaction1);
+        when(interactionRepository.save(interaction2)).thenReturn(interaction2);
+
+        ResponseEntity<?> responseEntity = interactionService.createInteractions(interactions);
+
+        // Verifica se as interações foram criadas com sucesso e compara o status da request
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertNotNull(responseEntity.getBody());
+        assertEquals("Total de interações cadastradas com sucesso: 2", responseEntity.getBody());
+    }
 
     @Test
     void testUpdateInteraction() {
