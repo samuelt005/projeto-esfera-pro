@@ -258,8 +258,6 @@ async function deleteProposal(row) {
         proposalList.splice(index, 1);
     }
 
-    // TODO adicionar confirmação de exclusão
-
     try {
         const response = await fetch(`${URL}/proposal/${id}`, {
             method: 'DELETE',

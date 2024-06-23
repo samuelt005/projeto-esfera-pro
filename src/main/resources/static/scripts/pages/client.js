@@ -328,8 +328,6 @@ async function deleteClient(row) {
         clientList.splice(index, 1);
     }
 
-    // TODO adicionar confirmação de exclusão
-
     try {
         const response = await fetch(`${URL}/client/${id}`, {
             method: 'DELETE',

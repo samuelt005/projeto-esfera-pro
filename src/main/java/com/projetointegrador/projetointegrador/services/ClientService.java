@@ -251,7 +251,7 @@ public class ClientService {
     }
 
     // Busca o teamId da request
-    private Long getTeamIdFromRequest() {
+    public Long getTeamIdFromRequest() {
         return (Long) request.getAttribute("teamId");
     }
 

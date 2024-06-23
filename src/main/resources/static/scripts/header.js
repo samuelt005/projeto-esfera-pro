@@ -78,5 +78,3 @@ emailConfigsButtonSetup();
 teamConfigsButtonSetup();
 logOutButtonSetup();
 helpConfigsButtonSetup();
-
-openConfigsScreen(0); // TODO remover depois
