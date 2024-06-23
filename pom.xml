@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.projetointegrador</groupId>
     <artifactId>projetointegrador</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.7.2-SNAPSHOT</version>
     <name>projetointegrador</name>
     <description>Projeto integrador do terceiro período do curso de A.D.S.</description>
     <properties>
