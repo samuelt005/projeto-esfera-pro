@@ -265,9 +265,9 @@ function createClientTableRow(client) {
     const newRow = document.createElement('tr');
     newRow.setAttribute('data-row-id', client.id);
     newRow.innerHTML = `
-        <th class="row-checkbox ${isSelectAllActive ? 'selected' : ''}" data-checkbox-id="${client.id}">
+        <td class="row-checkbox ${isSelectAllActive ? 'selected' : ''}" data-checkbox-id="${client.id}">
             ${rowCheckboxIcon}
-        </th>
+        </td>
         <td>${client.id}</td>
         <td>${client.name}</td>
         <td>${client.cnpj ? getCnpjFormatted(client.cnpj) : getCpfFormatted(client.cpf)}</td>
@@ -300,7 +300,9 @@ function addClientRowButtonEvents(row) {
         sendMessageButton.disabled = true;
     }
 
-    deleteButton.addEventListener('click', () => {
+    deleteButton.addEventListener('click', async () => {
+        if (!await showConfirmationModal("Você tem certeza que deseja excluir este cliente?")) return;
+
         deleteClient(row).catch(error => {
             console.error(error)
         });

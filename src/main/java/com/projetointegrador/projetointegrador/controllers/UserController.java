@@ -5,10 +5,7 @@ import com.projetointegrador.projetointegrador.dto.SingUpDTO;
 import com.projetointegrador.projetointegrador.dto.LogInDTO;
 import com.projetointegrador.projetointegrador.services.UserService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/user")
@@ -32,5 +29,12 @@ public class UserController {
     @PostMapping("/changepassword")
     public ResponseEntity<?> changePassword(@RequestBody ChangePasswordDTO changePasswordDTO) {
         return userService.changePassword(changePasswordDTO);
+    }
+
+    // Rota para desativar um cliente
+    @DeleteMapping("/disableuser/{id}")
+    @ResponseBody
+    public ResponseEntity<?> disableUser(@PathVariable Long id) {
+        return userService.disableUser(id);
     }
 }

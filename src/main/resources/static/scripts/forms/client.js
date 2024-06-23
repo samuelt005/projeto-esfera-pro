@@ -249,6 +249,9 @@ async function saveClient() {
     }
 
     if (isSavingClient) return;
+    if (isEditing) {
+        if (!await showConfirmationModal("Você tem certeza que deseja salvar?")) return;
+    }
     isSavingClient = true;
 
     try {

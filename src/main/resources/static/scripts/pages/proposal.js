@@ -207,9 +207,9 @@ function createProposalTableRow(proposal) {
     const newRow = document.createElement('tr');
     newRow.setAttribute('data-row-id', proposal.id);
     newRow.innerHTML = `
-        <th class="row-checkbox ${isSelectAllActive ? 'selected' : ''}" data-checkbox-id="${proposal.id}">
+        <td class="row-checkbox ${isSelectAllActive ? 'selected' : ''}" data-checkbox-id="${proposal.id}">
             ${rowCheckboxIcon}
-        </th>
+        </td>
         <td>${proposal.id}</td>
         <td>${proposal.client.name ? proposal.client.name : '-'}</td>
         <td>${getServiceTypeText(proposal.serviceType)}</td>
@@ -230,7 +230,9 @@ function addProposalRowButtonEvents(row) {
     const deleteButton = row.querySelector('.delete');
     const editButton = row.querySelector('.edit');
 
-    deleteButton.addEventListener('click', () => {
+    deleteButton.addEventListener('click', async () => {
+        if (!await showConfirmationModal("Você tem certeza que deseja excluir esta proposta?")) return;
+
         deleteProposal(row).catch(error => {
             console.error(error)
         });

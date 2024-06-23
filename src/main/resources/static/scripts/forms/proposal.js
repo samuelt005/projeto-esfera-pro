@@ -184,6 +184,9 @@ async function saveProposal() {
     }
 
     if (isSavingProposal) return;
+    if (isEditingProposal) {
+        if (!await showConfirmationModal("Você tem certeza que deseja salvar?")) return;
+    }
     isSavingProposal = true;
 
     try {

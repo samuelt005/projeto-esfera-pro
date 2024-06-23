@@ -1,6 +1,5 @@
 package com.projetointegrador.projetointegrador.controllers;
 
-import com.projetointegrador.projetointegrador.models.Team;
 import com.projetointegrador.projetointegrador.services.TeamService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,25 +9,22 @@ import org.springframework.web.bind.annotation.*;
 public class TeamController {
     private final TeamService teamService;
 
-    public TeamController(TeamService teamService){this.teamService = teamService;}
+    public TeamController(TeamService teamService) {
+        this.teamService = teamService;
+    }
 
     @GetMapping
-    public ResponseEntity<?> listTeams(){
-        return teamService.listTeams();
+    public ResponseEntity<?> getTeam() {
+        return teamService.getTeam();
     }
 
-    @PostMapping
-    public ResponseEntity<?> createTeam(Team team){
-        return teamService.createTeam(team);
+    @GetMapping("/members")
+    public ResponseEntity<?> listTeamMembers() {
+        return teamService.listTeamMembers();
     }
 
-    @PutMapping
-    public ResponseEntity<?> updateTeam(Team team){
-        return teamService.updateTeam(team);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteTeam(@PathVariable Long id){
-        return teamService.deleteTeam(id);
+    @GetMapping("/generatenewcode")
+    public ResponseEntity<?> generateNewTeamCode() {
+        return teamService.generateNewTeamCode();
     }
 }

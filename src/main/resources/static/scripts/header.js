@@ -79,4 +79,4 @@ teamConfigsButtonSetup();
 logOutButtonSetup();
 helpConfigsButtonSetup();
 
-openConfigsScreen(0);
+openConfigsScreen(0); // TODO remover depois
