@@ -21,15 +21,37 @@
     box-sizing: border-box;
     font-size: 20px;
     white-space: nowrap;
-    color: var(--text-primary);
     font-weight: 600;
     background-color: var(--button);
+    color: var(--text-primary);
     transition: background-color 0.5s;
     user-select: none;
+}
+
+.button1.filled,
+.button1.active {
+    background-color: var(--main-purple);
+    color: var(--white);
+}
+
+.button1 svg path {
+    fill: var(--text-primary);
+}
+
+.button1.filled svg path,
+.button1.active svg path {
+    fill: var(--white);
 }
 
 .button1:hover {
     cursor: pointer;
     background-color: var(--button-hover);
+    transition: background-color 0.5s;
+}
+
+.button1.active:hover,
+.button1.filled:hover {
+    cursor: pointer;
+    background-color: var(--ligth-purple);
     transition: background-color 0.5s;
 }

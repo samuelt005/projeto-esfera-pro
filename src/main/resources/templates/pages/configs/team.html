@@ -1,8 +1,36 @@
 <div th:fragment="team()" class="team-page hidden">
     <div class="page-title">
         <h3>Membros da equipe</h3>
+        <h4>Visualize membros e gerencie o código da equipe.</h4>
     </div>
     <div class="config-page-container">
+        <div class="table-members-container">
+            <table class="table-members">
+                <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Função</th>
+                    <th>E-mail</th>
+                    <th>Telefone</th>
+                    <th>Status</th>
+                    <th>Ações</th>
+                </tr>
+                </thead>
+                <tbody class="table-members-content">
 
+                </tbody>
+            </table>
+        </div>
+        <div class="team-data-container">
+            <h3 class="team-name">-</h3>
+            <div class="team-code-wrapper hidden">
+                <div class="copy-button">
+                    <div th:replace="~{icons/buttons/copy :: copy}"></div>
+                    <div th:replace="~{icons/buttons/check :: check}"></div>
+                </div>
+                <div th:replace="~{components/input1 :: input('teamCode', 'Sem código para esta equipe', 'text', true)}"></div>
+                <div th:replace="~{components/button1 :: button('generateCode', 'Gerar Novo Código', false, ~{icons/buttons/key :: key})}"></div>
+            </div>
+        </div>
     </div>
 </div>

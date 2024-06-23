@@ -38,7 +38,9 @@ body {
     display: none;
 }
 
-.overlay {
+.overlay,
+.overlay-import,
+.overlay-confirm {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -54,11 +56,20 @@ body {
     animation: fadeIn 0.5s forwards;
 }
 
-.overlay.hidden {
+.overlay-import,
+.overlay-confirm {
+    z-index: 12;
+}
+
+.overlay.hidden,
+.overlay-import.hidden,
+.overlay-confirm.hidden {
     display: none;
 }
 
-.overlay.fade-out {
+.overlay.fade-out,
+.overlay-import.fade-out,
+.overlay-confirm.fade-out {
     animation: fadeOut 0.5s forwards;
 }
 

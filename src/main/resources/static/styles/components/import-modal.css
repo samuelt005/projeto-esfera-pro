@@ -1,0 +1,105 @@
+.import-input-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 100%;
+    border: 2px solid var(--text-secondary);
+    border-radius: 5px;
+    user-select: none;
+    box-sizing: border-box;
+}
+
+.no-file-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-direction: column;
+    padding: 10px;
+    gap: 10px;
+    height: 100px;
+    width: 480px;
+    cursor: pointer;
+}
+
+.no-file-wrapper.hidden,
+.selected-file.hidden {
+    display: none;
+}
+
+.no-file-wrapper svg {
+    width: 40px;
+    height: 40px;
+}
+
+.no-file-wrapper p,
+.selected-file p,
+.success-message-wrapper p {
+    font-size: 20px;
+    font-weight: bold;
+    color: var(--text-secondary);
+    text-align: center;
+}
+
+.no-file-wrapper .file-input {
+    display: none;
+}
+
+.selected-file {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-direction: column;
+    padding: 10px;
+    gap: 16px;
+    height: 100px;
+    width: 480px;
+}
+
+.import-success {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-direction: column;
+    padding: 10px;
+    gap: 16px;
+    min-height: 100px;
+    max-height: 300px;
+    width: 480px;
+    overflow-y: auto;
+}
+
+.file-name-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.total-lines-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.model-file-container {
+    padding: 5px;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+.import-modal-button.hidden,
+.cancel-modal-import-button.hidden,
+.finish-button.hidden,
+.import-success.hidden,
+.model-file-container.hidden {
+    display: none;
+}
+
+.model-file-container p {
+    font-size: 20px;
+    color: var(--text-primary);
+    text-decoration: underline;
+    user-select: none;
+}
