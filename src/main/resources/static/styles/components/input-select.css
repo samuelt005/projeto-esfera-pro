@@ -36,3 +36,7 @@ select::-ms-expand {
 .input-select option:first-of-type {
     color: var(--field-focus);
 }
+
+.input-select.no-first-option option:first-of-type {
+    color: var(--text-primary);
+}

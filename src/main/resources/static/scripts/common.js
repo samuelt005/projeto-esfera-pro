@@ -64,59 +64,6 @@ const rowCheckboxIcon = `
 </div>
 `
 
-// Variável comum para ids selecionados das checkboxes
-let selectedIds = [];
-
-// Altera o estado da checkbox e adiciona/remove o id a lista
-function checkboxClicked(event) {
-    const checkbox = event.currentTarget;
-    const id = parseInt(checkbox.dataset.checkboxId);
-
-    const index = selectedIds.indexOf(id);
-
-    if (index !== -1) {
-        selectAllCheckbox.classList.remove("selected");
-        selectedIds.splice(index, 1);
-    } else {
-        selectedIds.push(id);
-    }
-
-    checkbox.classList.toggle("selected");
-}
-
-// Altera o estado da checkbox de selecionar tudo e adiciona/remove todos os ids da lista
-function selectAllHandler() {
-    if (selectAllCheckbox.classList.contains("selected")) {
-        selectedIds = [];
-        checkboxes.forEach((checkbox) => {
-            checkbox.classList.remove("selected");
-        });
-    } else {
-        selectedIds = [];
-        checkboxes.forEach((checkbox) => {
-            const id = parseInt(checkbox.dataset.checkboxId);
-            selectedIds.push(id);
-            checkbox.classList.add("selected");
-        });
-    }
-
-    selectAllCheckbox.classList.toggle("selected");
-}
-
-// Adiciona o evento da checkbox em todas as checkboxes
-function addCheckboxesEvents() {
-    checkboxes = document.querySelectorAll('.row-checkbox');
-    selectAllCheckbox = document.querySelector('.select-all-checkbox');
-
-    checkboxes.forEach((checkbox) => {
-        checkbox.removeEventListener('click', checkboxClicked);
-        checkbox.addEventListener('click', checkboxClicked);
-    });
-
-    selectAllCheckbox.removeEventListener('click', selectAllHandler);
-    selectAllCheckbox.addEventListener('click', selectAllHandler);
-}
-
 // Altera a visibilidade do overlay (aonde vai os modais)
 function switchOverlay() {
     if (overlay.classList.contains("hidden")) {
@@ -136,45 +83,20 @@ function addSwitchOverlayEvent(button) {
     button.addEventListener('click', switchOverlay);
 }
 
-// Converte um CPF no formato padrão para exibição
-function getCpfFormatted(cpfString) {
-    cpfString = cpfString.replace(/\D/g, '');
-    return cpfString.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
-}
+// Adiciona o evento de alterar a visibilidade do menu de filtros
+function addSwitchFilterMenuEvent(button, filtersWrapper) {
+    button.addEventListener("click", (event) => {
+        filtersWrapper.classList.toggle('hidden');
+        event.stopPropagation();
+    });
 
-// Converte um CNPJ no formato padrão para exibição
-function getCnpjFormatted(cnpjString) {
-    cnpjString = cnpjString.replace(/\D/g, '');
-    return cnpjString.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, "$1.$2.$3/$4-$5");
-}
+    document.addEventListener("click", function (event) {
+        const isClickedInsideMenu = button.contains(event.target) || filtersWrapper.contains(event.target);
 
-// Converte tipo date para formato DD/MM/YYYY
-function getDateFormatted(dateISO) {
-    const dateParts = dateISO.split('T')[0].split('-');
-    return dateParts[2] + '/' + dateParts[1] + '/' + dateParts[0];
-}
-
-// Converte formato DD/MM/YYYY para tipo date
-function getDateISO(date) {
-    const dateParts = date.split('/');
-    return dateParts[2] + '-' + dateParts[1] + '-' + dateParts[0];
-}
-
-// Recebe um double e converte para o formato de reais
-function formatCurrency(value) {
-    const valueParts = String(value).split('.');
-    let formattedValue = valueParts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-
-    if (valueParts.length > 1) {
-        let decimalPart = valueParts[1].padEnd(2, '0').slice(0, 2);
-        formattedValue += ',' + decimalPart;
-    } else {
-        formattedValue += ',00';
-    }
-
-    formattedValue = 'R$ ' + formattedValue;
-
-    return formattedValue;
+        if (!isClickedInsideMenu) {
+            filtersWrapper.classList.add('hidden');
+        }
+    });
 }
 
 // Recebe um id de result e retorna um fragmento de HTML
@@ -223,7 +145,6 @@ function getContactText(contactId) {
             return 'E-mail'
     }
 }
-
 
 // Recebe um id de result e retorna um fragmento de HTML
 function getStatusDiv(resultId) {
@@ -294,7 +215,11 @@ function switchSelectClass(event) {
 
 // Busca todos os clientes
 async function getAllClients(clientSelect) {
-    await fetch(`${URL}/client/all`)
+    await fetch(`${URL}/client/all`, {
+        method: 'GET', headers: {
+            'Authorization': userToken, 'Content-Type': 'text/html'
+        }
+    })
         .then(response => {
             if (!response.ok) {
                 throw new Error(`Erro ao recuperar clientes`);
@@ -305,7 +230,7 @@ async function getAllClients(clientSelect) {
             data.forEach((data) => {
                 const newOption = document.createElement('option');
                 newOption.value = data.id;
-                newOption.textContent = data.id + ' - ' + data.company + ' - ' + getCnpjFormatted(data.cnpj);
+                newOption.textContent = data.id + ' - ' + data.name + ' - ' + (data.cnpj ? getCnpjFormatted(data.cnpj) : getCpfFormatted(data.cpf));
                 newOption.classList.add('contact-option');
 
                 clientSelect.appendChild(newOption);
@@ -318,47 +243,38 @@ async function getAllClients(clientSelect) {
         });
 }
 
-// Busca todos os clientes
-async function getAllProposals(proposalSelect) {
-    await fetch(`${URL}/proposal/all`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Erro ao recuperar propostas`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            data.forEach((data) => {
-                const newOption = document.createElement('option');
-                newOption.value = data.id;
-                newOption.textContent = getDateFormatted(data.offerDate) + ' - ' + formatCurrency(data.value);
-                newOption.classList.add('proposal-option');
-
-                proposalSelect.appendChild(newOption);
-            })
-            proposalSelect.disabled = false;
-        })
-        .catch(error => {
-            console.error(error);
-            showErrorToast("Erro ao buscar propostas");
-        });
+// Função para definir o evento do scroll infinito na tabela
+function setInfiniteScroll(tableContainer, callFunction) {
+    tableContainer.addEventListener('scroll', function () {
+        if (tableContainer.scrollTop + tableContainer.offsetHeight >= tableContainer.scrollHeight - 1) {
+            callFunction();
+        }
+    });
 }
 
-// Função para definir o evento do scroll infinito na tabela
-function setInfiniteScroll(tableContainer) {
-    tableContainer.addEventListener('scroll', function () {
-        if (tableContainer.scrollTop + tableContainer.offsetHeight >= tableContainer.scrollHeight) {
-            switch (currentPage) {
-                case 2:
-                    getClients().then();
-                    break;
-                case 3:
-                    getProposal().then();
-                    break;
-                case 4:
-                    getInteractions().then();
-                    break;
-            }
+// Função para definir o comportamento do campo de pesquisa
+function setSearchInputEvent(searchInput, searchButton, cleanButton, cleanFunction, callFunction) {
+    const handleSearch = () => {
+        const searchTerm = searchInput.value.trim();
+        cleanFunction();
+        callFunction(searchTerm);
+        cleanButton.classList.toggle('hidden', searchTerm === null || searchTerm === "");
+    };
+
+    searchInput.addEventListener('keypress', (event) => {
+        if (event.key === 'Enter') {
+            handleSearch();
+        }
+    });
+
+    searchButton.addEventListener('click', handleSearch);
+
+    cleanButton.addEventListener('click', () => {
+        if (searchInput.value.trim() !== "") {
+            searchInput.value = "";
+            cleanFunction();
+            callFunction("");
+            cleanButton.classList.add('hidden');
         }
     });
 }

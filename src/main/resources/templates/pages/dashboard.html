@@ -7,7 +7,110 @@
 <body>
 <content>
     <div class="content-container">
-        <h2>Dashboard</h2>
+        <div class="first-line">
+            <div class="user-team-dashboard-wrapper">
+                <div th:replace="~{icons/dashboard/company :: company}"></div>
+                <p class="user-team-dashboard">Nome da Empresa</p>
+            </div>
+            <div class="small-graph-container">
+                <p class="graph-title">
+                    Interações em
+                    <span class="current-month">-</span>
+                </p>
+                <div class="data-container">
+                    <div class="data-text-wrapper">
+                        <div class="increase-wrapper">
+                            <div th:replace="~{icons/dashboard/increase-arrow :: increase-arrow}"></div>
+                            <p><span class="interaction-percentage-month">-</span> Mês anterior</p>
+                        </div>
+                        <p class="graph-total interaction-value-month">-</p>
+                    </div>
+                </div>
+            </div>
+            <div class="small-graph-container">
+                <p class="graph-title">
+                    Interações em
+                    <span class="current-year">-</span>
+                </p>
+                <div class="data-container">
+                    <div class="data-text-wrapper">
+                        <div class="increase-wrapper">
+                            <div th:replace="~{icons/dashboard/increase-arrow :: increase-arrow}"></div>
+                            <p><span class="interaction-percentage-year">-</span> Ano anterior</p>
+                        </div>
+                        <p class="graph-total interaction-value-year">-</p>
+                    </div>
+                </div>
+            </div>
+            <div class="small-graph-container">
+                <p class="graph-title">
+                    Clientes cadastrados
+                </p>
+                <div class="data-container">
+                    <div class="data-text-wrapper">
+                        <p class="graph-total client-value">-</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="second-line">
+            <div class="medium-graph-container">
+                <p class="graph-title">
+                    Propostas aceitas em
+                    <span class="current-month">-</span>
+                </p>
+                <div class="data-container">
+                    <div class="data-text-wrapper">
+                        <p class="graph-total proposal-total-month">-</p>
+                    </div>
+                    <div class="data-text-wrapper">
+                        <div class="increase-wrapper align-right">
+                            <div th:replace="~{icons/dashboard/increase-arrow :: increase-arrow}"></div>
+                            <p><span class="proposal-percentage-month">-</span> Mês anterior</p>
+                        </div>
+                        <p class="graph-total align-right proposal-value-month">-</p>
+                    </div>
+                </div>
+            </div>
+            <div class="medium-graph-container">
+                <p class="graph-title">
+                    Propostas aceitas em
+                    <span class="current-year">-</span>
+                </p>
+                <div class="data-container">
+                    <div class="data-text-wrapper">
+                        <p class="graph-total proposal-total-year">145</p>
+                    </div>
+                    <div class="data-text-wrapper">
+                        <div class="increase-wrapper align-right">
+                            <div th:replace="~{icons/dashboard/increase-arrow :: increase-arrow}"></div>
+                            <p><span class="proposal-percentage-year">-</span> Ano anterior</p>
+                        </div>
+                        <p class="graph-total align-right proposal-value-year">-</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="third-line">
+            <div class="large-graph-container">
+                <p class="graph-title centered">
+                    Relação de propostas em
+                    <span class="current-year">-</span>
+                </p>
+                <div class="graph-wrapper">
+                    <canvas id="proposalChart" style="max-width: 100%;"></canvas>
+                </div>
+            </div>
+            <div class="large-graph-container">
+                <p class="graph-title centered">
+                    Relação de interações em
+                    <span class="current-year">-</span>
+                </p>
+                <div class="graph-wrapper">
+                    <canvas id="interactionChart" style="max-width: 100%;"></canvas>
+                </div>
+            </div>
+        </div>
     </div>
 </content>
 

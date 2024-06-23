@@ -1,13 +1,11 @@
 package com.projetointegrador.projetointegrador.controllers;
 
-import com.projetointegrador.projetointegrador.dto.UserDTO;
-import com.projetointegrador.projetointegrador.models.User;
+import com.projetointegrador.projetointegrador.dto.ChangePasswordDTO;
+import com.projetointegrador.projetointegrador.dto.SingUpDTO;
+import com.projetointegrador.projetointegrador.dto.LogInDTO;
 import com.projetointegrador.projetointegrador.services.UserService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/user")
@@ -18,15 +16,25 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("/validation")
-    public ResponseEntity<?> validateUser(@RequestBody UserDTO user) {
-        return userService.userValidation(user);
+    @PostMapping("/login")
+    public ResponseEntity<?> userLogIn(@RequestBody LogInDTO user) {
+        return userService.userLogIn(user);
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestBody User newUser) {
-        return userService.createUser(newUser);
+    @PostMapping("/signup")
+    public ResponseEntity<?> userSignUp(@RequestBody SingUpDTO newUser) {
+        return userService.userSignUp(newUser);
     }
 
+    @PostMapping("/changepassword")
+    public ResponseEntity<?> changePassword(@RequestBody ChangePasswordDTO changePasswordDTO) {
+        return userService.changePassword(changePasswordDTO);
+    }
 
+    // Rota para desativar um cliente
+    @DeleteMapping("/disableuser/{id}")
+    @ResponseBody
+    public ResponseEntity<?> disableUser(@PathVariable Long id) {
+        return userService.disableUser(id);
+    }
 }

@@ -8,7 +8,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class Login {
-    @Value("${DATABASE_IPV4}")
+    @Value("${APPLICATION_IPV4}")
     private String IP;
     @Value("${APPLICATION_PORT}")
     private String PORT;

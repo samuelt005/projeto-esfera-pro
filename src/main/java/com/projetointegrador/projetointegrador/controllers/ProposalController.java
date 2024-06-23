@@ -25,15 +25,26 @@ public class ProposalController {
         return proposalService.findOneProposal(id);
     }
 
+    // Rota para buscar propostas pelo ID do cliente
+    @GetMapping("byClient/{clientId}")
+    @ResponseBody
+    public ResponseEntity<?> listProposalsPerClient(@PathVariable("clientId") Long clientId) {
+        return proposalService.listProposalsPerClient(clientId);
+    }
+
     // Rota para listar todas as propostas ativos com paginação
     @GetMapping("/{page}")
     @ResponseBody
     public ResponseEntity<?> listProposals(
-            @PathVariable int page
+            @PathVariable int page,
+            @RequestParam(required = false) String searchTerm,
+            @RequestParam(required = false) Integer statusId,
+            @RequestParam(required = false) Integer serviceTypeId
     ) {
         int size = 20;
         PageRequest pageRequest = PageRequest.of(page, size);
-        Page<Proposal> proposals = proposalService.listActiveProposal(pageRequest);
+        Page<Proposal> proposals = proposalService.listActiveProposal(searchTerm, statusId, serviceTypeId, pageRequest);
+
         return ResponseEntity.ok().body(proposals);
     }
 
@@ -41,22 +52,29 @@ public class ProposalController {
     @GetMapping("/all")
     @ResponseBody
     public ResponseEntity<?> listAllProposals() {
-        List<Proposal> proposal = proposalService.listAllActiveProposals();
-        return ResponseEntity.ok().body(proposal);
+        List<Proposal> proposals = proposalService.listAllActiveProposals();
+        return ResponseEntity.ok().body(proposals);
     }
 
     // Rota para criar uma proposta
     @PostMapping
     @ResponseBody
-    public ResponseEntity<?> createProposals(@RequestBody Proposal proposal) {
+    public ResponseEntity<?> createProposal(@RequestBody Proposal proposal) {
         return proposalService.createProposal(proposal);
+    }
+
+    // Rota para criar várias propostas
+    @PostMapping("/bulk")
+    @ResponseBody
+    public ResponseEntity<?> createProposals(@RequestBody List<Proposal> proposal) {
+        return proposalService.createProposals(proposal);
     }
 
     // Rota para atualizar uma proposta
     @PutMapping
     @ResponseBody
-    public ResponseEntity<?> updateProposals(@RequestBody Proposal proposal) {
-        return proposalService.updateProposal(proposal);
+    public ResponseEntity<?> updateProposals(@RequestBody Proposal proposals) {
+        return proposalService.updateProposal(proposals);
     }
 
     // Rota para desativar uma proposta
