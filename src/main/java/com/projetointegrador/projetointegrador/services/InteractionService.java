@@ -5,7 +5,6 @@ import com.projetointegrador.projetointegrador.models.Interaction;
 import com.projetointegrador.projetointegrador.models.Proposal;
 import com.projetointegrador.projetointegrador.models.Team;
 import com.projetointegrador.projetointegrador.repositories.InteractionRepository;
-import com.projetointegrador.projetointegrador.repositories.ProposalRepository;
 import com.projetointegrador.projetointegrador.responses.Response;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -126,7 +124,7 @@ public class InteractionService {
             Interaction interaction = optionalInteraction.get();
             interaction.setInactive(true);
             interactionRepository.save(interaction);
-            Response response = new Response(HttpStatus.OK, "Interacao inativada.");
+            Response response = new Response(HttpStatus.OK, "Interação inativada.");
             return ResponseEntity.ok().body(response);
         } else {
             Response response = new Response(HttpStatus.NOT_FOUND, "Interação não encontrada.");

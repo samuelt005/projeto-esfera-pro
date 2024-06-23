@@ -2,6 +2,7 @@ package com.projetointegrador.projetointegrador.services;
 
 import com.projetointegrador.projetointegrador.models.Address;
 import com.projetointegrador.projetointegrador.models.Client;
+import com.projetointegrador.projetointegrador.models.Team;
 import com.projetointegrador.projetointegrador.repositories.ClientRepository;
 import com.projetointegrador.projetointegrador.repositories.TeamRepository;
 import com.projetointegrador.projetointegrador.responses.Response;
@@ -56,7 +57,7 @@ public class ClientServiceTests {
     }
 
     @Test
-    void testlistActiveClients() {
+    void testListActiveClients() {
         Client client1 = new Client();
         client1.setId(1L);
         client1.setInactive(false);
@@ -73,11 +74,34 @@ public class ClientServiceTests {
 
         Page<Client> resultPage = clientService.listActiveClients(null, null, PageRequest.of(0, 20));
 
-        // Verificando se o mÈtodo retornou uma p·gina n„o nula
+        // Verificando se o m√©todo retornou uma p√°gina n√£o nula
         assertNotNull(resultPage);
 
-        // Verificando se a p·gina contÈm as interaÁıes simuladas
+        // Verificando se a p√°gina cont√©m os clientes simulados
         assertEquals(clients, resultPage.getContent());
+    }
+
+    @Test
+    void testListAllActiveClients() {
+        Client client1 = new Client();
+        client1.setId(1L);
+        client1.setInactive(false);
+
+        Client client2 = new Client();
+        client2.setId(2L);
+        client2.setInactive(false);
+
+        List<Client> clients = Arrays.asList(client1, client2);
+
+        when(clientRepository.findAll(any(Example.class))).thenReturn(clients);
+
+        List<Client> result = clientService.listAllActiveClients();
+
+        // Verificando se o m√©todo retornou uma lista n√£o nula
+        assertNotNull(result);
+
+        // Verificando se a lista cont√©m os clientes simulados
+        assertEquals(clients, result);
     }
 
     @Test
@@ -97,6 +121,33 @@ public class ClientServiceTests {
     }
 
     @Test
+    void testCreateClients() {
+        Address mockAddress1 = new Address();
+        Client mockClient1 = new Client();
+        mockClient1.setAddress(mockAddress1);
+        mockClient1.setCpf("78144559010");
+
+        Address mockAddress2 = new Address();
+        Client mockClient2 = new Client();
+        mockClient2.setAddress(mockAddress2);
+        mockClient2.setCpf("78201260007");
+
+        List<Client> clients = Arrays.asList(mockClient1, mockClient2);
+
+        when(clientRepository.save(mockClient1)).thenReturn(mockClient1);
+        when(clientRepository.save(mockClient2)).thenReturn(mockClient2);
+
+        ResponseEntity<?> responseEntity = clientService.createClients(clients);
+
+        // Verifica se os clientes foram criados com sucesso e compara o status da request
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertNotNull(responseEntity.getBody());
+
+        String responseMessage = responseEntity.getBody().toString();
+        assertTrue(responseMessage.contains("Total de clientes cadastrados com sucesso: 2"));
+    }
+
+    @Test
     void testUpdateClient() {
         Address mockAddress = new Address();
         mockAddress.setId(1L);
@@ -104,7 +155,6 @@ public class ClientServiceTests {
         mockClient.setAddress(mockAddress);
         mockClient.setId(1L);
         mockClient.setCpf("10179667025");
-        mockClient.setCnpj("48110821000107");
 
         when(clientRepository.save(mockClient)).thenReturn(mockClient);
 
@@ -120,18 +170,24 @@ public class ClientServiceTests {
     @Test
     void testDeleteClient() {
         Long clientId = 1L;
+        Long teamId = 10L;
+
         Client mockClient = new Client();
         mockClient.setId(clientId);
 
+        Team mockTeam = new Team();
+        mockTeam.setId(teamId);
+        mockClient.setTeam(mockTeam);
+
         when(clientRepository.findById(clientId)).thenReturn(Optional.of(mockClient));
+        when(clientService.getTeamIdFromRequest()).thenReturn(teamId);
 
         ResponseEntity<?> responseEntity = clientService.deleteClient(clientId);
 
-        // Verifica se o cliente foi desativado com sucesso e compara o status da request
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         Response responseBody = (Response) responseEntity.getBody();
         assertNotNull(responseBody);
-        assertEquals(200, responseBody.getStatus());
+        assertEquals(HttpStatus.OK.value(), responseBody.getStatus());
         assertEquals("Cliente inativado.", responseBody.getMessage());
     }
 
@@ -145,10 +201,10 @@ public class ClientServiceTests {
         when(clientRepository.findByCpf(mockClient.getCpf())).thenReturn(Optional.of(mockClient));
         when(clientRepository.findByCnpj(mockClient.getCpf())).thenReturn(Optional.of(mockClient));
 
-        // Se o CPF e CNPJ forem o mesmo, mas o ID n„o, ent„o o mÈtodo dever· retornar True
+        // Se o CPF e CNPJ forem o mesmo, mas o ID n√£o, ent√£o o m√©todo dever√° retornar True
         assertTrue(clientService.isAlreadyRegistered(mockClient.getCpf(), mockClient.getCnpj(), 2L));
 
-        // Se o CPF, CNPJ e ID existem no banco ent„o o mÈtodo dever· retornar False
+        // Se o CPF, CNPJ e ID existem no banco ent√£o o m√©todo dever√° retornar False
         assertFalse(clientService.isAlreadyRegistered(mockClient.getCpf(), mockClient.getCnpj(), mockClient.getId()));
     }
 
@@ -184,10 +240,10 @@ public class ClientServiceTests {
 
         when(clientRepository.findByCpf(mockClient.getCpf())).thenReturn(Optional.of(mockClient));
 
-        // Se o CPF e ID for o mesmo o mÈtodo dever· retornar false
+        // Se o CPF e ID for o mesmo o m√©todo dever√° retornar false
         assertFalse(clientService.isCpfAlreadyRegistered(mockClient.getCpf(), mockClient.getId()));
 
-        // Se o CPF for o mesmo, mas o ID n„o o mÈtodo dever· retornar true
+        // Se o CPF for o mesmo, mas o ID n√£o o m√©todo dever√° retornar true
         assertTrue(clientService.isCpfAlreadyRegistered(mockClient.getCpf(), 2L));
     }
 
@@ -199,10 +255,10 @@ public class ClientServiceTests {
 
         when(clientRepository.findByCnpj(mockClient.getCnpj())).thenReturn(Optional.of(mockClient));
 
-        // Se o CNPJ e ID for o mesmo o mÈtodo dever· retornar false
+        // Se o CNPJ e ID for o mesmo o m√©todo dever√° retornar false
         assertFalse(clientService.isCnpjAlreadyRegistered(mockClient.getCnpj(), mockClient.getId()));
 
-        // Se o CNPJ for o mesmo, mas o ID n„o o mÈtodo dever· retornar true
+        // Se o CNPJ for o mesmo, mas o ID n√£o o m√©todo dever√° retornar true
         assertTrue(clientService.isCnpjAlreadyRegistered(mockClient.getCnpj(), 2L));
     }
 }
