@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.projetointegrador</groupId>
     <artifactId>projetointegrador</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0-RELEASE</version>
     <name>projetointegrador</name>
     <description>Projeto integrador do terceiro período do curso de A.D.S.</description>
     <properties>
@@ -59,7 +59,7 @@
         </dependency>
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt-jackson</artifactId> <!-- or jjwt-gson if Gson is preferred -->
+            <artifactId>jjwt-jackson</artifactId>
             <version>0.11.0</version>
             <scope>runtime</scope>
         </dependency>

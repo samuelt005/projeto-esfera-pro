@@ -14,7 +14,7 @@ public class ProjetointegradorApplication {
 
     @Component
     public static class InitialLog implements CommandLineRunner {
-        @Value("${DATABASE_IPV4}")
+        @Value("${APPLICATION_IPV4}")
         private String IP;
         @Value("${APPLICATION_PORT}")
         private String PORT;
